@@ -25,22 +25,28 @@
         .branding p { font-size: 0.9rem; color: #666; }
 
         /* BANNER SLIDER - FIXED CSS */
-       .banner { 
+    .banner { 
     max-width: 1200px; 
     margin: 15px auto; 
-    overflow: hidden; /* বাড়তি অংশ লুকিয়ে রাখবে */
+    overflow: hidden; 
     border-radius: 12px; 
+    position: relative;
+    /* আপনার ছবির রেশিও অনুযায়ী উচ্চতা অটো সেট হবে */
+    aspect-ratio: 1200 / 450; 
 }
 
 .slider-container {
-    display: flex; /* ছবিগুলোকে এক লাইনে আনবে */
-    width: 300%; /* ৩টি ছবি তাই ৩০০% */
-    transition: transform 0.8s ease-in-out; /* স্লাইড হওয়ার স্মুথ ইফেক্ট */
+    display: flex; 
+    width: 300%; 
+    height: 100%;
+    transition: transform 0.8s ease-in-out;
 }
 
 .banner img {
     width: 100%; 
-    height: auto; /* আপনার ছবির আসল সাইজ অনুযায়ী থাকবে */
+    height: 100%; 
+    /* পুরো ছবিটা দেখাবে, কোনো অংশ কাটবে না */
+    object-fit: stretch; 
     flex-shrink: 0;
 }
 
