@@ -10,128 +10,54 @@
         body { font-family: 'SolaimanLipi', Arial, sans-serif; background: #f4f7f6; color: #333; line-height: 1.6; }
 
         /* NAVBAR */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 20px;
-            background: white;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; background: white; position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
         .nav-icons span { margin-left: 15px; cursor: pointer; }
 
         /* HEADER & LOGO */
-        .branding {
-            text-align: center;
-            padding: 20px 10px;
-            background: #fff;
+        .branding { text-align: center; padding: 20px 10px; background: #fff; }
+        .logo-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
+        
+        /* লোগোর ব্যাকগ্রাউন্ড ট্রিক */
+        .logo-area img { 
+            width: 50px; height: 50px; border-radius: 50%; border: 2px solid #27ae60;
+            mix-blend-mode: multiply; /* এটি কালো/সাদা ব্যাকগ্রাউন্ড সরাতে সাহায্য করে */
+            background-color: transparent;
         }
-        .logo-area {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 5px;
-        }
-        .logo-area img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #27ae60; }
-         mix-blend-mode: multiply; 
-    background-color: transparent;
         .branding p { font-size: 0.9rem; color: #666; }
 
-        /* BANNER */
-        .banner {
-           max-width: 1200px;
-    margin: 15px auto;
-    overflow: hidden;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        /* BANNER SLIDER - স্লাইড হওয়ার জন্য নতুন স্টাইল */
+        .banner { max-width: 1200px; margin: 15px auto; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        
+        .slider-container {
+            display: flex; /* ছবিগুলো পাশাপাশি রাখবে */
+            width: 300%; /* ৩টি ছবি তাই ৩০০% */
+            transition: transform 0.8s ease-in-out;
         }
         .banner img {
-              width: 100%;
-    height: auto; /
-    display: none;
-            opacity: 0;
-            transition: opacity 0.8s ease-in-out;
+            width: 100%; /* প্রতিটি ছবি পুরো জায়গা নেবে */
+            height: auto;
+            flex-shrink: 0;
         }
-        .banner img.active { opacity: 1; }
 
         /* SECTION TITLE */
-        .section-title {
-            text-align: center;
-            margin: 30px 0 20px;
-            font-size: 1.5rem;
-            position: relative;
-        }
-        .section-title::after {
-            content: '';
-            width: 50px;
-            height: 3px;
-            background: #27ae60;
-            display: block;
-            margin: 8px auto;
-        }
+        .section-title { text-align: center; margin: 30px 0 20px; font-size: 1.5rem; position: relative; }
+        .section-title::after { content: ''; width: 50px; height: 3px; background: #27ae60; display: block; margin: 8px auto; }
 
         /* PRODUCT GRID */
-        .grid-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-            gap: 20px;
-            padding: 0 20px;
-            max-width: 1100px;
-            margin: auto;
-        }
-        .grid-item {
-            background: #fff;
-            border-radius: 12px;
-            overflow: hidden;
-            text-align: center;
-            transition: transform 0.3s;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            border: 1px solid #eee;
-        }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 0 20px; max-width: 1100px; margin: auto; }
+        .grid-item { background: #fff; border-radius: 12px; overflow: hidden; text-align: center; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; }
         .grid-item:hover { transform: translateY(-5px); }
         .grid-item img { width: 100%; height: 230px; object-fit: cover; }
-        
         .info { padding: 15px; }
         .info h3 { font-size: 1rem; margin-bottom: 8px; height: 40px; overflow: hidden; }
         .price { color: #e74c3c; font-weight: bold; font-size: 1.1rem; margin-bottom: 12px; }
-        
-        .btn {
-            display: block;
-            padding: 8px;
-            background: #27ae60;
-            color: white;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-        .btn:hover { background: #219150; }
+        .btn { display: block; padding: 8px; background: #27ae60; color: white; border-radius: 6px; text-decoration: none; font-size: 14px; }
 
         /* INFO SECTION */
-        .info-section {
-            background: #fff;
-            max-width: 1100px;
-            margin: 40px auto;
-            padding: 20px;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
+        .info-section { background: #fff; max-width: 1100px; margin: 40px auto; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
 
         /* FOOTER */
-        footer {
-            background: #2c3e50;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            font-size: 0.9rem;
-        }
+        footer { background: #2c3e50; color: white; text-align: center; padding: 20px; margin-top: 40px; font-size: 0.9rem; }
     </style>
 </head>
 <body>
@@ -139,10 +65,7 @@
 <nav class="navbar">
     <div style="font-size: 20px; cursor: pointer;">☰</div>
     <div style="font-weight: bold; font-size: 1.2rem; color: #27ae60;">গ্রন্থকানন</div>
-    <div class="nav-icons">
-        <span>🔍</span>
-        <span>🛒</span>
-    </div>
+    <div class="nav-icons"><span>🔍</span> <span>🛒</span></div>
 </nav>
 
 <header class="branding">
@@ -155,10 +78,11 @@
 
 <!-- BANNER SLIDER -->
 <div class="banner">
-     <div class="slider-container" id="slider"> 
-    <img src="cover.jpeg" class="active">
-    <img src="cover2.jpg">
-    <img src="cover3.jpg">
+    <div class="slider-container" id="slider">
+        <img src="cover.jpeg">
+        <img src="cover2.jpg">
+        <img src="cover3.jpg">
+    </div>
 </div>
 
 <div class="section-title">বইয়ের তালিকা</div>
@@ -173,7 +97,6 @@
             <a class="btn" href="https://wa.me">অর্ডার করুন</a>
         </div>
     </div>
-
     <div class="grid-item">
         <img src="https://i.ibb.co.com/8nybhthC/book-0003.webp" alt="দোয়ার ডায়েরি">
         <div class="info">
@@ -182,32 +105,25 @@
             <a class="btn" href="https://wa.me">অর্ডার করুন</a>
         </div>
     </div>
-    
-    <!-- নতুন বই যোগ করার জন্য এই ব্লকটি কপি করুন -->
 </div>
 
-<!-- DELIVERY INFO -->
 <div class="info-section">
     <h3 style="color: #27ae60; margin-bottom: 10px;">ডেলিভারি তথ্য</h3>
     <p>🚚 সারাদেশে হোম ডেলিভারি সুবিধা</p>
     <p>ঢাকা: ৳ ৬০ | ঢাকার বাইরে: ৳ ৯০</p>
 </div>
 
-<footer>
-    &copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত
-</footer>
+<footer>&copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</footer>
 
 <script>
-    let slides = document.querySelectorAll(".banner img");
-    let currentIndex = 0;
-
+    let slider = document.getElementById("slider");
+    let index = 0;
     function nextSlide() {
-        slides[currentIndex].classList.remove("active");
-        currentIndex = (currentIndex + 1) % slides.length;
-        slides[currentIndex].classList.add("active");
+        index++;
+        if (index >= 3) { index = 0; } // ৩টি ছবির জন্য
+        slider.style.transform = `translateX(-${index * (100 / 3)}%)`;
     }
-
-    setInterval(nextSlide, 4000); // ৪ সেকেন্ড পর পর ব্যানার পাল্টাবে
+    setInterval(nextSlide, 3000); // ৩ সেকেন্ড পর পর স্লাইড হবে
 </script>
 
 </body>
