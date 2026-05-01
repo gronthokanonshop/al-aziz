@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
+ 
+
+
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>গ্রন্থকানন - আপনার পছন্দের বই</title>
@@ -37,6 +41,34 @@
             flex-shrink: 0;
             display: block;
         }
+        /* CATEGORY SECTION */
+.category-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap; /* মোবাইলে ক্যাটাগরিগুলো নিচে নিচে চলে আসবে */
+    max-width: 1100px;
+    margin: auto;
+}
+
+.cat-btn {
+    padding: 8px 18px;
+    background: #fff;
+    color: #27ae60;
+    border: 2px solid #27ae60;
+    border-radius: 25px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.cat-btn:hover, .cat-btn.active {
+    background: #27ae60;
+    color: #fff;
+}
+
 
         /* SECTION TITLE */
         .section-title { text-align: center; margin: 30px 0; font-size: 1.5rem; font-weight: bold; }
@@ -78,6 +110,16 @@
         <img src="cover3.jpg" alt=>
     </div>
 </div>
+<div class="category-container">
+    <a href="#" class="cat-btn active">সব বই</a>
+    <a href="#" class="cat-btn">হাদিস</a>
+    <a href="#" class="cat-btn">তাফসীর</a>
+    <a href="#" class="cat-btn">গল্পের বই</a>
+    <a href="#" class="cat-btn">শিশু-কিশোর</a>
+</div>
+
+<!-- বইয়ের তালিকার শুরু -->
+<div class="section-title">বইয়ের তালিকা</div>
 
 <div class="section-title">বইয়ের তালিকা</div>
 
