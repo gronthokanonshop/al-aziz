@@ -1,208 +1,213 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>গ্রন্থকানন</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>গ্রন্থকানন - আপনার পছন্দের বইয়ের সংগ্রহ</title>
+    <style>
+        /* RESET */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: #f4f7f6; color: #333; line-height: 1.6; }
 
-<style>
-    .navbar{
-  display:flex;
-  justify-content:space-between;
-  padding:15px;
-  background:white;
-  box-shadow:0 2px 10px rgba(0,0,0,0.1);
-}
-/* RESET */
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .nav-icons span { margin-left: 15px; cursor: pointer; }
 
-body {
-    font-family: 'SolaimanLipi', Arial, sans-serif;
-    background: #f8f9fa;
-    color: #333;
-}
+        /* HEADER & LOGO */
+        .branding {
+            text-align: center;
+            padding: 20px 10px;
+            background: #fff;
+        }
+        .logo-area {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+        .logo-area img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #27ae60; }
+        .branding p { font-size: 0.9rem; color: #666; }
 
-/* HEADER */
-header {
-    background: #fff;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
+        /* BANNER */
+        .banner {
+            max-width: 1100px;
+            margin: 15px auto;
+            position: relative;
+            height: 250px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: absolute;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+        }
+        .banner img.active { opacity: 1; }
 
-/* LOGO */
-.logo-area {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
+        /* SECTION TITLE */
+        .section-title {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 1.5rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            width: 50px;
+            height: 3px;
+            background: #27ae60;
+            display: block;
+            margin: 8px auto;
+        }
 
-.logo-area img {
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-}
+        /* PRODUCT GRID */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+            max-width: 1100px;
+            margin: auto;
+        }
+        .grid-item {
+            background: #fff;
+            border-radius: 12px;
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 1px solid #eee;
+        }
+        .grid-item:hover { transform: translateY(-5px); }
+        .grid-item img { width: 100%; height: 230px; object-fit: cover; }
+        
+        .info { padding: 15px; }
+        .info h3 { font-size: 1rem; margin-bottom: 8px; height: 40px; overflow: hidden; }
+        .price { color: #e74c3c; font-weight: bold; font-size: 1.1rem; margin-bottom: 12px; }
+        
+        .btn {
+            display: block;
+            padding: 8px;
+            background: #27ae60;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .btn:hover { background: #219150; }
 
-/* BANNER */
-.banner {
-    max-width: 1200px;
-    margin: 15px auto;
-    padding: 0 10px;
-}
+        /* INFO SECTION */
+        .info-section {
+            background: #fff;
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
 
-.banner img {
-    width: 100%;
-    border-radius: 12px;
-    display: none;
-}
-
-.banner img.active {
-    display: block;
-}
-
-/* TITLE */
-.section-title {
-    text-align: center;
-    margin: 20px 0;
-    font-weight: bold;
-}
-
-/* GRID */
-.grid-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 15px;
-    padding: 0 15px;
-    max-width: 1200px;
-    margin: auto;
-}
-
-.grid-item {
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-
-.grid-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-}
-
-.info {
-    padding: 10px;
-}
-
-.price {
-    color: red;
-    font-weight: bold;
-    margin: 5px 0;
-}
-
-.btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background: #27ae60;
-    color: white;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 12px;
-}
-
-/* INFO */
-.info-section {
-    background: #fff;
-    margin: 20px;
-    padding: 15px;
-    border-radius: 10px;
-}
-
-/* FOOTER */
-footer {
-    background: #2c3e50;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    margin-top: 20px;
-}
-</style>
+        /* FOOTER */
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-
 <body>
-<header class="navbar">
-  <div>☰</div>
-  <div>গ্রন্থ-কানন</div>
-  <div>🔍 🛒 👤</div>
-</header> 
-<header>
+
+<nav class="navbar">
+    <div style="font-size: 20px; cursor: pointer;">☰</div>
+    <div style="font-weight: bold; font-size: 1.2rem; color: #27ae60;">গ্রন্থকানন</div>
+    <div class="nav-icons">
+        <span>🔍</span>
+        <span>🛒</span>
+    </div>
+</nav>
+
+<header class="branding">
     <div class="logo-area">
-        <img src="logo.jpeg">
+        <img src="logo.jpeg" alt="Logo">
         <h2>গ্রন্থকানন</h2>
     </div>
     <p>স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
 </header>
 
-<!-- BANNER -->
+<!-- BANNER SLIDER -->
 <div class="banner">
-    <img src="cover.jpeg" class="active">
-    <img src="cover2.jpg">
-    <img src="cover3.jpg">
+    <img src="https://placeholder.com" class="active">
+    <img src="https://placeholder.com">
+    <img src="https://placeholder.com">
 </div>
 
 <div class="section-title">বইয়ের তালিকা</div>
 
 <!-- PRODUCTS -->
 <div class="grid-container">
-
     <div class="grid-item">
-        <img src="https://i.ibb.co.com/2YdC04dV/para-1.webp">
+        <img src="https://i.ibb.co.com/2YdC04dV/para-1.webp" alt="প্যারাডক্সিক্যাল সাজিদ">
         <div class="info">
             <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
             <div class="price">৳ ২২০</div>
-            <a class="btn" href="https://wa.me">অর্ডার</a>
+            <a class="btn" href="https://wa.me">অর্ডার করুন</a>
         </div>
     </div>
 
     <div class="grid-item">
-        <img src="https://i.ibb.co.com/8nybhthC/book-0003.webp">
+        <img src="https://i.ibb.co.com/8nybhthC/book-0003.webp" alt="দোয়ার ডায়েরি">
         <div class="info">
             <h3>দোয়ার ডায়েরি</h3>
             <div class="price">৳ ২৩০</div>
-            <a class="btn" href="https://wa.me">অর্ডার</a>
+            <a class="btn" href="https://wa.me">অর্ডার করুন</a>
         </div>
     </div>
-
+    
+    <!-- নতুন বই যোগ করার জন্য এই ব্লকটি কপি করুন -->
 </div>
 
-<!-- INFO -->
+<!-- DELIVERY INFO -->
 <div class="info-section">
-<h3>ডেলিভারি তথ্য</h3>
-<p>সারাদেশে হোম ডেলিভারি</p>
-<p>ঢাকা 60 টাকা | বাইরে 90 টাকা</p>
+    <h3 style="color: #27ae60; margin-bottom: 10px;">ডেলিভারি তথ্য</h3>
+    <p>🚚 সারাদেশে হোম ডেলিভারি সুবিধা</p>
+    <p>ঢাকা: ৳ ৬০ | ঢাকার বাইরে: ৳ ৯০</p>
 </div>
 
 <footer>
-© 2024 গ্রন্থকানন
+    &copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত
 </footer>
 
-<!-- SLIDER JS -->
 <script>
-let slides = document.querySelectorAll(".banner img");
-let i = 0;
+    let slides = document.querySelectorAll(".banner img");
+    let currentIndex = 0;
 
-setInterval(() => {
-    slides[i].classList.remove("active");
-    i = (i + 1) % slides.length;
-    slides[i].classList.add("active");
-}, 3000);
+    function nextSlide() {
+        slides[currentIndex].classList.remove("active");
+        currentIndex = (currentIndex + 1) % slides.length;
+        slides[currentIndex].classList.add("active");
+    }
+
+    setInterval(nextSlide, 4000); // ৪ সেকেন্ড পর পর ব্যানার পাল্টাবে
 </script>
 
 </body>
-</html> 
+</html>
