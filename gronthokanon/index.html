@@ -26,28 +26,36 @@
 
         /* BANNER SLIDER - FIXED CSS */
     /* BANNER */
-.banner {
-    max-width: 1200px;
-    margin: 15px auto;
-    padding: 0 10px;
+/* BANNER - ছবির সাইজ ফিক্স করার জন্য */
+.banner { 
+    max-width: 1200px; 
+    margin: 15px auto; 
+    overflow: hidden; 
+    border-radius: 12px; 
+    position: relative;
+    height: 300px; /* পিসি বা ল্যাপটপের জন্য উচ্চতা */
 }
 
-.slider-container {
+.slider-container { 
     display: flex; 
     width: 300%; 
     height: 100%;
-    transition: transform 0.8s ease-in-out;
+    transition: transform 0.8s ease-in-out; 
 }
 
-.banner img {
-    width: 100%;
-    border-radius: 12px;
-    display: none;
+.banner img { 
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover; /* ছবি যেন সুন্দর দেখায় এবং ফ্রেম ভরাট থাকে */
+    flex-shrink: 0; 
+    display: block; /* display: none মুছে দেওয়া হয়েছে */
 }
 
-.banner img.active {
-    display: block;
+/* মোবাইলের জন্য ব্যানার ছোট করা */
+@media (max-width: 768px) {
+    .banner { height: 180px; } 
 }
+.
 
 
         /* SECTION TITLE */
