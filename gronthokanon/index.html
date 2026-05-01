@@ -172,7 +172,6 @@
 <header class="branding">
     <div class="logo-area">
         <img src="logoo.jpeg" alt="Logo">
-        <h2>আসসালামু আলাইকুম</h2>
     </div
  
 
@@ -331,6 +330,88 @@
     }
 
     setInterval(autoSlide, 3500); // ৩.৫ সেকেন্ড পর পর ছবি বদলাবে
+<script>
+    // --- স্লাইডার কন্ট্রোল ---
+    const slider = document.getElementById('mainSlider');
+    const totalImages = document.querySelectorAll('.slider img').length;
+    let currentImg = 0;
+
+    function autoSlide() {
+        if (!slider) return;
+        currentImg++;
+        if (currentImg >= totalImages) { currentImg = 0; }
+        slider.scrollLeft = currentImg * slider.offsetWidth;
+    }
+    setInterval(autoSlide, 3500);
+
+    // --- কার্ট ও অর্ডার সিস্টেম ---
+    let cart = [];
+
+    function addToCart(name, price) {
+        cart.push({ name, price });
+        updateCart();
+        alert(name + " কার্টে যোগ হয়েছে!");
+    }
+
+    function updateCart() {
+        const countElement = document.getElementById('count');
+        if (countElement) {
+            countElement.innerText = cart.length;
+        }
+    }
+
+    function openOrderForm() {
+        if (cart.length === 0) return alert("আপনার কার্ট খালি!");
+        document.getElementById('orderModal').style.display = 'flex';
+    }
+
+    function closeOrderForm() {
+        document.getElementById('orderModal').style.display = 'none';
+    }
+
+    function confirmOrder() {
+        const name = document.getElementById('name').value;
+        const phone = document.getElementById('phone').value;
+        const address = document.getElementById('address').value;
+        const delivery = document.getElementById('area').value;
+
+        if (!name || !phone || !address) {
+            alert("দয়া করে সব তথ্য পূরণ করুন!");
+            return;
+        }
+
+        let message = `নতুন অর্ডার! (গ্রন্থকানন)%0A%0A`;
+        message += `নাম: ${name}%0A`;
+        message += `ফোন: ${phone}%0A`;
+        message += `ঠিকানা: ${address}%0A%0A`;
+        message += `বইয়ের তালিকা:%0A`;
+
+        let subtotal = 0;
+        cart.forEach((item, index) => {
+            message += `${index + 1}. ${item.name} - ${item.price}৳%0A`;
+            subtotal += item.price;
+        });
+
+        let total = subtotal + parseInt(delivery);
+        message += `%0Aবইয়ের দাম: ${subtotal}৳%0A`;
+        message += `ডেলিভারি চার্জ: ${delivery}৳%0A`;
+        message += `--------------------%0A`;
+        message += `মোট: ${total}৳`;
+
+        // আপনার হোয়াটসঅ্যাপ নম্বর এখানে যুক্ত করা হয়েছে
+        window.open(`https://wa.me{message}`, '_blank');
+
+        // সাকসেস মেসেজ দেখানো
+        document.getElementById('orderModal').style.display = 'none';
+        document.getElementById('successMsg').style.display = 'block';
+
+        // কার্ট ক্লিয়ার করা
+        cart = [];
+        updateCart();
+    }
+</script>
+
+ 
 </script>
 
 </body>
