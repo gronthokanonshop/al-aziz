@@ -17,26 +17,33 @@
         .branding { text-align: center; padding: 20px 10px; background: #fff; }
         .logo-area { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 5px; }
         
-        /* লোগোর ব্যাকগ্রাউন্ড ট্রিক */
         .logo-area img { 
-            width: 50px; height: 50px; border-radius: 50%; border: 2px solid #27ae60;
-            mix-blend-mode: multiply; /* এটি কালো/সাদা ব্যাকগ্রাউন্ড সরাতে সাহায্য করে */
-            background-color: transparent;
+            width: 50px; height: 50px; border-radius: 50%; border: 2px solid #27ae60; 
+            mix-blend-mode: multiply; 
+            background-color: transparent; 
         }
         .branding p { font-size: 0.9rem; color: #666; }
 
-        /* BANNER SLIDER - স্লাইড হওয়ার জন্য নতুন স্টাইল */
-        .banner { max-width: 1200px; margin: 15px auto; overflow: hidden; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        
-        .slider-container {
-            display: flex; /* ছবিগুলো পাশাপাশি রাখবে */
-            width: 300%; /* ৩টি ছবি তাই ৩০০% */
-            transition: transform 0.8s ease-in-out;
+        /* BANNER SLIDER - FIXED CSS */
+        .banner { 
+            max-width: 1200px; 
+            margin: 15px auto; 
+            overflow: hidden; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .banner img {
-            width: 100%; /* প্রতিটি ছবি পুরো জায়গা নেবে */
-            height: auto;
-            flex-shrink: 0;
+        
+        .slider-container { 
+            display: flex; 
+            width: 300%; 
+            transition: transform 0.8s ease-in-out; 
+        }
+        
+        .banner img { 
+            width: 100%; 
+            height: auto; 
+            flex-shrink: 0; 
+            display: block;
         }
 
         /* SECTION TITLE */
@@ -46,10 +53,8 @@
         /* PRODUCT GRID */
         .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 0 20px; max-width: 1100px; margin: auto; }
         .grid-item { background: #fff; border-radius: 12px; overflow: hidden; text-align: center; transition: transform 0.3s; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border: 1px solid #eee; }
-        .grid-item:hover { transform: translateY(-5px); }
         .grid-item img { width: 100%; height: 230px; object-fit: cover; }
         .info { padding: 15px; }
-        .info h3 { font-size: 1rem; margin-bottom: 8px; height: 40px; overflow: hidden; }
         .price { color: #e74c3c; font-weight: bold; font-size: 1.1rem; margin-bottom: 12px; }
         .btn { display: block; padding: 8px; background: #27ae60; color: white; border-radius: 6px; text-decoration: none; font-size: 14px; }
 
@@ -87,10 +92,9 @@
 
 <div class="section-title">বইয়ের তালিকা</div>
 
-<!-- PRODUCTS -->
 <div class="grid-container">
     <div class="grid-item">
-        <img src="https://i.ibb.co.com/2YdC04dV/para-1.webp" alt="প্যারাডক্সিক্যাল সাজিদ">
+        <img src="https://i.ibb.co.com/2YdC04dV/para-1.webp">
         <div class="info">
             <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
             <div class="price">৳ ২২০</div>
@@ -98,7 +102,7 @@
         </div>
     </div>
     <div class="grid-item">
-        <img src="https://i.ibb.co.com/8nybhthC/book-0003.webp" alt="দোয়ার ডায়েরি">
+        <img src="https://i.ibb.co.com/8nybhthC/book-0003.webp">
         <div class="info">
             <h3>দোয়ার ডায়েরি</h3>
             <div class="price">৳ ২৩০</div>
@@ -116,14 +120,14 @@
 <footer>&copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</footer>
 
 <script>
-    let slider = document.getElementById("slider");
+    const slider = document.getElementById("slider");
     let index = 0;
     function nextSlide() {
         index++;
-        if (index >= 3) { index = 0; } // ৩টি ছবির জন্য
+        if (index >= 3) { index = 0; } 
         slider.style.transform = `translateX(-${index * (100 / 3)}%)`;
     }
-    setInterval(nextSlide, 3000); // ৩ সেকেন্ড পর পর স্লাইড হবে
+    setInterval(nextSlide, 3000); 
 </script>
 
 </body>
