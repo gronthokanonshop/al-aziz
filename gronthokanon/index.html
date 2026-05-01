@@ -24,29 +24,28 @@
             object-fit: cover;
         }
         .branding p { font-size: 0.9rem; color: #666; }
+/* BANNER */
+.banner { 
+    max-width: 1200px; 
+    margin: 15px auto; 
+    overflow: hidden; 
+    border-radius: 12px;
+    position: relative;
+}
 
-        /* BANNER SLIDER - আপনার ছবির সাইজ অনুযায়ী */
-        .banner { 
-            max-width: 1200px; 
-            margin: 15px auto; 
-            overflow: hidden; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-            position: relative;
-        }
-        
-        .slider-wrapper {
-            display: flex; /* ছবিগুলো এক লাইনে পাশাপাশি রাখবে */
-            width: 300%; /* ৩টি ছবি তাই ৩০০% */
-            transition: transform 0.8s cubic-bezier(0.45, 0.05, 0.55, 0.95); 
-        }
-        
-        .slider-wrapper img {
-            width: 100%; /* প্রতিটি ছবি পুরো ব্যানার জুড়ে থাকবে */
-            height: auto; /* ছবির অরিজিনাল চ্যাপ্টা সাইজ বজায় রাখবে */
-            flex-shrink: 0;
-            display: block;
-        }
+.slider-wrapper {
+    display: flex; /* ছবিগুলো পাশাপাশি সাজাবে */
+    width: 300%;   /* ৩টি ছবি তাই ৩০০% */
+    transition: transform 0.8s ease-in-out;
+}
+
+.slider-wrapper img {
+    width: 100%;   /* প্রতিটি ছবি আলাদাভাবে পুরো ব্যানার দখল করবে */
+    height: auto;  /* আপনার ছবির আসল মাপ বজায় রাখবে */
+    flex-shrink: 0;
+    display: block;
+}
+
 
         /* SECTION TITLE */
         .section-title { text-align: center; margin: 30px 0 20px; font-size: 1.5rem; position: relative; font-weight: bold; }
@@ -133,20 +132,18 @@
 <footer>&copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত</footer>
 
 <script>
+   <script>
     const slider = document.getElementById("slider");
     let index = 0;
-    const totalSlides = 3; // আপনার মোট ছবির সংখ্যা
 
-    function startSlide() {
+    setInterval(() => {
         index++;
-        if (index >= totalSlides) {
-            index = 0;
-        }
-        // প্রতিটি স্লাইড ১০০/৩ = ৩৩.৩৩% করে বামে সরবে
-        slider.style.transform = `translateX(-${index * (100 / totalSlides)}%)`;
-    }
+        if (index >= 3) { index = 0; } // ৩টি ছবির জন্য
+        // পুরো ফ্রেমটিকে ১টি ছবির সমান (৩৩.৩৩%) বামে সরিয়ে দিচ্ছে
+        slider.style.transform = `translateX(-${index * (100 / 3)}%)`;
+    }, 3500);
+</script>
 
-    setInterval(startSlide, 3500); // ৩.৫ সেকেন্ড পর পর স্লাইড হবে
 </script>
 
 </body>
