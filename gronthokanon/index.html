@@ -83,13 +83,40 @@
 
         /* FOOTER */
         footer { background: #2c3e50; color: white; text-align: center; padding: 20px; margin-top: 40px; }
+     /* MOVING TEXT CSS */
+.moving-bar {
+    background: #ffffff; /* ব্যাকগ্রাউন্ড সাদা */
+    color: #27ae60;      /* লেখার কালার সবুজ */
+    padding: 10px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-weight: bold;
+    font-size: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.moving-text {
+    display: inline-block;
+    padding-left: 100%;
+    animation: marquee 15s linear infinite; /* ১৫ সেকেন্ড পর পর ঘুরবে */
+}
+
+@keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+
     </style>
 </head>
 <body>
 
 <nav class="navbar">
     <div>☰</div>
-<div> প্রথম অর্ডার এ থাকছে ১০% ছাড়</div>
+<div class="moving-bar">
+    <div class="moving-text">
+        🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ২০% পর্যন্ত ছাড়! 🚚 সারাদেশে হোম ডেলিভারি সুবিধা। দ্রুত অর্ডার করুন!
+    </div>
+</div>
    <div>🔍 🛒</div>
 </nav>
   
@@ -100,11 +127,12 @@
         <img src="logo.jpeg" alt="Logo">
         <h2>গ্রন্থকানন</h2>
     </div
-         <div style="text-align: center; padding: 10px;">
-    <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন..." style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 20px; outline: none;">
-</div>
+ 
 
  <p>স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p
+          <div style="text-align: center; padding: 10px;">
+    <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন..." style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 20px; outline: none;">
+</div>
 </header>
 
 <!-- BANNER SLIDER -->
