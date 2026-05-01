@@ -105,6 +105,45 @@
     0% { transform: translateX(0); }
     100% { transform: translateX(-100%); }
 }
+/* স্যোশাল বাটন ডিজাইন */
+.social-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.social-btn {
+    display: inline-block;
+    margin: 0 10px;
+    transition: transform 0.3s;
+}
+
+.social-btn img {
+    width: 45px; /* আইকনের সাইজ */
+    height: 45px;
+}
+
+.social-btn:hover {
+    transform: scale(1.1); /* মাউস নিলে একটু বড় হবে */
+}
+
+/* ফ্লোটিং হোয়াটসঅ্যাপ (স্ক্রিনের ডান কোণায় ভেসে থাকবে) */
+.wa-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1000;
+    transition: 0.3s;
+}
+
+.wa-float img {
+    width: 60px;
+    height: 60px;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
+}
+
+.wa-float:hover {
+    transform: rotate(10deg) scale(1.1);
+}
 
     </style>
 </head>
@@ -114,7 +153,7 @@
     <div>☰</div>
 <div class="moving-bar">
     <div class="moving-text">
-        🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ২০% পর্যন্ত ছাড়! 🚚 সারাদেশে হোম ডেলিভারি সুবিধা। দ্রুত অর্ডার করুন!
+        🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ১০% অতিরিক্ত ছাড়! 🚚 সারাদেশে ক্যাশ অন হোম ডেলিভারি সুবিধা। 
     </div>
 </div>
    <div>🔍 🛒</div>
@@ -236,7 +275,27 @@
         <div class="price">৳ ৩০০</div>
         <a class="btn" href="https://wa.me">অর্ডার করুন</a>
     </div>
+</div
+ <!-- ফেসবুক ও হোয়াটসঅ্যাপ বাটন (ফুটারে দেখাবে) -->
+<div class="social-section">
+    <p style="font-weight: bold; margin-bottom: 10px;">আমাদের সাথে যোগাযোগ করুন:</p>
+    
+    <!-- ফেসবুক আইকন -->
+    <a href="আপনার_ফেসবুক_লিঙ্ক_এখানে" class="social-btn" target="_blank">
+        <img src="https://wikimedia.org" alt="Facebook">
+    </a>
+
+    <!-- হোয়াটসঅ্যাপ আইকন -->
+    <a href="https://wa.me" class="social-btn" target="_blank">
+        <img src="https://wikimedia.org" alt="WhatsApp">
+    </a>
 </div>
+
+<!-- স্ক্রিনের কোণায় ভেসে থাকা হোয়াটসঅ্যাপ বাটন -->
+<a href="https://wa.me" class="wa-float" target="_blank">
+    <img src="https://wikimedia.org" alt="WhatsApp Chat">
+</a>
+
 
 <footer>
    
