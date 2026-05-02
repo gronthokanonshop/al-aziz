@@ -166,7 +166,6 @@
    }
 </style>
 
-    </style>
 </head>
 <body>
 
@@ -362,8 +361,8 @@
 
     &copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত
 </footer>
-
-<script>
+<script
+    let cart = [];
 window.onload = function () {
 
     const slider = document.getElementById('mainSlider');
@@ -377,12 +376,9 @@ window.onload = function () {
         slider.scrollLeft = currentImg * slider.offsetWidth;
     }, 3500);
 
-    let cart = [];
-
     window.addToCart = function(name, price) {
         cart.push({ name, price });
-        const count = document.getElementById('count');
-        if (count) count.innerText = cart.length;
+        document.getElementById('count').innerText = cart.length;
         alert(name + " কার্টে যোগ হয়েছে!");
     }
 
@@ -402,7 +398,7 @@ window.onload = function () {
         const delivery = document.getElementById('area').value;
 
         if (!name || !phone || !address) {
-            alert("সব তথ্য পূরণ করুন!");
+            alert("সব তথ্য দিন!");
             return;
         }
 
