@@ -216,7 +216,7 @@
         <div class="info">
             <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
             <div class="price">৳ 220</div>
-            <button class="btn" onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ', 220" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
+            <button class="btn" onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ', 220)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
 
         </div>
     </div>
@@ -313,10 +313,23 @@
     <img src="https://i.ibb.co.com/ymY60ckf/png-transparent-whatsapp-click-to-chat-button.png" alt="WhatsApp Chat">
 </a>
 <!-- ফ্লোটিং কার্ট বাটন -->
-<div class="cart-floating" onclick="openOrderForm()">
+<div class="cart-floating" onclick="showCart()">
     🛒 কার্টে জমা হয়েছে <span class="cart-count" id="count">0</span>
 </div>
-
+<div id="cartBox" style="display:none; position:fixed; right:20px; bottom:80px; width:300px; background:#fff; padding:15px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.2); z-index:9999;">
+    <h3>🛒 আপনার কার্ট</h3>
+    <div id="cartItems"></div>
+    <hr>
+    <p>Subtotal: ৳<span id="subtotal">0</span></p>
+    <p>Delivery: ৳<span id="deliveryFee">60</span></p>
+    <h4>Total: ৳<span id="total">0</span></h4>
+    <button onclick="openOrderForm()" style="width:100%; padding:8px; background:#27ae60; color:#fff; border:none;">
+    Checkout
+</button> 
+<button onclick="closeCart()" style="width:100%; margin-top:10px;">
+    ❌ বন্ধ করুন
+</button>
+</div>
 
 <footer>
 <!-- অর্ডার ফর্ম (এটি লুকানো থাকবে, কার্টে ক্লিক করলে দেখা যাবে) -->
@@ -359,70 +372,102 @@
 
     &copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত
 </footer>
-<script>
+ <script>
 let cart = [];
 
-    const slider = document.getElementById('mainSlider');
-    const totalImages = document.querySelectorAll('.slider img').length;
-    let currentImg = 0;
+const slider = document.getElementById('mainSlider');
+const totalImages = document.querySelectorAll('.slider img').length;
+let currentImg = 0;
 
-    setInterval(() => {
-        if (!slider) return;
-        currentImg++;
-        if (currentImg >= totalImages) currentImg = 0;
-        slider.scrollLeft = currentImg * slider.offsetWidth;
-    }, 3500);
+/* SLIDER */
+setInterval(() => {
+    if (!slider) return;
+    currentImg++;
+    if (currentImg >= totalImages) currentImg = 0;
+    slider.scrollLeft = currentImg * slider.offsetWidth;
+}, 3500);
 
-    window.addToCart = function(name, price) {
-        cart.push({ name, price });
-        document.getElementById('count').innerText = cart.length;
-        alert(name + " কার্টে যোগ হয়েছে!");
+/* ADD TO CART */
+window.addToCart = function(name, price) {
+    cart.push({ name, price: Number(price) });
+    document.getElementById('count').innerText = cart.length;
+    updateCartUI();
+    alert(name + " কার্টে যোগ হয়েছে!");
+}
+
+/* SHOW CART */
+window.showCart = function () {
+    document.getElementById('cartBox').style.display = 'block';
+    updateCartUI();
+}
+window.closeCart = function () {
+    document.getElementById('cartBox').style.display = 'none';
+}
+/* CART UI UPDATE */
+function updateCartUI() {
+    let box = document.getElementById('cartItems');
+    box.innerHTML = "";
+
+    let subtotal = 0;
+
+    cart.forEach((item) => {
+        box.innerHTML += `<p>${item.name} - ৳${item.price}</p>`;
+        subtotal += Number(item.price);
+    });
+
+    let delivery = 60;
+    let total = subtotal + delivery;
+
+    document.getElementById('subtotal').innerText = subtotal;
+    document.getElementById('deliveryFee').innerText = delivery;
+    document.getElementById('total').innerText = total;
+}
+
+/* ORDER FORM */
+window.openOrderForm = function() {
+    if (cart.length === 0) return alert("কার্ট খালি!");
+    document.getElementById('orderModal').style.display = 'flex';
+}
+
+window.closeOrderForm = function() {
+    document.getElementById('orderModal').style.display = 'none';
+}
+
+/* CONFIRM ORDER */
+window.confirmOrder = function() {
+    const name = document.getElementById('name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const delivery = document.getElementById('area').value;
+
+    if (!name || !phone || !address) {
+        alert("সব তথ্য দিন!");
+        return;
     }
 
-    window.openOrderForm = function() {
-        if (cart.length === 0) return alert("কার্ট খালি!");
-        document.getElementById('orderModal').style.display = 'flex';
-    }
+    let message = `নতুন অর্ডার (গ্রন্থকানন)\n\n`;
+    message += `নাম: ${name}\n`;
+    message += `ফোন: ${phone}\n`;
+    message += `ঠিকানা: ${address}\n\n`;
 
-    window.closeOrderForm = function() {
-        document.getElementById('orderModal').style.display = 'none';
-    }
+    let subtotal = 0;
 
-    window.confirmOrder = function() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const delivery = document.getElementById('area').value;
+    cart.forEach((item, i) => {
+        message += `${i+1}. ${item.name} - ${item.price}৳\n`;
+        subtotal += Number(item.price);
+    });
 
-        if (!name || !phone || !address) {
-            alert("সব তথ্য দিন!");
-            return;
-        }
+    let total = subtotal + Number(delivery);
 
-        let message = `নতুন অর্ডার (গ্রন্থকানন)\n\n`;
-        message += `নাম: ${name}\n`;
-        message += `ফোন: ${phone}\n`;
-        message += `ঠিকানা: ${address}\n\n`;
+    message += `\nমোট: ${total}৳`;
 
-        let subtotal = 0;
+    window.open(
+        `https://wa.me/8801516595762?text=${encodeURIComponent(message)}`,
+        '_blank'
+    );
 
-        cart.forEach((item, i) => {
-            message += `${i+1}. ${item.name} - ${item.price}৳\n`;
-            subtotal += Number(item.price);
-        });
-
-        let total = subtotal + parseInt(delivery);
-
-        message += `\nমোট: ${total}৳`;
-
-        window.open(
-            `https://wa.me/8801516595762?text=${encodeURIComponent(message)}`,
-            '_blank'
-        );
-
-        cart = [];
-        document.getElementById('orderModal').style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-    }
-
+    cart = [];
+    document.getElementById('orderModal').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+}
 </script>
