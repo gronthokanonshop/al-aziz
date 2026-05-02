@@ -432,16 +432,6 @@ function updateCartUI() {
 }
 
 /* ORDER FORM */
-window.openOrderForm = function() {
-    if (cart.length === 0) return alert("কার্ট খালি!");
-    document.getElementById('orderModal').style.display = 'flex';
-}
-
-window.closeOrderForm = function() {
-    document.getElementById('orderModal').style.display = 'none';
-}
-
-/* CONFIRM ORDER */
 window.confirmOrder = function () {
 
     let name = document.getElementById('name').value;
@@ -455,51 +445,30 @@ window.confirmOrder = function () {
     }
 
     let subtotal = 0;
-    let orderText = "✔ আপনার অর্ডার কনফার্ম হয়েছে\n\n";
+    let message = `নতুন অর্ডার (গ্রন্থকানন)\n\n`;
 
     cart.forEach((item, i) => {
-        orderText += `${i + 1}. ${item.name} - ৳${item.price}\n`;
+        message += `${i + 1}. ${item.name} - ৳${item.price}\n`;
         subtotal += Number(item.price);
     });
 
     let total = subtotal + delivery;
 
-    orderText += `\nSubtotal: ৳${subtotal}`;
-    orderText += `\nDelivery: ৳${delivery}`;
-    orderText += `\nTotal: ৳${total}`;
+    message += `\nনাম: ${name}`;
+    message += `\nফোন: ${phone}`;
+    message += `\nঠিকানা: ${address}`;
 
-    alert(orderText);
+    message += `\n\nSubtotal: ৳${subtotal}`;
+    message += `\nDelivery: ৳${delivery}`;
+    message += `\nTotal: ৳${total}`;
 
-    // reset cart
+    alert("অর্ডার কনফার্ম হয়েছে!");
+
     cart = [];
     document.getElementById('cartBox').style.display = 'none';
     document.getElementById('orderModal').style.display = 'none';
     document.getElementById('count').innerText = 0;
-}
+};
 
-    let message = `নতুন অর্ডার (গ্রন্থকানন)\n\n`;
-    message += `নাম: ${name}\n`;
-    message += `ফোন: ${phone}\n`;
-    message += `ঠিকানা: ${address}\n\n`;
-
-    let subtotal = 0;
-
-    cart.forEach((item, i) => {
-        message += `${i+1}. ${item.name} - ${item.price}৳\n`;
-        subtotal += Number(item.price);
-    });
-
-    let total = subtotal + Number(delivery);
-
-    message += `\nমোট: ${total}৳`;
-
-    window.open(
-        `https://wa.me/8801516595762?text=${encodeURIComponent(message)}`,
-        '_blank'
-    );
-
-    cart = [];
-    document.getElementById('orderModal').style.display = 'none';
-    document.getElementById('successMsg').style.display = 'block';
-}
+    
 </script>
