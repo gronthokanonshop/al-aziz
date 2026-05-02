@@ -152,6 +152,19 @@
 .wa-float:hover {
     transform: rotate(10deg) scale(1.1);
 }
+   .cart-floating{
+       position: fixed;
+       bottom: 25px;
+       left: 20px;
+       background: #27ae60;
+       color: white;
+       padding: 10px 15px;
+       border-radius: 30px;
+       cursor: pointer;
+       z-index: 9999;
+       font-weight: bold;
+   }
+</style>
 
     </style>
 </head>
@@ -175,7 +188,7 @@
     </div>
  
 
- <p>স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p
+ <p>স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
           <div style="text-align: center; padding: 10px;">
     <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন..." style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 20px; outline: none;">
 </div>
@@ -184,10 +197,9 @@
 <!-- BANNER SLIDER -->
 <div class="banner-container">
     <div class="slider" id="mainSlider">
-        <!-- আপনার ছবির নামগুলো এখানে দিন -->
-        <img src="cover.jpeg" alt=>
-        <img src="cover2.jpg" alt=>
-        <img src="cover3.jpg" alt=>
+        <img src="cover.jpeg" alt="">
+        <img src="cover2.jpg" alt="">
+        <img src="cover3.jpg" alt="">
     </div>
 </div>
 <div class="category-container">
@@ -283,7 +295,7 @@
         <div class="price">৳ ৩০০</div>
           <button class="btn" onclick="addToCart('ম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
     </div>
-</div
+ </div>
  <!-- ফেসবুক ও হোয়াটসঅ্যাপ বাটন (ফুটারে দেখাবে) -->
 <div class="social-section">
     <p style="font-weight: bold; margin-bottom: 10px;">আমাদের সাথে যোগাযোগ করুন:</p>
@@ -309,7 +321,7 @@
 </div>
 
 
-<footer
+<footer>
 <!-- অর্ডার ফর্ম (এটি লুকানো থাকবে, কার্টে ক্লিক করলে দেখা যাবে) -->
 <div id="orderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center; padding:15px;">
     <div style="background:#fff; padding:25px; border-radius:15px; width:100%; max-width:400px; text-align:center; position:relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
