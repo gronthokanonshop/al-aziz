@@ -1,534 +1,241 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
- 
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>গ্রন্থকানন - ইসলামিক বই</title>
 
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial;background:#f4f7f6}
 
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>গ্রন্থকানন - আপনার পছন্দের বই</title>
-    <style>
-        /* RESET */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'SolaimanLipi', Arial, sans-serif; background: #f4f7f6; color: #333; }
-
-        /* NAVBAR & BRANDING */
-        .navbar { display: flex; justify-content: space-between; padding: 15px 20px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
-        .branding { text-align: center; padding: 20px; background: #fff; }
-     .logo-area img { 
-    width: 250px; /* লোগোটি স্পষ্ট দেখার জন্য মাপ */
-    height: auto; 
-    display: block;
-    margin: 0 auto; /* লোগো মাঝখানে থাকবে */
-    /* পুরনো mix-blend-mode বা border-radius মুছে দেওয়া হয়েছে */
+/* HEADER */
+.navbar{
+display:flex;
+justify-content:space-between;
+padding:15px;
+background:#fff;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+position:sticky;
+top:0;
+z-index:1000;
 }
 
+.branding{text-align:center;padding:20px;background:#fff}
 
+.logo-area img{width:200px}
 
-        /* BANNER SLIDER - একদম সহজ পদ্ধতি */
-        .banner-container { 
-            max-width: 1200px; 
-            margin: 15px auto; 
-            overflow: hidden; 
-            border-radius: 12px; 
-            position: relative;
-            background: #eee;
-        }
+/* SLIDER */
+.banner-container{max-width:1000px;margin:15px auto;overflow:hidden}
+.slider{display:flex;transition:0.5s}
+.slider img{width:100%;flex-shrink:0}
 
-        .slider {
-            display: flex;
-            width: 100%;
-            overflow-x: hidden; /* স্ক্রলবার লুকানোর জন্য */
-            scroll-behavior: smooth; /* ডানে সরার সময় স্মুথ দেখাবে */
-        }
-
-        .slider img {
-            width: 100%; /* প্রতিটি ছবি পুরো ব্যানার দখল করবে */
-            height: auto; /* আপনার ছবির আসল সাইজ বজায় থাকবে */
-            flex-shrink: 0;
-            display: block;
-        }
-        /* CATEGORY SECTION */
-.category-container {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    padding: 20px;
-    flex-wrap: wrap; /* মোবাইলে ক্যাটাগরিগুলো নিচে নিচে চলে আসবে */
-    max-width: 1100px;
-    margin: auto;
+/* PRODUCTS */
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+gap:15px;
+padding:20px;
 }
 
-.cat-btn {
-    padding: 8px 18px;
-    background: #fff;
-    color: #27ae60;
-    border: 2px solid #27ae60;
-    border-radius: 25px;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: bold;
-    transition: all 0.3s ease;
+.card{
+background:#fff;
+border-radius:10px;
+overflow:hidden;
+text-align:center;
+padding-bottom:10px;
 }
 
-.cat-btn:hover, .cat-btn.active {
-    background: #27ae60;
-    color: #fff;
+.card img{width:100%;height:200px;object-fit:cover}
+
+.btn{
+background:#27ae60;
+color:#fff;
+border:none;
+padding:10px;
+width:100%;
+cursor:pointer;
 }
 
-
-        /* SECTION TITLE */
-        .section-title { text-align: center; margin: 30px 0; font-size: 1.5rem; font-weight: bold; }
-
-        /* PRODUCT GRID */
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 20px; padding: 0 20px; max-width: 1100px; margin: auto; }
-        .grid-item { background: #fff; border-radius: 12px; overflow: hidden; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .grid-item img { width: 100%; height: 230px; object-fit: cover; }
-        .info { padding: 15px; }
-        .price { color: #e74c3c; font-weight: bold; margin-bottom: 10px; }
-        .btn { display: block; padding: 10px; background: #27ae60; color: white; border-radius: 6px; text-decoration: none; font-weight: bold; }
-
-        /* FOOTER */
-        footer { background: #2c3e50; color: white; text-align: center; padding: 20px; margin-top: 40px; }
-     /* MOVING TEXT CSS */
-.moving-bar {
-    background: #ffffff; /* ব্যাকগ্রাউন্ড সাদা */
-    color: #27ae60;      /* লেখার কালার সবুজ */
-    padding: 10px 0;
-    overflow: hidden;
-    white-space: nowrap;
-    font-weight: bold;
-    font-size: 15px;
-    border-bottom: 1px solid #eee;
+/* CART */
+.cart-floating{
+position:fixed;
+bottom:20px;
+left:20px;
+background:#27ae60;
+color:#fff;
+padding:10px 15px;
+border-radius:50px;
+cursor:pointer;
+z-index:999;
 }
 
-.moving-text {
-    display: inline-block;
-    padding-left: 100%;
-    animation: marquee 15s linear infinite; /* ১৫ সেকেন্ড পর পর ঘুরবে */
+/* WHATSAPP */
+.wa-float{
+position:fixed;
+bottom:20px;
+right:20px;
 }
 
-@keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
-}
-/* স্যোশাল বাটন ডিজাইন */
-.social-section {
-    text-align: center;
-    padding: 20px;
+.wa-float img{width:55px}
+
+/* MODAL */
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+justify-content:center;
+align-items:center;
 }
 
-.social-btn {
-    display: inline-block;
-    margin: 0 10px;
-    transition: transform 0.3s;
+.box{
+background:#fff;
+padding:20px;
+width:90%;
+max-width:400px;
+border-radius:10px;
 }
 
-.social-btn img {
-    width: 45px; /* আইকনের সাইজ */
-    height: 45px;
+input,textarea,select{
+width:100%;
+padding:10px;
+margin:8px 0;
 }
-
-.social-btn:hover {
-    transform: scale(1.1); /* মাউস নিলে একটু বড় হবে */
-}
-
-/* ফ্লোটিং হোয়াটসঅ্যাপ (স্ক্রিনের ডান কোণায় ভেসে থাকবে) */
-.wa-float {
-    position: fixed;
-    bottom: 25px;
-    right: 25px;
-    z-index: 1000;
-    transition: 0.3s;
-}
-
-.wa-float img {
-    width: 60px;
-    height: 60px;
-    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.2));
-}
-
-.wa-float:hover {
-    transform: rotate(10deg) scale(1.1);
-}
-
-    </style>
+</style>
 </head>
+
 <body>
 
-<nav class="navbar">
-    <div>☰</div>
-<div class="moving-bar">
-    <div class="moving-text">
-        🔥 বিশেষ অফার: সকল ইসলামিক বইয়ে ১০% অতিরিক্ত ছাড়! 🚚 সারাদেশে ক্যাশ অন হোম ডেলিভারি সুবিধা। 
-    </div>
+<!-- NAV -->
+<div class="navbar">
+<div>☰</div>
+<div>গ্রন্থকানন</div>
+<div>🛒</div>
 </div>
-   <div>🔍 🛒</div>
-</nav>
-  
- 
 
-<header class="branding">
-    <div class="logo-area">
-        <img src="logoo.jpeg" alt="Logo">
-    </div>
- 
-
- <p>স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p
-          <div style="text-align: center; padding: 10px;">
-    <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন..." style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 20px; outline: none;">
+<!-- LOGO -->
+<div class="branding">
+<img src="logoo.jpeg" class="logo-area">
+<p>ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
 </div>
-</header>
 
-<!-- BANNER SLIDER -->
+<!-- SLIDER -->
 <div class="banner-container">
-    <div class="slider" id="mainSlider">
-        <!-- আপনার ছবির নামগুলো এখানে দিন -->
-        <img src="cover.jpeg" alt=>
-        <img src="cover2.jpg" alt=>
-        <img src="cover3.jpg" alt=>
-    </div>
+<div class="slider" id="slider">
+<img src="cover.jpeg">
+<img src="cover2.jpg">
+<img src="cover3.jpg">
 </div>
-<div class="category-container">
-    <a href="#" class="cat-btn active">সব বই</a>
-    <a href="#" class="cat-btn">হাদিস</a>
-    <a href="#" class="cat-btn">তাফসীর</a>
-    <a href="#" class="cat-btn">গল্পের বই</a>
-    <a href="#" class="cat-btn">শিশু-কিশোর</a>
 </div>
 
-<!-- বইয়ের তালিকার শুরু -->
-<div class="section-title">বইয়ের তালিকা</div>
+<!-- PRODUCTS -->
+<div class="grid">
 
-<div class="grid-container">
-    <div class="grid-item">
-        <img src="https://co.com">
-        <div class="info">
-            <h3>প্যারাডক্সিক্যাল সাজিদ</h3>
-            <div class="price">৳ ২২০</div>
-            <button class="btn" onclick="addToCart('প্যারাডক্সিক্যাল সাজিদ', ২২০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-
-        </div>
-    </div>
-    <div class="grid-item">
-        <img src="https://co.com">
-        <div class="info">
-            <h3>দোয়ার ডায়েরি</h3>
-            <div class="price">৳ ২৩০</div>
-          <button class="btn" onclick="addToCart('দোয়ার ডায়েরি', ২৩০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-        </div>
-    </div>
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>আমার বাড়ি</h3>
-        <div class="price">৳ ৩০০</div>
-             <button class="btn" onclick="addToCart('আমার বাড়ি', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div>
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>বই</h3>
-        <div class="price">৳ ৩০০</div>
-       <button class="btn" onclick="addToCart('বই', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div>
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>নাম</h3>
-        <div class="price">৳ ৩০০</div>
-         <button class="btn" onclick="addToCart('নাম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
+<div class="card">
+<img src="https://via.placeholder.com/300">
+<h3>প্যারাডক্সিক্যাল সাজিদ</h3>
+<p>৳220</p>
+<button class="btn" onclick="add('প্যারাডক্সিক্যাল সাজিদ',220)">কার্টে যোগ</button>
 </div>
 
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>বম</h3>
-        <div class="price">৳ ৩০০</div>
-      <button class="btn" onclick="addToCart('বম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div>
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>বইম</h3>
-        <div class="price">৳ ৩০০</div>
-        <button class="btn" onclick="addToCart('বইম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div>
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>ম</h3>
-        <div class="price">৳ ৩০০</div>
-   <button class="btn" onclick="addToCart('ম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div>
-<div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>আম</h3>
-        <div class="price">৳ ৩০০</div>
-    <button class="btn" onclick="addToCart('আম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div>
- <div class="grid-item">
-    <img src="ছবির_লিঙ্ক">
-    <div class="info">
-        <h3>ম</h3>
-        <div class="price">৳ ৩০০</div>
-          <button class="btn" onclick="addToCart('ম', ৩০০)" style="width:100%; border:none; cursor:pointer;">কার্টে যোগ করুন</button>
-    </div>
-</div
- <!-- ফেসবুক ও হোয়াটসঅ্যাপ বাটন (ফুটারে দেখাবে) -->
-<div class="social-section">
-    <p style="font-weight: bold; margin-bottom: 10px;">আমাদের সাথে যোগাযোগ করুন:</p>
-    
-    <!-- ফেসবুক আইকন -->
-    <a href="https://www.facebook.com/gronthokanon0943" class="social-btn" target="_blank">
-        <img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook">
-    </a>
-
-    <!-- হোয়াটসঅ্যাপ আইকন -->
-    <a href="https://wa.me/8801516595762" class="social-btn" target="_blank">
-        <img src="https://i.ibb.co.com/ymY60ckf/png-transparent-whatsapp-click-to-chat-button.png" alt="WhatsApp">
-    </a>
+<div class="card">
+<img src="https://via.placeholder.com/300">
+<h3>দোয়ার ডায়েরি</h3>
+<p>৳230</p>
+<button class="btn" onclick="add('দোয়ার ডায়েরি',230)">কার্টে যোগ</button>
 </div>
 
-<!-- স্ক্রিনের কোণায় ভেসে থাকা হোয়াটসঅ্যাপ বাটন -->
-<a href="https://wa.me/8801516595762" class="wa-float" target="_blank">
-    <img src="https://i.ibb.co.com/ymY60ckf/png-transparent-whatsapp-click-to-chat-button.png" alt="WhatsApp Chat">
+</div>
+
+<!-- CART -->
+<div class="cart-floating" onclick="openCart()">
+🛒 Cart: <span id="count">0</span>
+</div>
+
+<!-- WHATSAPP -->
+<a class="wa-float" href="https://wa.me/8801516595762" target="_blank">
+<img src="https://i.ibb.co/ymY60ckf/whatsapp.png">
 </a>
-<!-- ফ্লোটিং কার্ট বাটন -->
-<div class="cart-floating" onclick="openOrderForm()">
-    🛒 কার্টে জমা হয়েছে <span class="cart-count" id="count">0</span>
+
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="box">
+
+<h3>অর্ডার তথ্য</h3>
+
+<input id="name" placeholder="নাম">
+<input id="phone" placeholder="ফোন">
+<textarea id="address" placeholder="ঠিকানা"></textarea>
+
+<select id="delivery">
+<option value="60">ঢাকার ভিতরে ৳60</option>
+<option value="90">ঢাকার বাইরে ৳90</option>
+</select>
+
+<button class="btn" onclick="order()">অর্ডার কনফার্ম</button>
+<button onclick="closeCart()">বন্ধ</button>
+
 </div>
-
-
-<footer
-<!-- অর্ডার ফর্ম (এটি লুকানো থাকবে, কার্টে ক্লিক করলে দেখা যাবে) -->
-<div id="orderModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:2000; justify-content:center; align-items:center; padding:15px;">
-    <div style="background:#fff; padding:25px; border-radius:15px; width:100%; max-width:400px; text-align:center; position:relative; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
-        <h3 style="color:#27ae60; margin-bottom:20px; font-size: 1.2rem;">শিপিং তথ্য দিন</h3>
-        
-        <input type="text" id="name" placeholder="আপনার নাম" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; outline:none; font-family:inherit;">
-        
-        <input type="text" id="phone" placeholder="মোবাইল নম্বর" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; outline:none; font-family:inherit;">
-        
-        <textarea id="address" placeholder="সম্পূর্ণ ঠিকানা (জেলাসহ)" style="width:100%; padding:12px; margin-bottom:15px; border:1px solid #ddd; border-radius:8px; outline:none; height:80px; font-family:inherit; resize:none;"></textarea>
-
-        <select id="area" style="width:100%; padding:12px; margin-bottom:20px; border:1px solid #ddd; border-radius:8px; font-family:inherit;">
-            <option value="60">ঢাকার ভিতরে (ডেলিভারি চার্জ ৳৬০)</option>
-            <option value="90">ঢাকার বাইরে (ডেলিভারি চার্জ ৳৯০)</option>
-        </select>
-
-        <button onclick="confirmOrder()" style="width:100%; padding:15px; background:#27ae60; color:#fff; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px; transition: 0.3s;">অর্ডার কনফার্ম করুন</button>
-        
-        <button onclick="closeOrderForm()" style="margin-top:15px; background:none; border:none; color:#888; cursor:pointer; text-decoration:underline; font-size: 14px;">এখনই নয়</button>
-    </div>
 </div>
-
-<!-- অর্ডার সফল হওয়ার মেসেজ -->
-<div id="successMsg" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%, -50%); background:#fff; padding:30px; border-radius:15px; text-align:center; z-index:3000; box-shadow:0 10px 40px rgba(0,0,0,0.2); width:90%; max-width:350px;">
-    <div style="font-size: 50px; color: #27ae60; margin-bottom: 10px;">✔️</div>
-    <h3 style="margin-bottom:10px;">অর্ডার পাঠানো হয়েছে!</h3>
-    <p style="color: #666;">আপনার অর্ডারটি হোয়াটসঅ্যাপে পাঠানো হয়েছে। আমরা শীঘ্রই যোগাযোগ করবো।</p>
-    <button onclick="location.reload()" style="margin-top:20px; padding:10px 30px; background:#27ae60; color:#fff; border:none; border-radius:8px; cursor:pointer; font-weight: bold;">ঠিক আছে</button>
-</div>
-
- 
-   
- <div style="margin-bottom: 15px;">
-        <p style="font-size: 20px; color: #bbb; margin-bottom: 12px;">আমরা গ্রহন করি:</p>
-        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" width="50" style="margin: 0 8px; border-radius: 5px;">
-        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" width="50" style="margin: 0 8px; border-radius: 5px;">
-    </div>
-
-    &copy; 2024 গ্রন্থকানন | সর্বস্বত্ব সংরক্ষিত
-</footer>
 
 <script>
-    const slider = document.getElementById('mainSlider');
-    const totalImages = document.querySelectorAll('.slider img').length;
-    let currentImg = 0;
 
-    function autoSlide() {
-        currentImg++;
-        if (currentImg >= totalImages) {
-            currentImg = 0;
-        }
-        // ছবির চওড়া অনুযায়ী ডানে সরিয়ে দেওয়া হচ্ছে
-        slider.scrollLeft = currentImg * slider.offsetWidth;
-    }
+let cart=[];
 
-    setInterval(autoSlide, 3500); // ৩.৫ সেকেন্ড পর পর ছবি বদলাবে
-<script>
-    // --- স্লাইডার কন্ট্রোল ---
-    const slider = document.getElementById('mainSlider');
-    const totalImages = document.querySelectorAll('.slider img').length;
-    let currentImg = 0;
+/* SLIDER */
+let i=0;
+setInterval(()=>{
+let s=document.getElementById("slider");
+i++;
+if(i>=3)i=0;
+s.style.transform=`translateX(-${i*100}%)`;
+},3000);
 
-    function autoSlide() {
-        if (!slider) return;
-        currentImg++;
-        if (currentImg >= totalImages) { currentImg = 0; }
-        slider.scrollLeft = currentImg * slider.offsetWidth;
-    }
-    setInterval(autoSlide, 3500);
+/* CART */
+function add(name,price){
+cart.push({name,price});
+document.getElementById("count").innerText=cart.length;
+}
 
-    // --- কার্ট ও অর্ডার সিস্টেম ---
-    let cart = [];
+/* OPEN CART */
+function openCart(){
+if(cart.length==0){alert("কার্ট খালি");return;}
+document.getElementById("modal").style.display="flex";
+}
 
-    function addToCart(name, price) {
-        cart.push({ name, price });
-        updateCart();
-        alert(name + " কার্টে যোগ হয়েছে!");
-    }
+function closeCart(){
+document.getElementById("modal").style.display="none";
+}
 
-    function updateCart() {
-        const countElement = document.getElementById('count');
-        if (countElement) {
-            countElement.innerText = cart.length;
-        }
-    }
+/* ORDER */
+function order(){
 
-    function openOrderForm() {
-        if (cart.length === 0) return alert("আপনার কার্ট খালি!");
-        document.getElementById('orderModal').style.display = 'flex';
-    }
+let name=document.getElementById("name").value;
+let phone=document.getElementById("phone").value;
+let address=document.getElementById("address").value;
+let delivery=document.getElementById("delivery").value;
 
-    function closeOrderForm() {
-        document.getElementById('orderModal').style.display = 'none';
-    }
+let msg="নতুন অর্ডার%0A";
 
-    function confirmOrder() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const delivery = document.getElementById('area').value;
+cart.forEach((p,i)=>{
+msg+=`${i+1}. ${p.name} - ${p.price}৳%0A`;
+});
 
-        if (!name || !phone || !address) {
-            alert("দয়া করে সব তথ্য পূরণ করুন!");
-            return;
-        }
+let total=cart.reduce((a,b)=>a+b.price,0)+parseInt(delivery);
 
-        let message = `নতুন অর্ডার! (গ্রন্থকানন)%0A%0A`;
-        message += `নাম: ${name}%0A`;
-        message += `ফোন: ${phone}%0A`;
-        message += `ঠিকানা: ${address}%0A%0A`;
-        message += `বইয়ের তালিকা:%0A`;
+msg+=`%0Aমোট: ${total}৳`;
 
-        let subtotal = 0;
-        cart.forEach((item, index) => {
-            message += `${index + 1}. ${item.name} - ${item.price}৳%0A`;
-            subtotal += item.price;
-        });
+window.open(`https://wa.me/8801516595762?text=${msg}`,"_blank");
 
-        let total = subtotal + parseInt(delivery);
-        message += `%0Aবইয়ের দাম: ${subtotal}৳%0A`;
-        message += `ডেলিভারি চার্জ: ${delivery}৳%0A`;
-        message += `--------------------%0A`;
-        message += `মোট: ${total}৳`;
+cart=[];
+document.getElementById("count").innerText=0;
+closeCart();
+}
 
-        // আপনার হোয়াটসঅ্যাপ নম্বর এখানে যুক্ত করা হয়েছে
-        window.open(`https://wa.me{message}`, '_blank');
-
-        // সাকসেস মেসেজ দেখানো
-        document.getElementById('orderModal').style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-
-        // কার্ট ক্লিয়ার করা
-        cart = [];
-        updateCart();
- <script>
-    // --- স্লাইডার কন্ট্রোল (যদি থাকে) ---
-    const slider = document.getElementById('mainSlider');
-    const totalImages = document.querySelectorAll('.slider img').length;
-    let currentImg = 0;
-
-    function autoSlide() {
-        if (!slider) return;
-        currentImg++;
-        if (currentImg >= totalImages) { currentImg = 0; }
-        slider.scrollLeft = currentImg * slider.offsetWidth;
-    }
-    setInterval(autoSlide, 3500);
-
-    // --- কার্ট ও অর্ডার সিস্টেম ---
-    let cart = [];
-
-    function addToCart(name, price) {
-        cart.push({ name, price });
-        updateCart();
-        alert(name + " কার্টে যোগ হয়েছে!");
-    }
-
-    function updateCart() {
-        const countElement = document.getElementById('count');
-        if (countElement) {
-            countElement.innerText = cart.length;
-        }
-    }
-
-    function openOrderForm() {
-        if (cart.length === 0) return alert("আপনার কার্ট খালি!");
-        document.getElementById('orderModal').style.display = 'flex';
-    }
-
-    function closeOrderForm() {
-        document.getElementById('orderModal').style.display = 'none';
-    }
-
-    function confirmOrder() {
-        const name = document.getElementById('name').value;
-        const phone = document.getElementById('phone').value;
-        const address = document.getElementById('address').value;
-        const delivery = document.getElementById('area').value;
-
-        if (!name || !phone || !address) {
-            alert("দয়া করে সব তথ্য পূরণ করুন!");
-            return;
-        }
-
-        let message = `নতুন অর্ডার! (গ্রন্থকানন)%0A%0A`;
-        message += `নাম: ${name}%0A`;
-        message += `ফোন: ${phone}%0A`;
-        message += `ঠিকানা: ${address}%0A%0A`;
-        message += `বইয়ের তালিকা:%0A`;
-
-        let subtotal = 0;
-        cart.forEach((item, index) => {
-            message += `${index + 1}. ${item.name} - ${item.price}৳%0A`;
-            subtotal += item.price;
-        });
-
-        let total = subtotal + parseInt(delivery);
-        message += `%0Aবইয়ের দাম: ${subtotal}৳%0A`;
-        message += `ডেলিভারি চার্জ: ${delivery}৳%0A`;
-        message += `--------------------%0A`;
-        message += `মোট: ${total}৳`;
-
-        // আপনার হোয়াটসঅ্যাপ নম্বরসহ সঠিক লিঙ্ক
-        window.open(`https://wa.me{message}`, '_blank');
-
-        // সাকসেস মেসেজ দেখানো
-        document.getElementById('orderModal').style.display = 'none';
-        document.getElementById('successMsg').style.display = 'block';
-
-        // কার্ট ক্লিয়ার করা
-        cart = [];
-        updateCart();
-    }
-</script>
-
- 
-</script>
-
- 
 </script>
 
 </body>
