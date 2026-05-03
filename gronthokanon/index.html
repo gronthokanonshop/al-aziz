@@ -40,7 +40,15 @@
     justify-content: center;
 }
 .menu-icon { font-size: 21px; cursor: pointer; color: #27ae60; }
-.brand-name { font-size: 20px; font-weight: bold; color: #27ae60; }
+.brand-name {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap; /* লেখা যেন এক লাইনে থাকে */
+    font-size: 18px;
+    font-weight: bold;
+    color: #1a5276; /* আপনার পছন্দের কালার */
+}
 .nav-right { display: flex; align-items: center; gap: 12px; }
 .user-icon { font-size: 19px; cursor: pointer; color: #333; }
 .cart-icon-wrapper { position: relative; font-size: 22px; cursor: pointer; }
