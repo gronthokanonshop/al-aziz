@@ -25,7 +25,20 @@
     top: 0;
     z-index: 1000;
 }
+.logo-area img {
+    width: 60px; /* ৭০ বেশি বড় মনে হলে ৬০ পিক্সেল করে দেখতে পারেন */
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
 
+/* নেভবারের মাঝখানের জায়গা নিয়ন্ত্রণ করতে */
+.nav-center {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+}
 .menu-icon { font-size: 24px; cursor: pointer; color: #27ae60; }
 .brand-name { font-size: 20px; font-weight: bold; color: #27ae60; }
 .nav-right { display: flex; align-items: center; gap: 15px; }
@@ -213,10 +226,11 @@
  
 
 <header class="branding">
+   <div class="nav-center">
     <div class="logo-area">
         <img src="logo.png" alt="Logo">
     </div>
- 
+</div>
 <p style="font-size:19px; font-weight:600; color:#1f7a4c; line-height:1.6;">
     স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান
 </p>
