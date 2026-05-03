@@ -34,20 +34,39 @@
 }
 
 /* নেভবারের মাঝখানের জায়গা নিয়ন্ত্রণ করতে */
+/* নেভবার মাঝখানের অংশ */
 .nav-center {
     flex-grow: 1;
     display: flex;
     justify-content: center;
+    margin: 0 10px; /* দুই পাশের আইকন থেকে দূরত্ব */
 }
-.menu-icon { font-size: 21px; cursor: pointer; color: #27ae60; }
-.brand-name {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap; /* লেখা যেন এক লাইনে থাকে */
-    font-size: 18px;
-    font-weight: bold;
-    color: #1a5276; /* আপনার পছন্দের কালার */
+
+/* সার্চ বার কন্টেইনার */
+.nav-search-container {
+    display: flex;
+    align-items: center;
+    background: #f1f3f4;
+    border-radius: 20px;
+    padding: 4px 12px;
+    width: 100%;
+    max-width: 220px; /* মোবাইল স্ক্রিনে সুন্দর দেখাবে */
+    border: 1px solid #e0e0e0;
+}
+
+.nav-search-input {
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    font-size: 13px;
+    color: #333;
+}
+
+.search-icon-btn {
+    font-size: 14px;
+    color: #27ae60;
+    cursor: pointer;
 }
 .nav-right { display: flex; align-items: center; gap: 12px; }
 .user-icon { font-size: 19px; cursor: pointer; color: #333; }
@@ -214,13 +233,16 @@
     </div>
 </div>
 
-<!-- নতুন নেভিগেশন বার -->
+<!-- নতুন নেভিগেশন বার যেখানে মাঝখানে সার্চ বার আছে -->
 <nav class="navbar">
     <div class="nav-left">
         <span class="menu-icon" onclick="toggleSidebar()">☰</span>
     </div>
     <div class="nav-center">
-        <span class="brand-name">গ্রন্থকানন</span>
+        <div class="nav-search-container">
+            <input type="text" placeholder="বই খুঁজুন..." class="nav-search-input">
+            <span class="search-icon-btn">🔍</span>
+        </div>
     </div>
     <div class="nav-right">
         <span class="user-icon">👤</span>
@@ -242,9 +264,7 @@
 <p style="font-size:19px; font-weight:600; color:#1f7a4c; line-height:1.6;">
     স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান
 </p>
-          <div style="text-align: center; padding: 10px;">
-    <input type="text" placeholder="বইয়ের নাম লিখে খুঁজুন..." style="padding: 10px; width: 80%; max-width: 400px; border: 1px solid #ccc; border-radius: 20px; outline: none;">
-</div>
+        
 </header>
 
 <!-- BANNER SLIDER -->
