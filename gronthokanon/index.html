@@ -35,22 +35,23 @@
 
 /* নেভবারের মাঝখানের জায়গা নিয়ন্ত্রণ করতে */
 /* নেভবার মাঝখানের অংশ */
+/* মাঝখানের অংশটিকে পুরো জায়গা নিতে বাধ্য করা */
 .nav-center {
-    flex-grow: 1;
+    flex: 1; /* এটি বাম এবং ডানের আইকনের মাঝের পুরো জায়গা দখল করবে */
     display: flex;
     justify-content: center;
-    margin: 0 10px; /* দুই পাশের আইকন থেকে দূরত্ব */
+    padding: 0 10px; /* আইকন থেকে সামান্য গ্যাপ */
 }
 
-/* সার্চ বার কন্টেইনার */
+/* সার্চ বার এখন পুরো জায়গা জুড়ে থাকবে */
 .nav-search-container {
     display: flex;
     align-items: center;
     background: #f1f3f4;
     border-radius: 20px;
-    padding: 4px 12px;
-    width: 100%;
-    max-width: 220px; /* মোবাইল স্ক্রিনে সুন্দর দেখাবে */
+    padding: 6px 15px;
+    width: 100%; /* ১০০% চওড়া হবে */
+    max-width: 100%; /* কোনো সীমা থাকবে না */
     border: 1px solid #e0e0e0;
 }
 
@@ -59,8 +60,7 @@
     background: transparent;
     outline: none;
     width: 100%;
-    font-size: 13px;
-    color: #333;
+    font-size: 14px;
 }
 
 .search-icon-btn {
@@ -261,7 +261,7 @@
         <img src="logo.png" alt="Logo">
     </div>
 </div>
-<p style="font-size:19px; font-weight:600; color:#1f7a4c; line-height:1.6;">
+<p style="font-size:19px; font-weight:500; color:#1f7a4c; line-height:1.6;">
     স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান
 </p>
         
