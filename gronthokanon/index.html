@@ -324,46 +324,60 @@ function filterBooks() {
     let subtotal = 0;
     box.innerHTML = "";
 
+    // ১. কার্টের আইটেমগুলোকে গ্রুপ করা (নাম, দাম এবং ছবি অনুযায়ী)
     let grouped = {};
     cart.forEach(item => {
         if (grouped[item.name]) { 
             grouped[item.name].qty += 1; 
         } else { 
-            // এখানে ছবির লিঙ্কটিও গ্রুপ করা হচ্ছে
-            grouped[item.name] = { price: item.price, qty: 1, img: item.img }; 
+            grouped[item.name] = { 
+                price: item.price, 
+                qty: 1, 
+                img: item.img || 'https://via.placeholder.com/45x60?text=No+Image' // ছবি না থাকলে ডিফল্ট ছবি
+            }; 
         }
     });
 
+    // ২. কার্ট এইচটিএমএল জেনারেট করা
     for (let name in grouped) {
         let item = grouped[name];
         subtotal += (item.price * item.qty);
-        let escapedName = name.replace(/'/g, "\\'");
+        let escapedName = name.replace(/'/g, "\\'"); // সিঙ্গেল কোটেশন হ্যান্ডেল করা
         
         box.innerHTML += `
             <div class="cart-item-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">
-                <!-- এখানে বইয়ের আসল ছবি দেখা যাবে -->
                 <img src="${item.img}" style="width: 45px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #ddd;">
                 
                 <div style="flex:1; text-align:left;">
-                    <h4 style="font-size:13px; margin:0;">${name}</h4>
+                    <h4 style="font-size:13px; margin:0; color:#333;">${name}</h4>
                     <span style="color:#e74c3c; font-size:13px; font-weight:bold;">৳${item.price}</span>
                 </div>
                 <div style="display:flex; align-items:center; gap:8px;">
-                    <button class="qty-btn" onclick="changeQty('${escapedName}', -1)">-</button>
-                    <span style="font-weight:bold;">${item.qty}</span>
-                    <button class="qty-btn" onclick="changeQty('${escapedName}', 1)">+</button>
+                    <button class="qty-btn" onclick="changeQty('${escapedName}', -1)" style="cursor:pointer;">-</button>
+                    <span style="font-weight:bold; font-size:14px;">${item.qty}</span>
+                    <button class="qty-btn" onclick="changeQty('${escapedName}', 1)" style="cursor:pointer;">+</button>
                 </div>
             </div>`;
     }
-    
-    // বাকি ক্যালকুলেশন (সাবটোটাল, ডেলিভারি) আপনার আগের কোডেই থাকবে
+
+    // ৩. সংখ্যা (Count) আপডেট করা - এটি আপনার মিসিং ছিল
+    let totalItems = cart.length;
+    let countBadge = document.getElementById('count');
+    let floatCountBadge = document.getElementById('floatCount');
+
+    if (countBadge) countBadge.innerText = totalItems;
+    if (floatCountBadge) floatCountBadge.innerText = totalItems;
+
+    // ৪. দামের হিসাব আপডেট করা
     let deliveryInput = document.getElementById('location');
     let delivery = deliveryInput ? Number(deliveryInput.value) : 0;
+    
+    // discountPercent গ্লোবাল ভেরিয়েবল থেকে আসবে
     let discountAmt = Math.round(subtotal * (discountPercent / 100));
     
-    document.getElementById('subtotal').innerText = subtotal;
-    document.getElementById('discountAmt').innerText = discountAmt;
-    document.getElementById('total').innerText = (subtotal - discountAmt) + delivery;
+    if(document.getElementById('subtotal')) document.getElementById('subtotal').innerText = subtotal;
+    if(document.getElementById('discountAmt')) document.getElementById('discountAmt').innerText = discountAmt;
+    if(document.getElementById('total')) document.getElementById('total').innerText = (subtotal - discountAmt) + delivery;
 }
 
     function changeQty(name, delta) {
