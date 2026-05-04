@@ -247,12 +247,11 @@
         }
         if(window.innerWidth < 768 && document.getElementById('sidebar').classList.contains('active')) toggleSidebar();
     }
-
-   function filterBooks() {
-    let input = document.getElementById('searchInput').value.trim().toLowerCase();
+function filterBooks() {
+    // .normalize("NFC") যুক্ত করা হয়েছে ইউনিকোড সমস্যা মিটাতে
+    let input = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
     let suggestionBox = document.getElementById('searchSuggestions');
     let items = document.getElementsByClassName('grid-item');
-    
     if (input.length === 0) {
         suggestionBox.style.display = "none";
         for (let item of items) item.style.display = "block";
@@ -263,7 +262,7 @@
     let foundCount = 0;
 
     for (let item of items) {
-        let title = item.querySelector('h3').innerText;
+        let title = item.querySelector('h3').innerText.normalize("NFC").trim();
         let lowerTitle = title.toLowerCase();
         let price = item.querySelector('.price').innerText;
         let imgSrc = item.querySelector('img').src;
