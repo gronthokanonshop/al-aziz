@@ -84,7 +84,7 @@
 </div>
 
 <div class="moving-bar">
-    <div class="moving-text">🔥 বিশেষ অফার: সকল বইয়ে ১০% অতিরিক্ত ছাড়! 🚚 সারাদেশে ক্যাশ অন হোম ডেলিভারি।</div>
+    <div class="moving-text">🔥 বিশেষ অফার: প্রথম অর্ডার এ পাচ্ছেন ০৫% অতিরিক্ত ছাড়!,কুপন কোড (FIRSTORDER)</div>
 </div>
 
 <!-- NAVBAR -->
@@ -164,7 +164,7 @@
 
         <div style="padding: 15px; background: #f9f9f9; border-top: 1px solid #ddd;">
             <div style="display: flex; gap: 5px; margin-bottom: 10px;">
-                <input type="text" id="couponCode" placeholder="কুপন (SAVE10)" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="text" id="couponCode" placeholder="কুপন (FIRSTORDER)" style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
                 <button onclick="applyCoupon()" style="background: #2c3e50; color: white; border: none; padding: 0 12px; border-radius: 5px; cursor: pointer;">Apply</button>
             </div>
             <div style="font-size: 14px; line-height: 1.8;">
@@ -394,8 +394,8 @@ function filterBooks() {
     function applyCoupon() {
         let code = document.getElementById('couponCode').value.toUpperCase();
         if (code === "SAVE10") {
-            discountPercent = 10;
-            alert("🎉 ১০% ডিসকাউন্ট যুক্ত হয়েছে!");
+            discountPercent = 05;
+            alert("🎉 ০৫% ডিসকাউন্ট যুক্ত হয়েছে!");
             updateCartUI();
         } else { alert("ভুল কুপন কোড!"); }
     }
