@@ -1,0 +1,26 @@
+/* ═══════════════════════════════════════
+   আল আযীয বুকশপ — Firebase Config
+═══════════════════════════════════════ */
+
+const firebaseConfig = {
+    apiKey: "AIzaSyBQMZ3x2d-2ELopI-3w78EFrcWnfIh2xg0",
+    authDomain: "gronthokanon-8573e.firebaseapp.com",
+    databaseURL: "https://gronthokanon-8573e-default-rtdb.firebaseio.com",
+    projectId: "gronthokanon-8573e",
+    storageBucket: "gronthokanon-8573e.firebasestorage.app",
+    messagingSenderId: "192907327925",
+    appId: "1:192907327925:web:1c469a312aa02bf2fe81fc",
+    measurementId: "G-KFQF4ND0KF"
+};
+
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const auth = firebase.auth();
+const db   = firebase.database();
+
+// Firestore — শুধু AAbook.html এ load হবে
+if (typeof firebase.firestore === 'function') {
+    window.fsdb = firebase.firestore();
+}

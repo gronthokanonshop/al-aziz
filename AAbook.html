@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="logo.png" type="image/png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>বই বিস্তারিত — আল আজিজ বুকশপ</title>
+    <meta name="theme-color" content="#0D1F44">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="AAcommon.css">
+    <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+    <style>
+        /* ═══════ AL AZIZ COLOR TOKENS ═══════ */
+        :root {
+            --primary: #1B3A6B;
+            --primary-dark: #0D1F44;
+            --primary-light: #2550A0;
+            --accent: #C9920A;
+            --accent-light: #E6B800;
+            --danger: #DC2626;
+            --bg: #F3F4F8;
+            --bg2: #E8ECF5;
+            --card: rgba(255,255,255,0.92);
+            --text: #1F2937;
+            --text2: #6B7280;
+            --border: rgba(27,58,107,0.15);
+            --green: #1B3A6B;
+            --dark: #0D1F44;
+            --red: #DC2626;
+            --price-bg: rgba(27,58,107,0.05);
+            --shadow: rgba(27,58,107,0.10);
+            --nav-bg: #0D1F44;
+            --nav-border: rgba(201,146,10,0.30);
+            --search-input-bg: rgba(22,32,64,0.85);
+            --search-input-border: rgba(42,74,127,0.6);
+        }
+        [data-theme="dark"] {
+            --bg: #060c18;
+            --card: rgba(10,20,45,0.85);
+            --text: #E0E8F8;
+            --text2: #7A9DC8;
+            --border: rgba(101,139,211,0.12);
+            --green: #658BD3;
+            --dark: #E0E8F8;
+            --red: #F87171;
+            --price-bg: rgba(27,58,107,0.12);
+            --shadow: rgba(0,0,0,0.40);
+            --nav-bg: rgba(4,8,20,0.96);
+        }
+
+        body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);transition:background 0.3s,color 0.3s;padding-bottom:90px;}
+
+        /* READING PROGRESS */
+        #readProg{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#1B3A6B,#C9920A,#E6B800);width:0%;z-index:9999;transition:width 0.1s linear;border-radius:0 2px 2px 0;}
+
+        /* NAVBAR — consistent with index */
+        .navbar-top {
+            display:flex;
+            align-items:center;
+            padding:8px 14px;
+            gap:10px;
+            background:#0D1F44;
+        }
+        .navbar-icons {
+            display:flex;
+            align-items:center;
+            gap:8px;
+            margin-left:auto;
+        }
+        .nav-logo{width:32px;height:32px;object-fit:contain;}
+        
+        
+        
+        
+        
+        .cart-badge{position:absolute;top:-6px;right:-7px;background:#ef4444;color:white;font-size:9px;font-weight:700;padding:2px 5px;border-radius:0;min-width:17px;text-align:center;border:1.5px solid var(--nav-bg);line-height:1.2;}
+
+        /* CONTAINER */
+        .container{max-width:500px;margin:0 auto;padding:16px 14px 20px;}
+
+        /* IMAGE ZOOM */
+        #imgModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:9998;align-items:center;justify-content:center;cursor:zoom-out;}
+        #imgModal.open{display:flex;}
+        #imgModal img{max-width:90vw;max-height:90vh;border-radius:0;}
+
+        /* IMAGE CARD */
+        .img-card{background:var(--card);border-radius:0;padding:24px;text-align:center;margin-bottom:16px;position:relative;border:1px solid #1B3A6B;}
+        .book-img-wrap{position:relative;display:inline-block;cursor:zoom-in;}
+        .book-img-wrap img{width:180px;height:260px;object-fit:cover;border-radius:0;transition:transform 0.3s;}
+        .book-img-wrap img:hover{transform:scale(1.04);}
+        .img-skel{width:180px;height:260px;border-radius:0;background:linear-gradient(90deg,var(--border) 25%,var(--bg) 50%,var(--border) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite;display:none;}
+        @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+        .share-btn{position:absolute;top:14px;left:14px;background:var(--card);border:1px solid #1B3A6B;border-radius:0;width:40px;height:40px;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow);transition:0.2s;}
+        .share-btn:hover{transform:scale(1.12);border-color:var(--accent);}
+        .wl-btn-lg{position:absolute;top:14px;right:14px;background:var(--card);border:1px solid #1B3A6B;border-radius:0;width:40px;height:40px;cursor:pointer;font-size:19px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px var(--shadow);transition:0.2s;}
+        .wl-btn-lg:hover{transform:scale(1.12);}
+        .wl-btn-lg.active{background:#ffe4e4;border-color:#dc2626;}
+
+        #sharePanel{position:absolute;top:62px;left:10px;background:var(--card);border:1px solid #1B3A6B;border-radius:0;padding:10px;box-shadow:0 8px 24px var(--shadow);z-index:50;display:none;min-width:190px;}
+        #sharePanel.open{display:block;animation:fadeDown 0.2s ease;}
+        @keyframes fadeDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
+        .share-opt{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:0;cursor:pointer;font-size:13px;font-weight:600;transition:0.15s;}
+        .share-opt:hover{background:var(--bg);}
+
+        /* BOOK INFO CARD */
+        .info-card{background:var(--card);border-radius:0;padding:20px;margin-bottom:16px;border:1px solid #1B3A6B;}
+        .book-title{font-size:22px;font-weight:700;color:var(--dark);margin-bottom:6px;line-height:1.3;}
+        .book-author{font-size:15px;color:var(--primary);font-weight:600;margin-bottom:10px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;}
+        .book-author:hover{text-decoration:underline;}
+
+        /* BADGES */
+        .badges{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+        .badge{font-size:12px;padding:4px 12px;border-radius:0;font-weight:600;}
+        .b-cat{background:#EEF2FA;color:var(--primary);border:1px solid #1B3A6B;}
+        .b-ok{background:#EEF2FA;color:var(--primary);border:1px solid #1B3A6B;}
+        .b-low{background:#fff3e0;color:#f39c12;border:1px solid #1B3A6B;}
+        .b-out{background:#fdecea;color:#e74c3c;border:1px solid #1B3A6B;}
+        [data-theme="dark"] .b-cat,[data-theme="dark"] .b-ok{background:#071328;}
+        [data-theme="dark"] .b-low{background:#1e1005;}
+        [data-theme="dark"] .b-out{background:#1a0505;}
+
+        /* PRICE */
+        .price-section{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:14px;background:var(--price-bg);border-radius:0;border:1px solid #1B3A6B;}
+        .price-sell{font-size:28px;font-weight:700;color:var(--red);}
+        .price-orig{font-size:16px;color:var(--text2);text-decoration:line-through;}
+        .price-disc{
+            background:var(--red);color:white;
+            font-size:12px;font-weight:800;
+            padding:5px 16px 5px 10px;
+            clip-path:polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+            letter-spacing:0.2px;
+            box-shadow:2px 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* QTY */
+        .qty-row{display:flex;align-items:center;gap:14px;margin-bottom:14px;}
+        .qty-label{font-size:14px;font-weight:600;color:var(--text2);}
+        .qty-wrap{display:flex;align-items:center;border:1px solid #1B3A6B;border-radius:0;overflow:hidden;}
+        .qty-btn{width:38px;height:38px;border:none;background:var(--bg);color:var(--text);font-size:20px;cursor:pointer;font-weight:700;transition:0.15s;display:flex;align-items:center;justify-content:center;}
+        .qty-btn:hover{background:var(--primary);color:white;}
+        .qty-num{width:40px;text-align:center;font-size:16px;font-weight:700;color:var(--text);background:var(--card);border:none;outline:none;}
+
+        /* INFO TABLE */
+        .info-table{width:100%;border-collapse:collapse;margin-bottom:16px;}
+        .info-table tr{border-bottom:1px solid #1B3A6B;}
+        .info-table td{padding:10px 4px;font-size:14px;}
+        .info-label{color:var(--text2);width:110px;font-weight:500;}
+        .info-val{color:var(--text);font-weight:600;}
+
+        /* DELIVERY CARD */
+        .delivery-card{background:linear-gradient(135deg,#EEF2FA,#E0E8F5);border:1px solid #1B3A6B;border-radius:0;padding:14px 16px;margin-bottom:16px;}
+        [data-theme="dark"] .delivery-card{background:linear-gradient(135deg,#0a2e1a,#0d3d22);border-color:#0D1F44;}
+        .d-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;}
+        .d-row:last-child{margin-bottom:0;}
+        .d-icon{font-size:18px;width:26px;text-align:center;}
+        .d-text{font-size:13px;font-weight:600;color:#0D1F44;}
+        [data-theme="dark"] .d-text{color:#C9920A;}
+        .d-sub{font-size:11px;color:var(--accent);}
+        [data-theme="dark"] .d-sub{color:#658BD3;}
+
+        /* BUTTONS */
+        .btn-wl{width:100%;padding:12px;background:#fff;color:#111;border:1px solid #1B3A6B;border-radius:0;font-size:14px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;margin-bottom:10px;}
+        .btn-wl:hover{background:#111;color:#fff;}
+        .btn-wl.active{background:#ffe0e0;color:#dc2626;border-color:#dc2626;}
+        .btn-row{display:flex;gap:0;margin-bottom:10px;}
+        .btn-cart{flex:1;padding:14px;background:#fff;color:#111;border:1px solid #1B3A6B;border-right:none;border-radius:0;font-size:15px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;}
+        .btn-cart:hover{background:var(--primary-dark);color:#fff;}
+        .btn-buy{flex:1;padding:14px;background:var(--primary);color:#fff;border:1px solid #1B3A6B;border-radius:0;font-size:15px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;}
+        .btn-buy:hover{background:var(--accent);color:#0D1F44;border-color:var(--accent);}
+        .btn-disabled{background:#ccc!important;color:#888!important;border-color:#aaa!important;cursor:not-allowed!important;}
+
+        /* STICKY BAR */
+        #stickyBar{position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--card);border-top:1px solid #1B3A6B;padding:10px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -4px 20px var(--shadow);transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);}
+        #stickyBar.visible{transform:translateY(0);}
+        .sticky-price{font-size:20px;font-weight:800;color:var(--red);white-space:nowrap;}
+        .sticky-qty-wrap{display:flex;align-items:center;border:1px solid #1B3A6B;border-radius:0;overflow:hidden;}
+        .sticky-qty-btn{width:32px;height:36px;border:none;background:var(--bg);color:var(--text);font-size:18px;font-weight:700;cursor:pointer;transition:0.15s;}
+        .sticky-qty-btn:hover{background:var(--primary);color:white;}
+        .sticky-qty-num{width:34px;text-align:center;font-size:14px;font-weight:700;background:var(--card);color:var(--text);}
+        .sticky-buy{flex:1;padding:12px;background:var(--primary);color:#fff;border:1px solid #1B3A6B;border-radius:0;font-size:14px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:0.18s;}
+        .sticky-buy:hover{background:var(--accent);color:#0D1F44;border-color:var(--accent);}
+
+        /* DESC */
+        .desc-card{background:var(--card);border-radius:0;padding:20px;margin-bottom:16px;border:1px solid #1B3A6B;}
+        .desc-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1B3A6B;}
+        [data-theme="dark"] .desc-card h3{color:#ecfdf5;}
+        .desc-text{font-size:14px;color:var(--text2);line-height:1.8;}
+        .desc-toggle{display:inline-block;margin-top:8px;color:var(--primary);font-size:13px;font-weight:700;cursor:pointer;}
+
+        /* RELATED */
+        .related-card{background:var(--card);border-radius:0;padding:20px;margin-bottom:16px;border:1px solid #1B3A6B;}
+        .related-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid #1B3A6B;}
+        [data-theme="dark"] .related-card h3{color:#ecfdf5;}
+        .rel-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
+        .rel-row::-webkit-scrollbar{height:4px;}
+        .rel-row::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+        .rel-book{flex-shrink:0;width:110px;cursor:pointer;transition:0.2s;}
+        .rel-book:hover{transform:translateY(-4px);}
+        .rel-book img{width:110px;height:150px;object-fit:cover;border-radius:0;box-shadow:0 4px 10px rgba(0,0,0,0.1);margin-bottom:6px;border:1px solid #1B3A6B;}
+        .rel-name{font-size:11px;font-weight:600;color:var(--text);line-height:1.3;text-align:center;}
+        .rel-price{font-size:12px;color:var(--red);font-weight:700;text-align:center;margin-top:3px;}
+
+        /* TOAST */
+        .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#0D1F44;color:#C9920A;padding:12px 24px;border-radius:0;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #C9920A;}
+        .toast.show{display:block;animation:toastIn 0.3s ease;}
+        @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+        /* FLY CART */
+        .fly-item{position:fixed;font-size:28px;z-index:9999;pointer-events:none;transition:all 0.6s cubic-bezier(0.4,0,0.2,1);}
+
+        /* TRUST STRIP */
+        .trust-strip{background:var(--card);border-top:1px solid #1B3A6B;border-bottom:1px solid #1B3A6B;padding:12px 16px;display:flex;justify-content:space-around;align-items:center;}
+        .trust-item{text-align:center;}
+        .trust-icon{font-size:20px;}
+        .trust-text{font-size:10px;font-weight:700;color:var(--primary);}
+
+        /* WHATSAPP */
+        
+        
+    </style>
+</head>
+<body>
+
+<div id="readProg"></div>
+<div id="imgModal" onclick="closeImgModal()"><img id="modalImg" src="" alt="বই"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" style="background:#0D1F44;border-bottom:2.5px solid #C9920A;position:sticky;top:0;z-index:1000;">
+    <div class="navbar-top">
+        <button class="back-btn" onclick="goBack()" style="background:transparent;border:1px solid rgba(201,146,10,0.5);color:#C9920A;width:36px;height:36px;border-radius:0;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
+        <img src="logo.png" class="nav-logo" alt="গ্রন্থকানন" style="margin-left:6px;">
+        <div class="navbar-icons">
+            <button class="dark-pill" onclick="toggleDark()" id="darkBtn" style="background:transparent;border:1px solid rgba(201,146,10,0.5);color:#C9920A;width:36px;height:36px;border-radius:0;cursor:pointer;font-size:16px;">🌙</button>
+            <div class="nav-btn" onclick="goToCart()" title="কার্ট" style="position:relative;cursor:pointer;background:var(--accent);color:#0D1F44;width:36px;height:36px;border-radius:0;display:flex;align-items:center;justify-content:center;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+                <span class="cart-badge" id="cartCount">0</span>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- IMAGE -->
+    <div class="img-card">
+        <button class="share-btn" onclick="toggleShare(event)" title="শেয়ার">🔗</button>
+        <div id="sharePanel">
+            <div class="share-opt" onclick="shareWA()">📲 <span>WhatsApp শেয়ার</span></div>
+            <div class="share-opt" onclick="copyLink()">🔗 <span id="copyTxt">লিঙ্ক কপি করুন</span></div>
+        </div>
+        <div class="book-img-wrap" onclick="openImgModal()">
+            <div class="img-skel" id="imgSkel"></div>
+            <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:var(--text2);">📷 ট্যাপ করুন বড় করে দেখতে</div>
+        <button class="wl-btn-lg" id="wlBtnLg" onclick="toggleWL()">🤍</button>
+
+    </div>
+
+    <!-- INFO -->
+    <div class="info-card" id="mainSection">
+        <div class="book-title" id="bookTitle"></div>
+        <div class="book-author" id="bookAuthor"></div>
+        <div class="badges" id="bookBadges"></div>
+        <div class="price-section">
+            <div class="price-sell" id="bookPrice"></div>
+            <div class="price-orig" id="bookOrigPrice"></div>
+            <div class="price-disc" id="bookDisc"></div>
+        </div>
+        <div class="qty-row">
+            <span class="qty-label">পরিমাণ:</span>
+            <div class="qty-wrap">
+                <button class="qty-btn" onclick="changeQty(-1)">−</button>
+                <div class="qty-num" id="qtyNum">১</div>
+                <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+        </div>
+        <table class="info-table">
+            <tr><td class="info-label">প্রকাশনী</td><td class="info-val" id="bookPub"></td></tr>
+            <tr><td class="info-label">পৃষ্ঠা সংখ্যা</td><td class="info-val" id="bookPages"></td></tr>
+            <tr><td class="info-label">কভার</td><td class="info-val" id="bookCover"></td></tr>
+            <tr><td class="info-label">বিষয়</td><td class="info-val" id="bookSubject"></td></tr>
+        </table>
+        <div class="delivery-card">
+            <div class="d-row"><div class="d-icon">🚚</div><div><div class="d-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div><div class="d-sub">বাইরে: ৩-৫ কার্যদিবস</div></div></div>
+            <div class="d-row"><div class="d-icon">💵</div><div><div class="d-text">ক্যাশ অন ডেলিভারি সুবিধা</div><div class="d-sub">ডেলিভারি পেয়ে টাকা দিন</div></div></div>
+            <div class="d-row"><div class="d-icon">🔄</div><div><div class="d-text">সহজ রিটার্ন পলিসি</div><div class="d-sub">৭ দিনের মধ্যে ফেরত দিন</div></div></div>
+        </div>
+        <button class="btn-wl" id="wlBtn" onclick="toggleWL()">🤍 উইশলিস্টে যোগ করুন</button>
+        <div class="btn-row" id="btnRow">
+            <button class="btn-cart" id="btnCart" onclick="addToCartShow()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:5px;"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>কার্টে যোগ করুন</button>
+            <button class="btn-buy" id="btnBuy" onclick="buyNow()">⚡ এখনই কিনুন</button>
+        </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="desc-card">
+        <h3>📖 বিস্তারিত</h3>
+        <div class="desc-text" id="bookDesc"></div>
+        <span class="desc-toggle" id="descToggle" onclick="toggleDesc()" style="display:none;">আরো দেখুন ▼</span>
+    </div>
+
+    <!-- RELATED -->
+    <div class="related-card" id="relatedSection">
+    <h3>📚 একই বিষয়ের বই</h3>
+        <div class="rel-row" id="relatedBooks"></div>
+    </div>
+
+    <!-- RECENTLY VIEWED -->
+    <div class="related-card" id="recentSection" style="display:none;">
+        <h3>🕐 সম্প্রতি দেখেছেন</h3>
+        <div class="rel-row" id="recentBooks"></div>
+    </div>
+</div>
+
+<div class="toast" id="toast">✅ কার্টে যোগ হয়েছে!</div>
+
+<div class="trust-strip">
+    <div class="trust-item"><div class="trust-icon">🚚</div><div class="trust-text">দ্রুত ডেলিভারি</div></div>
+    <div class="trust-item"><div class="trust-icon">✅</div><div class="trust-text">ক্যাশ অন ডেলিভারি</div></div>
+    <div class="trust-item"><div class="trust-icon">🔒</div><div class="trust-text">নিরাপদ অর্ডার</div></div>
+    <div class="trust-item"><div class="trust-icon">🔄</div><div class="trust-text">রিটার্ন পলিসি</div></div>
+</div>
+
+<footer style="background:#0D1F44;color:#8FA8C8;text-align:center;padding:28px 20px;border-top:2px solid #C9920A;">
+    <p style="font-weight:700;font-size:16px;margin-bottom:8px;color:#C9920A;">📚 আল আজিজ বুকশপ</p>
+    <p style="font-size:13px;margin-bottom:6px;color:#8FA8C8;">স্বল্প মূল্যে ইসলামিক বইয়ের নির্ভরযোগ্য প্রতিষ্ঠান</p>
+    <p style="font-size:13px;">📞 <a href="tel:01516595762" style="color:#a7f3d0;text-decoration:none;">01516595762</a></p>
+    <p style="font-size:12px;color:#658BD3;margin-top:10px;">&copy; 2025 আল আজিজ বুকশপ | সর্বস্বত্ব সংরক্ষিত</p>
+</footer>
+
+<a href="https://wa.me/8801516595762" target="_blank" class="wa-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
+</a>
+
+<div id="stickyBar">
+    <div class="sticky-price" id="stickyPrice">৳ 0</div>
+    <div class="sticky-qty-wrap">
+        <button class="sticky-qty-btn" onclick="changeQty(-1)">−</button>
+        <div class="sticky-qty-num" id="stickyQtyNum">১</div>
+        <button class="sticky-qty-btn" onclick="changeQty(1)">+</button>
+    </div>
+    <button class="sticky-buy" id="stickyBuy" onclick="buyNow()">⚡ এখনই কিনুন</button>
+</div>
+
+<script src="book.js"></script>
+<script>
+let cart=JSON.parse(localStorage.getItem('alaziz_cart'))||[];
+let wishlist=JSON.parse(localStorage.getItem('alaziz_wishlist'))||[];
+let curBook=null,curIdx=-1,qty=1,descExp=false;
+
+/* DARK */
+
+/* READING PROGRESS + STICKY */
+window.addEventListener('scroll',()=>{
+    const p=document.documentElement.scrollHeight-window.innerHeight;
+    document.getElementById('readProg').style.width=p>0?(window.scrollY/p*100)+'%':'0%';
+    const r=document.getElementById('mainSection').getBoundingClientRect();
+    document.getElementById('stickyBar').classList.toggle('visible',r.bottom<0);
+});
+
+function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
+
+/* WL */
+function updateWLUI(){
+    const wl=wishlist.includes(curBook?.name);
+    const lg=document.getElementById('wlBtnLg');const btn=document.getElementById('wlBtn');
+    if(lg){lg.innerText=wl?'❤️':'🤍';lg.classList.toggle('active',wl);}
+    if(btn){btn.innerHTML=wl?'❤️ উইশলিস্ট থেকে সরান':'🤍 উইশলিস্টে যোগ করুন';btn.classList.toggle('active',wl);}
+}
+function toggleWL(){
+    if(!curBook)return;
+    let added;
+    if(wishlist.includes(curBook.name)){wishlist=wishlist.filter(w=>w!==curBook.name);added=false;}
+    else{wishlist.push(curBook.name);added=true;}
+    localStorage.setItem('alaziz_wishlist',JSON.stringify(wishlist));
+    updateWLUI();
+    openWLModal(added);
+}
+
+/* QTY */
+const BN=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+function toBN(n){return String(n).split('').map(d=>BN[d]||d).join('');}
+function changeQty(d){
+    qty=Math.max(1,Math.min(10,qty+d));
+    document.getElementById('qtyNum').innerText=toBN(qty);
+    document.getElementById('stickyQtyNum').innerText=toBN(qty);
+    if(curBook)document.getElementById('stickyPrice').innerText='৳ '+(curBook.price*qty);
+}
+
+/* IMAGE */
+function onImgLoad(){document.getElementById('imgSkel').style.display='none';document.getElementById('bookImg').style.display='block';}
+function openImgModal(){const s=document.getElementById('bookImg').src;document.getElementById('modalImg').src=s;document.getElementById('imgModal').classList.add('open');}
+function closeImgModal(){document.getElementById('imgModal').classList.remove('open');}
+
+/* SHARE */
+function toggleShare(e){e.stopPropagation();document.getElementById('sharePanel').classList.toggle('open');}
+document.addEventListener('click',()=>document.getElementById('sharePanel').classList.remove('open'));
+function shareWA(){if(!curBook)return;const t=encodeURIComponent(`📚 "${curBook.name}" — ${curBook.author}\n৳ ${curBook.price} | গ্রন্থকানন\n${window.location.href}`);window.open('https://wa.me/?text='+t,'_blank');document.getElementById('sharePanel').classList.remove('open');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copyTxt').innerText='✅ কপি হয়েছে!';setTimeout(()=>document.getElementById('copyTxt').innerText='লিঙ্ক কপি করুন',2000);});}
+
+/* DESC TOGGLE */
+function toggleDesc(){
+    descExp=!descExp;
+    const el=document.getElementById('bookDesc');
+    el.style.maxHeight=descExp?'none':'80px';el.style.overflow=descExp?'visible':'hidden';
+    document.getElementById('descToggle').innerHTML=descExp?'কম দেখুন ▲':'আরো দেখুন ▼';
+}
+
+/* TOAST */
+let toastT;
+function showToast(msg){const t=document.getElementById('toast');t.innerText=msg||'✅ কার্টে যোগ হয়েছে!';t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2500);}
+
+/* FLY CART */
+function flyToCart(x,y){
+    const el=document.createElement('div');el.className='fly-item';el.innerText='📗';
+    el.style.left=x+'px';el.style.top=y+'px';document.body.appendChild(el);
+    const r=document.getElementById('cartCount').getBoundingClientRect();
+    requestAnimationFrame(()=>{el.style.left=(r.left+r.width/2)+'px';el.style.top=(r.top+r.height/2)+'px';el.style.opacity='0';el.style.transform='scale(0.3)';});
+    setTimeout(()=>el.remove(),650);
+}
+
+/* ADD TO CART */
+function addToCartShow(){
+    if(!curBook)return;
+    const btn=document.getElementById('btnCart'),r=btn.getBoundingClientRect();
+    for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
+    localStorage.setItem('alaziz_cart',JSON.stringify(cart));
+    updateCartCount();flyToCart(r.left+r.width/2,r.top+r.height/2);
+    showToast(`✅ ${toBN(qty)}টি বই কার্টে যোগ হয়েছে!`);
+}
+function buyNow(){
+    if(!curBook)return;
+    for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
+    localStorage.setItem('alaziz_cart',JSON.stringify(cart));
+    window.location.href='checkout.html';
+}
+
+/* RECENTLY VIEWED */
+function loadRecent(){
+    let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
+    r=r.filter(i=>i!==curIdx).slice(0,6);
+    if(!r.length)return;
+    document.getElementById('recentSection').style.display='block';
+    document.getElementById('recentBooks').innerHTML=r.map(ri=>{
+        const rb=books[ri];if(!rb)return '';
+        const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';
+        return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'">
+            <img src="${rImg}" alt="${rb.name}" loading="lazy">
+            <div class="rel-name">${rb.name}</div>
+            <div class="rel-price">৳ ${rb.price}</div></div>`;
+    }).join('');
+}
+
+/* LOAD BOOK */
+function loadBook(){
+    const idx=parseInt(new URLSearchParams(window.location.search).get('id'));
+    if(isNaN(idx)||!books[idx]){window.location.href='index.html';return;}
+    curIdx=idx;curBook=books[idx];
+    const b=curBook,pct=discPct(b);
+
+    let r=JSON.parse(localStorage.getItem('gronthokanon_recent'))||[];
+    r=[idx,...r.filter(i=>i!==idx)].slice(0,8);
+    localStorage.setItem('gronthokanon_recent',JSON.stringify(r));
+
+    document.title=b.name+' — গ্রন্থকানন';
+    document.getElementById('imgSkel').style.display='block';
+    document.getElementById('bookImg').style.display='none';
+    const bookImg = (typeof bookImgs!=='undefined' && bookImgs[b.name]) || b.img || '';
+    document.getElementById('bookImg').src=bookImg;
+    document.getElementById('bookTitle').innerText=b.name;
+    document.getElementById('bookAuthor').innerText='✍️ '+b.author;
+    document.getElementById('bookPrice').innerText='৳ '+b.price;
+    document.getElementById('stickyPrice').innerText='৳ '+b.price;
+    document.getElementById('bookPub').innerText=b.pub;
+    document.getElementById('bookPages').innerText=b.pages;
+    document.getElementById('bookCover').innerText=b.cover||'Paperback';
+    document.getElementById('bookSubject').innerText=b.subject||b.cat;
+
+    document.getElementById('bookAuthor').onclick=()=>window.location.href=`filter.html?type=author&value=${encodeURIComponent(b.author)}`;
+
+    const desc=(typeof bookDescs!=='undefined' && bookDescs[b.name] && bookDescs[b.name]!=='শীঘ্রই আপডেট করা হবে' ? bookDescs[b.name] : null) || b.desc || 'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
+    const descEl=document.getElementById('bookDesc');descEl.innerText=desc;
+    if(desc.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';document.getElementById('descToggle').style.display='inline-block';}
+
+    const origEl=document.getElementById('bookOrigPrice');
+    if(b.original_price>b.price)origEl.innerText='৳ '+b.original_price;else origEl.style.display='none';
+    const discEl=document.getElementById('bookDisc');
+    if(pct>0)discEl.innerText=pct+'% ছাড়';else discEl.style.display='none';
+
+    const badges=document.getElementById('bookBadges');
+  db.ref('stock/'+idx).once('value').then(snap=>{
+    const inStock=snap.val()!==false;
+    badges.innerHTML=`<span class="badge b-cat">📚 ${b.cat}</span><span class="${inStock?'badge b-ok':'badge b-out'}">${inStock?'✅ স্টক আছে':'❌ স্টক শেষ'}</span>`;
+    if(!inStock){
+        document.getElementById('btnCart').classList.add('btn-disabled');
+        document.getElementById('btnCart').onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');
+        document.getElementById('btnBuy').classList.add('btn-disabled');
+        document.getElementById('btnBuy').onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');
+        document.getElementById('stickyBuy').classList.add('btn-disabled');
+        document.getElementById('stickyBuy').onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');
+    }
+});
+    const today=new Date();today.setDate(today.getDate()+2);
+    document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
+
+    updateWLUI();
+
+  const related=books.filter((rb,i)=>
+    i!==idx &&
+    rb.author!==b.author &&
+    (rb.subject===b.subject || rb.cat===b.cat)
+).slice(0,8);
+    if(!related.length){document.getElementById('relatedSection').style.display='none';}
+    else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='book.html?id=${ri}'"><img src="${rImg}" alt="${rb.name}" loading="lazy"><div class="rel-name">${rb.name}</div><div class="rel-price">৳ ${rb.price}</div></div>`;}).join('');}
+
+    loadRecent();updateCartCount();
+}
+function goToCart(){localStorage.setItem('gronthokanon_opencart','1');window.location.href='index.html';}
+
+/* ═══ FIREBASE VIEW COUNTER ═══ */
+const DB_URL = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
+
+async function incrementView(bookId) {
+    db.ref('views/'+bookId).transaction(v => (v||0)+1);
+}
+
+window.onload = function() {
+    loadBook();
+    const idx = parseInt(new URLSearchParams(window.location.search).get('id'));
+    if (!isNaN(idx)){
+        incrementView(idx);
+        setTimeout(()=>loadReviews(idx), 1500);
+    }
+};
+</script>
+<!-- ═══ WISHLIST MODAL ═══ -->
+<div id="wlOverlay" onclick="closeWLModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9998;"></div>
+<div id="wlModal" style="
+    display:none;position:fixed;bottom:0;left:0;right:0;
+    background:var(--card);border-radius:24px 24px 0 0;
+    z-index:9999;padding:0 0 40px;
+    transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+">
+    <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 20px;"></div>
+    <div id="wlModalInner" style="padding:0 20px;"></div>
+</div>
+
+<script>
+function openWLModal(added){
+    const b = curBook;
+    const bImg = (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
+    const inner = document.getElementById('wlModalInner');
+    inner.innerHTML = `
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:20px;">
+            <img src="${bImg}" style="width:64px;height:86px;object-fit:cover;border-radius:0;border:1px solid #1B3A6B;flex-shrink:0;">
+            <div>
+                <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${b.name}</div>
+                <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${b.author}</div>
+                <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#ecfdf5':'#fff5f5'};border:1.5px solid ${added?'#6ee7b7':'#fca5a5'};border-radius:0;padding:5px 12px;">
+                    <span style="font-size:15px;">${added?'❤️':'💔'}</span>
+                    <span style="font-size:12px;font-weight:700;color:${added?'#059669':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
+                </div>
+            </div>
+        </div>
+        ${added ? `
+        <div style="display:flex;gap:10px;">
+            <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1px solid #1B3A6B;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
+            <button onclick="closeWLModal();localStorage.setItem('gronthokanon_opencart','wl');window.location.href='index.html';" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+        </div>` : `
+        <button onclick="closeWLModal()" style="width:100%;padding:12px;background:var(--primary);color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>
+        `}
+    `;
+    document.getElementById('wlOverlay').style.display = 'block';
+    const modal = document.getElementById('wlModal');
+    modal.style.display = 'block';
+    requestAnimationFrame(()=>{ modal.style.transform = 'translateY(0)'; });
+}
+function closeWLModal(){
+    const modal = document.getElementById('wlModal');
+    modal.style.transform = 'translateY(100%)';
+    setTimeout(()=>{
+        modal.style.display = 'none';
+        document.getElementById('wlOverlay').style.display = 'none';
+    }, 350);
+}
+</script>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="firebase-config.js"></script>
+
+<!-- ═══ REVIEW SECTION ═══ -->
+<div style="padding:14px;margin-bottom:80px;">
+    <div style="background:var(--card);border-radius:0;padding:18px;box-shadow:0 2px 12px var(--shadow);">
+        <h3 style="font-size:16px;margin-bottom:16px;">⭐ পাঠকদের মতামত</h3>
+        <div id="reviewForm" style="margin-bottom:20px;padding:14px;background:var(--bg);border-radius:0;border:1px solid #1B3A6B;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;">আপনার রিভিউ লিখুন</div>
+            <div style="display:flex;gap:6px;margin-bottom:10px;">
+                <span class="rv-star" onclick="setRating(1)">☆</span>
+                <span class="rv-star" onclick="setRating(2)">☆</span>
+                <span class="rv-star" onclick="setRating(3)">☆</span>
+                <span class="rv-star" onclick="setRating(4)">☆</span>
+                <span class="rv-star" onclick="setRating(5)">☆</span>
+            </div>
+            <textarea id="reviewText" placeholder="আপনার মতামত লিখুন..." style="width:100%;padding:10px;border:1px solid #1B3A6B;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;resize:none;height:80px;outline:none;box-sizing:border-box;"></textarea>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+                <input id="reviewName" placeholder="আপনার নাম" style="flex:1;padding:9px 12px;border:1px solid #1B3A6B;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
+                <button onclick="submitReview()" style="padding:9px 16px;background:var(--primary);color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">পাঠাও</button>
+            </div>
+        </div>
+        <div id="reviewsList"><div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div></div>
+    </div>
+</div>
+
+<style>
+.rv-star{font-size:26px;cursor:pointer;color:#d97706;transition:transform 0.1s;}
+.rv-star:active{transform:scale(1.2);}
+.rv-card{padding:12px 0;border-bottom:1px solid #1B3A6B;}
+.rv-card:last-child{border:none;}
+</style>
+
+<script>
+function escapeHTML(str){
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+let selectedRating=0;
+let curBookId=null;
+
+function setRating(n){
+    selectedRating=n;
+    document.querySelectorAll('.rv-star').forEach((s,i)=>s.innerText=i<n?'★':'☆');
+}
+
+function loadReviews(bookId){
+    curBookId=bookId;
+    const el=document.getElementById('reviewsList');
+    el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">লোড হচ্ছে...</div>';
+    function doLoad(){
+        if(typeof db==='undefined'||!db){setTimeout(doLoad,200);return;}
+        db.ref('reviews/'+bookId).get()
+        .then(snap=>{
+            if(!snap.exists()){
+                el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);font-size:13px;">এখনো কোনো রিভিউ নেই। প্রথম হন! 🌟</div>';
+                return;
+            }
+            const reviews=[];
+            snap.forEach(child=>reviews.push(child.val()));
+            reviews.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+            const latest=reviews.slice(0,15);
+            el.innerHTML=latest.map(r=>`
+                <div class="rv-card">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+                        <span style="font-size:13px;font-weight:700;">${escapeHTML(r.name||'অজ্ঞাত')}</span>
+                        <span style="font-size:11px;color:var(--text2);">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</span>
+                    </div>
+                    <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'★'.repeat(r.rating||0)+'☆'.repeat(5-(r.rating||0))}</div>
+                  <div style="font-size:13px;line-height:1.5;">${escapeHTML(r.comment||'')}</div>
+                </div>`).join('');
+        }).catch(()=>{
+            el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';
+        });
+    }
+    doLoad();
+}
+
+async function submitReview(){
+    const name=document.getElementById('reviewName').value.trim();
+    const comment=document.getElementById('reviewText').value.trim();
+    if(!selectedRating)return showToast('⭐ রেটিং দিন','#d97706');
+    if(!comment)return showToast('মতামত লিখুন','#d97706');
+    if(!name)return showToast('নাম লিখুন','#d97706');
+    try{
+        const newRef=db.ref('reviews/'+curBookId).push();
+        await newRef.set({name,comment,rating:selectedRating,createdAt:Date.now()});
+        document.getElementById('reviewText').value='';
+        document.getElementById('reviewName').value='';
+        setRating(0);selectedRating=0;
+        showToast('✅ রিভিউ দেওয়া হয়েছে!','#059669');
+        loadReviews(curBookId);
+    }catch(e){
+        showToast('❌ রিভিউ পাঠানো যায়নি','#dc2626');
+    }
+}
+</script>
+
+<script src="AAcommon.js"></script>
+</body>
+</html>

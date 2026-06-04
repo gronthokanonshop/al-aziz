@@ -1,0 +1,83 @@
+/* ═══════════════════════════════════════
+   আল আজিজ বুকশপ — Common JavaScript
+   সব page এ shared হয় এই JS
+═══════════════════════════════════════ */
+
+/* ═══ DARK MODE ═══ */
+function toggleDark() {
+    const h = document.documentElement;
+    const isDark = h.getAttribute('data-theme') === 'dark';
+    h.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    const btn = document.getElementById('darkBtn');
+    if (btn) btn.innerText = isDark ? '🌙' : '☀️';
+    localStorage.setItem('alaziz_theme', isDark ? 'light' : 'dark');
+}
+
+/* Dark theme auto-apply on page load */
+(function () {
+    const saved = localStorage.getItem('alaziz_theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+    const btn = document.getElementById('darkBtn');
+    if (btn && saved === 'dark') btn.innerText = '☀️';
+})();
+
+/* ═══ TOAST NOTIFICATION ═══ */
+function showToast(msg, color) {
+    const t = document.createElement('div');
+    t.style.cssText = `position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color||'#0D1F44'};color:#fff;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.25);font-family:'Hind Siliguri',Arial,sans-serif;border:1px solid rgba(255,255,255,0.15);`;
+    t.innerText = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2200);
+}
+
+/* ═══ PAGE NAVIGATION (smooth fade) ═══ */
+function navigateTo(url) {
+    document.body.style.animation = 'pageOut 0.25s ease forwards';
+    setTimeout(() => window.location.href = url, 240);
+}
+
+/* ═══ SCROLL TO TOP ═══ */
+window.addEventListener('scroll', () => {
+    const btn = document.getElementById('scrollTopBtn');
+    if (btn) btn.classList.toggle('show', window.scrollY > 300);
+});
+
+/* ═══ CART COUNT (shared across pages) ═══ */
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('alaziz_cart') || '[]');
+    const el = document.getElementById('cartCount');
+    if (el) el.innerText = cart.length;
+}
+
+/* ═══ BACK NAVIGATION ═══ */
+function goBack() {
+    if (document.referrer && document.referrer.includes(location.hostname)) {
+        window.history.back();
+    } else {
+        window.location.href = 'index.html';
+    }
+}
+
+/* ═══ SIDEBAR TOGGLE ═══ */
+function toggleSidebar() {
+    document.getElementById('sidebar')?.classList.toggle('active');
+    document.getElementById('overlay')?.classList.toggle('active');
+}
+function closeSidebars() {
+    document.getElementById('sidebar')?.classList.remove('active');
+    document.getElementById('overlay')?.classList.remove('active');
+}
+
+/* ═══ READING PROGRESS BAR ═══ */
+(function () {
+    const bar = document.getElementById('readProg');
+    if (!bar) return;
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        bar.style.width = scrollHeight > 0 ? (scrollTop / scrollHeight * 100) + '%' : '0%';
+    }, { passive: true });
+})();
+
+/* Auto-run on load */
+document.addEventListener('DOMContentLoaded', updateCartCount);
