@@ -637,19 +637,16 @@
             padding:6px 0 max(8px,env(safe-area-inset-bottom));
         }
         .bnav-item {
-            flex:1; display:flex; flex-direction:column;
-            align-items:center; gap:3px; padding:6px 4px;
-            cursor:pointer; font-size:9.5px; font-weight:700;
-            color:#8FC8E8; border:none; background:transparent;
-            font-family:'Hind Siliguri',Arial,sans-serif;
-            border-radius:10px; transition:.2s; position:relative;
-        }
+    flex:1; display:flex; flex-direction:column;
+    align-items:center; gap:3px; padding:6px 4px;
+    cursor:pointer; font-size:9.5px; font-weight:700;
+    color:rgba(255,255,255,0.70); border:none; background:transparent;
         .bnav-svg {
             width:22px; height:22px; fill:none; stroke:currentColor;
             stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; transition:.2s;
         }
         .bnav-label { font-size:9.5px; }
-        .bnav-item.active { color:var(--accent-light); }
+      .bnav-item.active { color:#FFFFFF; }
         .bnav-item.active .bnav-svg { transform:translateY(-2px); }
         .bnav-item:active { transform:scale(0.90); }
         .bnav-badge {
@@ -1419,10 +1416,30 @@ function renderCouponSection(){
             <button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">✕ বাতিল</button>
         </div>`;
     } else {
-        sec.innerHTML=`<div style="display:flex;gap:6px;">
-            <input type="text" id="couponCode" placeholder="কুপন কোড লিখুন" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--input-bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;">
-            <button onclick="applyCoupon()" style="background:var(--primary);color:white;border:none;padding:0 14px;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;">Apply</button>
-        </div>`;
+     sec.innerHTML=`<div style="display:flex;flex-direction:column;gap:8px;">
+    <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:2px;">🎟️ কুপন কোড আছে?</div>
+    <div style="display:flex;gap:6px;align-items:stretch;">
+        <input type="text" id="couponCode" placeholder="যেমন: FIRSTORDER"
+            style="flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;
+            background:var(--input-bg);color:var(--text);
+            font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;
+            box-shadow:0 1px 4px rgba(0,0,0,0.06) inset;"
+            onkeydown="if(event.key==='Enter')applyCoupon()">
+        <button onclick="applyCoupon()"
+            style="background:linear-gradient(135deg,#1A56DB,#2979FF);
+            color:white;border:none;padding:0 16px;border-radius:9px;cursor:pointer;
+            font-weight:800;font-size:13px;font-family:'Hind Siliguri',Arial,sans-serif;
+            box-shadow:0 3px 10px rgba(41,121,255,0.35);
+            white-space:nowrap;transition:.2s;"
+            onmouseover="this.style.background='linear-gradient(135deg,#2360E8,#3A87FF)'"
+            onmouseout="this.style.background='linear-gradient(135deg,#1A56DB,#2979FF)'">
+            ✓ Apply
+        </button>
+    </div>
+    <div style="font-size:11px;color:var(--text3);padding:0 2px;">
+        💡 প্রথমবার অর্ডারে <strong>FIRSTORDER</strong> কোড দিয়ে ৫% ছাড় পান
+    </div>
+</div>`
     }
 }
 function removeCoupon(){
