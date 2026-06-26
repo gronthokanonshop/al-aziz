@@ -24,7 +24,7 @@ function toggleDark() {
 /* ═══ TOAST NOTIFICATION ═══ */
 function showToast(msg, color) {
     const t = document.createElement('div');
-    t.style.cssText = `position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color||'#0D1F44'};color:#fff;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.25);font-family:'Hind Siliguri',Arial,sans-serif;border:1px solid rgba(255,255,255,0.15);`;
+    t.style.cssText = `position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color||'#1a2e1b'};color:#fff;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.25);font-family:'Hind Siliguri',Arial,sans-serif;border:1px solid rgba(255,255,255,0.15);`;
     t.innerText = msg;
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2200);
@@ -50,11 +50,16 @@ function updateCartCount() {
 }
 
 /* ═══ BACK NAVIGATION ═══ */
+/* Homepage filename — change to 'al_azliz_index.html' if you keep that name */
+const HOME_URL = 'al_azliz_index.html';
 function goBack() {
-    if (document.referrer && document.referrer.includes(location.hostname)) {
+    // In-site history thakle normal back
+    if (window.history.length > 1 &&
+        document.referrer && document.referrer.includes(location.hostname)) {
         window.history.back();
     } else {
-        window.location.href = 'index.html';
+        // Direct visit / no history → homepage e fallback
+        window.location.href = HOME_URL;
     }
 }
 
