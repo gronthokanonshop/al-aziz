@@ -1,16 +1,16 @@
 /* ═══════════════════════════════════════
-   আল আযীয বুকশপ — Firebase Config
+   আল আজিজ বুকশপ — Firebase Config
 ═══════════════════════════════════════ */
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBQMZ3x2d-2ELopI-3w78EFrcWnfIh2xg0",
-    authDomain: "gronthokanon-8573e.firebaseapp.com",
-    databaseURL: "https://gronthokanon-8573e-default-rtdb.firebaseio.com",
-    projectId: "gronthokanon-8573e",
-    storageBucket: "gronthokanon-8573e.firebasestorage.app",
-    messagingSenderId: "192907327925",
-    appId: "1:192907327925:web:1c469a312aa02bf2fe81fc",
-    measurementId: "G-KFQF4ND0KF"
+    apiKey: "AIzaSyBM6yhwowHUiroYeQvgq86s1CkWLg5vX3M",
+    authDomain: "screenshot-2db71.firebaseapp.com",
+    databaseURL: "https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "screenshot-2db71",
+    storageBucket: "screenshot-2db71.firebasestorage.app",
+    messagingSenderId: "365113172403",
+    appId: "1:365113172403:web:05f9bebd3adf6f341aebc6",
+    measurementId: "G-LCDCFSFJV8"
 };
 
 if (!firebase.apps.length) {
@@ -20,7 +20,7 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db   = firebase.database();
 
-// Firestore — শুধু AAbook.html এ load হবে
+// Firestore — শুধু book.html এ load হবে
 if (typeof firebase.firestore === 'function') {
     window.fsdb = firebase.firestore();
 }
