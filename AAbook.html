@@ -4,214 +4,171 @@
 <meta charset="UTF-8">
 <link rel="icon" href="logo.png" type="image/png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>বই বিস্তারিত — আল আজিজ বুকশপ</title>
-<meta name="theme-color" content="#1A56DB">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>বই বিস্তারিত — NafahLife</title>
+<meta name="theme-color" content="#2a562b">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="AAcommon.css">
 <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
-/* ═══════════════════════════════════════════
-   AL AZIZ BOOKSHOP — PRO BOOK DETAILS PAGE
-   Blue Theme + Dark Mode + Mobile First
-═══════════════════════════════════════════ */
 :root {
-  --primary:       #1A56DB;
-  --primary-dark:  #0D1A3A;
-  --primary-light: #2979FF;
-  --accent:        #1A56DB;
+  --primary:       #4f8d51;
+  --primary-dark:  #152716;
+  --primary-light: #79b07b;
+  --accent:        #4f8d51;
   --danger:        #DC2626;
-  --bg:            #F7F8FC;
-  --bg2:           #EEF1F9;
+  --bg:            #ffffff;
+  --bg2:           #ffffff;
   --card:          rgba(255,255,255,0.96);
   --card-solid:    #FFFFFF;
-  --text:          #1A1A2E;
-  --text2:         #4A5568;
+  --text:          #162717;
+  --text2:         #526152;
   --text3:         #888888;
-  --border:        rgba(26,86,219,0.12);
-  --border-color:  rgba(26,86,219,0.12);
+  --border:        rgba(79,141,81,0.12);
+  --border-color:  rgba(79,141,81,0.12);
   --input-bg:      rgba(255,255,255,0.92);
 }
 [data-theme="dark"] {
-  --bg:            #04080F;
-  --bg2:           #0a1018;
-  --card:          rgba(8,18,32,0.88);
-  --card-solid:    #08121f;
-  --text:          #E8EEF8;
-  --text2:         #8CA3C4;
-  --text3:         #5A7090;
-  --border:        rgba(70,160,220,0.14);
-  --border-color:  rgba(70,160,220,0.14);
-  --input-bg:      rgba(8,18,32,0.85);
+  --bg:            #061006;
+  --bg2:           #0c1a0c;
+  --card:          rgba(14,28,18,0.88);
+  --card-solid:    #0e1c0e;
+  --text:          #f7f5f5;
+  --text2:         #a3c0ab;
+  --text3:         #5f7d66;
+  --border:        rgba(121,176,123,0.14);
+  --border-color:  rgba(121,176,123,0.14);
+  --input-bg:      rgba(14,28,18,0.85);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 body{font-family:'Hind Siliguri','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;padding-bottom:78px;}
-
-/* ════ OVERLAY / SIDEBAR (shared) ════ */
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:2000;}
 .overlay.active{display:block;}
-.sidebar{position:fixed;top:0;left:-100%;width:min(280px,80vw);height:100vh;background:linear-gradient(180deg,#0D1A3A 0%,#1a2a5e 100%);color:#fff;z-index:2100;transition:.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;scrollbar-width:none;}
+.sidebar{position:fixed;top:0;left:-100%;width:min(280px,80vw);height:100vh;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;z-index:2100;transition:.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;scrollbar-width:none;}
 .sidebar::-webkit-scrollbar{display:none;}
 .sidebar.active{left:0;}
 .sidebar-header{padding:18px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,0.10);background:rgba(0,0,0,0.15);}
 .sidebar-item{padding:14px 18px;border-bottom:1px solid rgba(255,255,255,0.07);font-size:14px;font-weight:600;cursor:pointer;color:rgba(255,255,255,0.85);display:flex;justify-content:space-between;align-items:center;transition:.2s;}
 .sidebar-item:hover{background:rgba(255,255,255,0.07);color:#fff;padding-left:22px;}
-
-/* ════ NAVBAR (shared) ════ */
-.navbar{background:var(--nav-bg, #0D1A3A);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:2.5px solid var(--accent);box-shadow:0 4px 20px rgba(0,0,0,0.25);position:sticky;top:0;z-index:1000;}
+.navbar{background:#fff;color:#204521;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:2.5px solid var(--accent);box-shadow:0 4px 20px rgba(0,0,0,0.25);position:sticky;top:0;z-index:1000;}
 .navbar-top{display:flex;align-items:center;padding:10px 14px;gap:10px;}
 .nav-back-btn{width:36px;height:36px;background:rgba(255,255,255,0.10);border:1.5px solid rgba(255,255,255,0.18);border-radius:9px;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.2s;}
 .nav-back-btn:hover{background:rgba(255,255,255,0.18);transform:translateX(-2px);}
-.navbar-brand-title{flex:1;color:#fff;font-size:15px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.navbar-brand-title{flex:1;color:#204521;font-size:15px;font-weight:700;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .navbar-icons{display:flex;align-items:center;gap:8px;}
 .nav-icon-btn{width:36px;height:36px;background:rgba(255,255,255,0.10);color:#fff;border:1.5px solid rgba(255,255,255,0.18);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;position:relative;transition:.2s;}
 .nav-icon-btn:hover{background:rgba(255,255,255,0.20);}
-.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid #0D1A3A;}
+.nav-badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid #152716;}
 .nav-badge.show{display:flex;}
-
-/* ════ BREADCRUMB ════ */
 .crumb{padding:12px 16px 0;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
-.crumb a{color:#1A56DB;text-decoration:none;font-weight:600;}
+.crumb a{color:#204521;text-decoration:none;font-weight:600;}
 .crumb span.sep{color:var(--text3);font-size:10px;}
 .crumb span.cur{color:var(--text);}
-
-/* ════ MAIN LAYOUT ════ */
 .detail-wrap{max-width:980px;margin:0 auto;padding:14px;}
 .detail-grid{display:grid;grid-template-columns:280px 1fr;gap:22px;align-items:start;}
-
-/* ════ COVER PANEL ════ */
 .cover-col{position:relative;}
-.cover-panel{background:var(--card-solid);border-radius:18px;border:1px solid var(--border);box-shadow:0 6px 30px rgba(26,86,219,0.10);padding:18px;position:relative;overflow:hidden;}
-.cover-frame{position:relative;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#1A56DB,#2979FF);box-shadow:0 16px 32px -14px rgba(13,26,58,0.45);}
+.cover-panel{background:var(--card-solid);border-radius:18px;border:1px solid var(--border);box-shadow:0 6px 30px rgba(79,141,81,0.10);padding:18px;position:relative;overflow:hidden;}
+.cover-frame{position:relative;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#224f23,#2f7531);box-shadow:0 16px 32px -14px rgba(20,40,26,0.45);}
 .cover-frame img{width:100%;aspect-ratio:3/4.4;object-fit:cover;display:block;}
 .cover-disc-flag{position:absolute;top:0;left:0;z-index:2;background:var(--danger);color:#fff;font-size:12px;font-weight:800;width:58px;height:58px;display:flex;align-items:flex-start;justify-content:flex-start;padding:8px 0 0 7px;clip-path:polygon(0 0,100% 0,0 100%);line-height:1;}
 .cover-wl-btn{position:absolute;top:10px;right:10px;z-index:2;background:rgba(255,255,255,0.92);backdrop-filter:blur(6px);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.18);transition:.2s;}
 .cover-wl-btn:hover{transform:scale(1.15);}
 .cover-wl-btn.active{background:#ffe4e4;}
-[data-theme="dark"] .cover-wl-btn{background:rgba(8,18,32,0.92);}
-
-.stock-strip{display:flex;align-items:center;gap:8px;margin-top:14px;padding:10px 12px;background:rgba(22,163,74,0.08);border:1px solid rgba(22,163,74,0.22);border-radius:10px;}
-.stock-dot{width:8px;height:8px;border-radius:50%;background:#16A34A;flex-shrink:0;box-shadow:0 0 0 3px rgba(22,163,74,0.18);}
-.stock-strip span{font-size:12.5px;font-weight:700;color:#15803D;}
-[data-theme="dark"] .stock-strip{background:rgba(34,197,94,0.10);border-color:rgba(34,197,94,0.25);}
-[data-theme="dark"] .stock-strip span{color:#4ADE80;}
-
+[data-theme="dark"] .cover-wl-btn{background:rgba(14,28,18,0.92);}
+.stock-strip{display:flex;align-items:center;gap:8px;margin-top:14px;padding:10px 12px;background:rgba(22,163,27,0.08);border:1px solid rgba(22,163,27,0.22);border-radius:10px;}
+.stock-dot{width:8px;height:8px;border-radius:50%;background:#16a31b;flex-shrink:0;box-shadow:0 0 0 3px rgba(22,163,27,0.18);}
+.stock-strip span{font-size:12.5px;font-weight:700;color:#158019;}
+[data-theme="dark"] .stock-strip{background:rgba(34,197,39,0.10);border-color:rgba(34,197,39,0.25);}
+[data-theme="dark"] .stock-strip span{color:#4ade4f;}
 .trust-mini{margin-top:14px;display:flex;flex-direction:column;gap:9px;}
 .trust-mini .row{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--text2);}
-.trust-mini svg{width:16px;height:16px;color:#1A56DB;flex-shrink:0;}
-
-/* ════ DETAILS COLUMN ════ */
+.trust-mini svg{width:16px;height:16px;color:#204521;flex-shrink:0;}
 .detail-col{min-width:0;}
-.subject-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(26,86,219,0.08);color:#1A56DB;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:12px;}
-
-h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);margin-bottom:8px;}
+.subject-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(79,141,81,0.08);color:#204521;font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:12px;}
+h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;line-height:1.35;color:var(--text);margin-bottom:8px;}
 .book-author-row{font-size:14.5px;color:var(--text2);margin-bottom:14px;}
-.book-author-row b{color:#1A56DB;font-weight:700;}
-
+.book-author-row b{color:#204521;font-weight:700;}
 .meta-chip-row{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px;}
 .meta-chip{display:flex;align-items:center;gap:6px;background:var(--card-solid);border:1px solid var(--border);font-size:11.5px;color:var(--text2);padding:6px 10px;border-radius:8px;}
-.meta-chip svg{width:13px;height:13px;color:#1A56DB;}
-
-/* ════ PRICE CARD ════ */
-.price-card{background:var(--card-solid);border:1px solid var(--border);border-radius:16px;padding:16px 18px;box-shadow:0 4px 20px rgba(26,86,219,0.07);margin-bottom:16px;}
+.meta-chip svg{width:13px;height:13px;color:#204521;}
+.price-card{background:var(--card-solid);border:1px solid var(--border);border-radius:16px;padding:16px 18px;box-shadow:0 4px 20px rgba(79,141,81,0.07);margin-bottom:16px;}
 .price-line{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
 .price-now-big{font-size:27px;font-weight:900;color:var(--danger);}
 .price-now-big .cur{font-size:16px;font-weight:700;margin-right:1px;}
 .price-old-big{font-size:15px;color:var(--text2);text-decoration:line-through;}
-.price-save-chip{font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,#1A56DB,#2979FF);padding:3px 9px;border-radius:6px;}
-
+.price-save-chip{font-size:11.5px;font-weight:700;color:#fff;background:linear-gradient(135deg,#dc2626,#ef4444);padding:3px 9px;border-radius:6px;}
 .qty-buy-row{display:flex;align-items:stretch;gap:10px;margin-top:16px;}
 .qty-box{display:flex;align-items:center;border:1.5px solid var(--border);border-radius:10px;overflow:hidden;flex-shrink:0;}
 .qty-box button{width:38px;background:var(--bg);border:none;cursor:pointer;font-size:17px;color:var(--text2);display:flex;align-items:center;justify-content:center;}
-.qty-box button:hover{background:rgba(26,86,219,0.10);color:#1A56DB;}
-.qty-box input{width:38px;text-align:center;border:none;font-size:15px;font-weight:700;color:var(--text);font-family:inherit;background:transparent;}
+.qty-box button:hover{background:rgba(79,141,81,0.10);color:#204521;}
+.qty-box input{width:38px;text-align:center;border:none;font-size:15px;font-weight:700;color:#204521;font-family:inherit;background:transparent;}
 .qty-box input:focus{outline:none;}
-
 .btn-flat{border:none;border-radius:10px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:7px;transition:.2s;}
 .btn-flat:active{transform:scale(0.97);}
-.btn-cart-outline{flex:1;background:transparent;color:#1A56DB;border:1.5px solid #1A56DB;}
-.btn-cart-outline:hover{background:rgba(26,86,219,0.06);}
-.btn-buy-solid{flex:1.3;background:linear-gradient(135deg,#1A56DB 0%,#2979FF 60%,#3A87FF 100%);color:#fff;box-shadow:0 6px 18px rgba(41,121,255,0.40);}
-.btn-buy-solid:hover{box-shadow:0 8px 24px rgba(41,121,255,0.55);transform:translateY(-1px);}
-
+.btn-cart-outline{flex:1;background:transparent;color:#a85320;border:1.5px solid #c66a30;}
+.btn-cart-outline:hover{background:rgba(79,141,81,0.06);}
+.btn-buy-solid{flex:1.3;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;box-shadow:0 6px 18px rgba(121,176,123,0.40);}
+.btn-buy-solid:hover{box-shadow:0 8px 24px rgba(121,176,123,0.55);transform:translateY(-1px);}
 .delivery-mini{margin-top:14px;padding-top:13px;border-top:1px dashed var(--border);display:flex;flex-direction:column;gap:8px;}
 .delivery-mini .row{display:flex;align-items:flex-start;gap:9px;font-size:12.5px;color:var(--text2);}
-.delivery-mini svg{width:15px;height:15px;color:#1A56DB;flex-shrink:0;margin-top:1px;}
+.delivery-mini svg{width:15px;height:15px;color:#204521;flex-shrink:0;margin-top:1px;}
 .delivery-mini b{color:var(--text);font-weight:700;}
-
-/* ════ SECTION BLOCKS ════ */
 .dsec{background:var(--card-solid);border:1px solid var(--border);border-radius:16px;padding:16px 18px;margin-bottom:14px;}
 .dsec-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:11px;display:flex;align-items:center;gap:8px;}
-.dsec-title svg{width:17px;height:17px;color:#1A56DB;}
+.dsec-title svg{width:17px;height:17px;color:#204521;}
 .desc-body{font-size:13.5px;color:var(--text2);line-height:1.85;}
 .desc-body p{margin-bottom:10px;}
 .desc-body p:last-child{margin-bottom:0;}
-
 .specs-tbl{width:100%;border-collapse:collapse;font-size:13px;}
 .specs-tbl tr{border-bottom:1px solid var(--border);}
 .specs-tbl tr:last-child{border-bottom:none;}
 .specs-tbl td{padding:10px 4px;}
 .specs-tbl td:first-child{color:var(--text3);width:36%;}
 .specs-tbl td:last-child{color:var(--text);font-weight:600;}
-
-/* ════ RELATED ════ */
 .related-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
 .related-row::-webkit-scrollbar{display:none;}
 .rel-card{background:var(--card-solid);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;flex-shrink:0;width:128px;transition:.2s;}
-.rel-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(26,86,219,0.14);}
-.rel-card img{width:100%;aspect-ratio:3/4.2;object-fit:cover;background:linear-gradient(135deg,#1A56DB,#2979FF);}
+.rel-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(79,141,81,0.14);}
+.rel-card img{width:100%;aspect-ratio:3/4.2;object-fit:cover;background:linear-gradient(135deg,#224f23,#2f7531);}
 .rel-body{padding:9px 10px 11px;}
 .rel-title{font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35;height:30px;}
 .rel-price{font-size:12.5px;font-weight:800;color:var(--danger);}
-
-/* ════ MOBILE STICKY BUY BAR ════ */
 .mobile-buybar{display:none;}
-
-/* ════ TOAST (shared) ════ */
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#0D1A3A;color:#60A5FA;padding:12px 24px;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #2979FF;border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#152716;color:#a8cca9;padding:12px 24px;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #79b07b;border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;}
 .toast.show{display:block;animation:toastIn 0.3s ease;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
-
-/* ════ CART DRAWER (shared, reused markup) ════ */
 #cartBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.52);z-index:3000;justify-content:flex-end;align-items:stretch;}
 #cartBox.open{display:flex;}
 .cart-drawer-panel{width:min(300px,88vw);height:100%;background:var(--card-solid);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,0.22);transform:translateX(110%);transition:transform 0.38s cubic-bezier(0.4,0,0.2,1);overflow:hidden;}
 #cartBox.sliding .cart-drawer-panel{transform:translateX(0);}
-.qty-ctrl-btn{width:26px;height:26px;border-radius:50%;background:rgba(26,86,219,0.08);border:1px solid rgba(26,86,219,0.15);cursor:pointer;font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;justify-content:center;}
-.qty-ctrl-btn:hover{background:#1A56DB;color:#fff;}
+.qty-ctrl-btn{width:26px;height:26px;border-radius:50%;background:rgba(79,141,81,0.08);border:1px solid rgba(79,141,81,0.15);cursor:pointer;font-size:16px;font-weight:700;color:var(--text);display:flex;align-items:center;justify-content:center;}
+.qty-ctrl-btn:hover{background:#4f8d51;color:#fff;}
 .coupon-wrap{display:flex;flex-direction:column;gap:7px;}
 .coupon-label{font-size:12px;font-weight:700;color:var(--text2);}
 .coupon-row{display:flex;gap:6px;align-items:stretch;}
 .coupon-input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;background:var(--input-bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;}
-.coupon-btn{background:linear-gradient(135deg,#1A56DB,#2979FF);color:white;border:none;padding:0 16px;border-radius:9px;cursor:pointer;font-weight:800;font-size:13px;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 3px 10px rgba(41,121,255,0.35);white-space:nowrap;}
+.coupon-btn{background:linear-gradient(135deg,#cf6f33,#a85320);color:white;border:none;padding:0 16px;border-radius:9px;cursor:pointer;font-weight:800;font-size:13px;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 3px 10px rgba(121,176,123,0.35);white-space:nowrap;}
 .coupon-hint{font-size:11px;color:var(--text3);padding:0 2px;}
-.coupon-applied{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(41,121,255,0.07);border:1.5px dashed rgba(41,121,255,0.35);border-radius:9px;}
-.coupon-applied-label{flex:1;font-size:13px;font-weight:700;color:#1A56DB;}
-.coupon-remove-btn{background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
-
-/* ════ WISHLIST MODAL (shared) ════ */
+.coupon-applied{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(121,176,123,0.07);border:1.5px dashed rgba(121,176,123,0.35);border-radius:9px;}
+.coupon-applied-label{flex:1;font-size:13px;font-weight:700;color:#204521;}
+.coupon-remove-btn{background:#fee2e2;color:#204521;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
 #wishlistBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3100;align-items:flex-end;justify-content:center;}
 #wishlistBox.open{display:flex;}
 #wishlistBox > div{background:var(--card-solid);width:100%;border-radius:24px 24px 0 0;max-height:75vh;overflow-y:auto;display:flex;flex-direction:column;}
-
-/* ════ BOTTOM NAV (shared) ════ */
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(26,86,219,0.12);display:flex;align-items:center;z-index:900;box-shadow:0 -4px 20px rgba(26,86,219,0.10);}
-[data-theme="dark"] .bottom-nav{background:rgba(4,13,24,0.96);border-top-color:rgba(70,160,220,0.10);}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(255,255,255,0.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(79,141,81,0.12);display:flex;align-items:center;z-index:900;box-shadow:0 -4px 20px rgba(79,141,81,0.10);}
+[data-theme="dark"] .bottom-nav{background:rgba(255,255,255,0.96);border-top-color:rgba(79,141,81,0.18);box-shadow:0 -4px 20px rgba(0,0,0,0.18);}
 .bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:6px 0;color:var(--text2);transition:.2s;}
-.bnav-item.active{color:#1A56DB;}
+.bnav-item.active{color:#204521;}
 .bnav-svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
 .bnav-badge{position:absolute;top:-4px;right:-4px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center;border:1.5px solid #fff;}
 .bnav-badge.show{display:flex;}
 .bnav-label{font-size:10px;font-weight:600;margin-top:2px;}
 .bnav-login-pill{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;padding:4px 0;}
-.bnav-login-inner{background:linear-gradient(135deg,#1A56DB,#2979FF);color:#fff;border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(41,121,255,0.35);}
+.bnav-login-inner{background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border-radius:20px;padding:4px 12px;display:flex;align-items:center;gap:4px;box-shadow:0 2px 8px rgba(121,176,123,0.35);}
 .bnav-login-svg{width:14px;height:14px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
 .bnav-login-text{font-size:12px;font-weight:700;color:#fff;}
-
 ::-webkit-scrollbar{width:3px;height:3px;}
-::-webkit-scrollbar-thumb{background:#1A56DB;border-radius:4px;}
-::selection{background:rgba(41,121,255,0.20);color:#0D1A3A;}
-
-/* ════ RESPONSIVE ════ */
+::-webkit-scrollbar-thumb{background:#4f8d51;border-radius:4px;}
+::selection{background:rgba(121,176,123,0.20);color:#152716;}
 @media(max-width:760px){
   .detail-grid{grid-template-columns:1fr;gap:18px;}
   .cover-panel{max-width:300px;margin:0 auto;}
@@ -227,28 +184,61 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
 @media(max-width:420px){
   .related-row .rel-card{width:112px;}
 }
+.nav-back-btn,.nav-icon-btn{background:rgba(53,107,55,.06)!important;border:1.5px solid rgba(53,107,55,.16)!important;color:#000!important}
+.nav-back-btn svg,.nav-icon-btn svg{stroke:#000!important;color:#000!important}
+.cover-niche{position:relative;background:none;padding:0;margin-bottom:14px;overflow:visible}
+.girih-band{display:none}
+.cover-niche .cover-frame{position:relative;z-index:1;margin:6px auto 0;max-width:200px;border:1px solid rgba(201,162,74,.6);box-shadow:0 16px 34px -12px rgba(0,0,0,.55),inset 0 0 0 3px rgba(201,162,74,.16)}
+.cover-niche .cover-disc-flag{z-index:3}
+.cover-niche .cover-wl-btn{z-index:3;background:rgba(255,255,255,.92)!important;color:#1f6b22!important}
+.rv-summary{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#fbf6ec,#fff);border:1px solid #ecdfc9;border-radius:14px;padding:14px 18px;margin-bottom:14px}
+.rv-avg{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:600;color:#224f23;line-height:1}
+.rv-sum-r{display:flex;flex-direction:column;gap:3px}
+.rv-sum-stars{color:#e0a32f;font-size:16px;letter-spacing:2px}
+.rv-sum-count{font-size:12px;color:#8d7a73;font-weight:600}
+.rv-list{display:flex;flex-direction:column;gap:10px;margin-bottom:18px}
+.rv-item{background:#fffdf8;border:1px solid #f0e6d4;border-radius:12px;padding:12px 14px}
+.rv-head{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.rv-av{width:30px;height:30px;border-radius:50%;background:#224f23;color:#e7cf94;display:flex;align-items:center;justify-content:center;font-family:'Tiro Bangla',serif;font-size:14px;flex-shrink:0}
+.rv-nm{font-weight:700;font-size:13px;color:#142314}
+.rv-it-stars{color:#e0a32f;font-size:12px;letter-spacing:1px}
+.rv-dt{margin-left:auto;font-size:10px;color:#b3a59c}
+.rv-tx{font-size:13px;color:#4a3a36;line-height:1.6}
+.rv-empty{font-size:13px;color:#8d7a73;text-align:center;padding:14px;background:#fffdf8;border:1px dashed #e6d8c2;border-radius:12px;margin-bottom:16px}
+.rv-form{background:linear-gradient(135deg,#fbf6ec,#fff);border:1px solid #ecdfc9;border-radius:14px;padding:16px}
+.rv-form-title{font-family:'Tiro Bangla',serif;font-size:17px;color:#224f23;margin-bottom:12px}
+.rv-name,.rv-text{width:100%;border:1.5px solid #e6dac9;border-radius:10px;padding:10px 12px;font-family:'Hind Siliguri',sans-serif;font-size:13px;color:#142314;background:#fff;outline:none;margin-bottom:10px;box-sizing:border-box}
+.rv-name:focus,.rv-text:focus{border-color:#2f7531}
+.rv-stars{font-size:28px;color:#dcc7a0;letter-spacing:4px;margin-bottom:10px;cursor:pointer;user-select:none}
+.rv-stars span.on{color:#e0a32f}
+.rv-submit{width:100%;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;border-radius:11px;padding:12px;font-family:'Hind Siliguri',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+.dsec-title svg{color:#a87f2e}
+.cover-frame{position:relative}
+.cover-cap{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 11px;background:linear-gradient(to top,rgba(58,12,21,.94),rgba(58,12,21,.5) 55%,transparent);color:#e7cf94;font-family:'Tiro Bangla',serif;font-size:15px;line-height:1.3;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
+.rv-list{position:relative;padding-left:24px}
+.rv-list::before{content:'';position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:linear-gradient(#e0a32f,#ecdfc9)}
+.rv-item{position:relative;overflow:visible}
+.rv-item::before{content:'';position:absolute;left:-22px;top:16px;width:11px;height:11px;border-radius:50%;background:#e0a32f;border:2px solid #fff;box-shadow:0 0 0 2px #ecdfc9}
+.rv-list.empty{padding-left:0}
+.rv-list.empty::before{display:none}
 </style>
 </head>
 <body>
-
 <div class="overlay" id="overlay" onclick="closeSidebars()"></div>
-
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <h3 style="display:flex;align-items:center;gap:8px;font-size:16px;color:#fff;">📚 আল আজিজ মেনু</h3>
+    <h3 style="display:flex;align-items:center;gap:8px;font-size:16px;color:#fff;"><img src="nafah-logo-dark.png" alt="NafahLife" style="height:32px;width:auto;"> <span style="color:#fff;font-weight:600;">মেনু</span></h3>
     <button style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;" onclick="closeSidebars()">×</button>
   </div>
   <div>
-    <div class="sidebar-item" onclick="navigateTo('index.html')">🏠 হোম</div>
-    <div class="sidebar-item" onclick="navigateTo('Aatrack.html')">📦 অর্ডার ট্র্যাক</div>
-    <div class="sidebar-item" onclick="navigateTo('contact.html')">📞 যোগাযোগ</div>
+    <div class="sidebar-item" onclick="navigateTo('al_azliz_index.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg> হোম</div>
+    <div class="sidebar-item" onclick="navigateTo('Aatrack.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার ট্র্যাক</div>
+    <div class="sidebar-item" onclick="navigateTo('contact.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19 19 0 0 1 3 5.2 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 11a16 16 0 0 0 5 5l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg> যোগাযোগ</div>
   </div>
 </div>
-
-<!-- ═══════ CART DRAWER ═══════ -->
 <div id="cartBox" onclick="if(event.target===this)closeCart()">
   <div class="cart-drawer-panel">
-    <div style="padding:16px 18px;background:linear-gradient(135deg,#0D1A3A,#1A56DB);color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;border-bottom:2px solid #2979FF;">
+    <div style="padding:16px 18px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;display:flex;justify-content:space-between;align-items:center;flex-shrink:0;border-bottom:2px solid #79b07b;">
       <h3 style="margin:0;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
         আপনার ব্যাগ
@@ -262,25 +252,21 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
         <p style="display:flex;justify-content:space-between;margin:0;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
         <p style="display:flex;justify-content:space-between;margin:0;color:var(--danger);">ডিসকাউন্ট: <span>-৳<span id="discountAmt">0</span></span></p>
         <hr style="margin:10px 0;border:none;border-top:1px solid var(--border);">
-        <h4 style="display:flex;justify-content:space-between;color:#1A56DB;font-size:18px;margin:0;">মোট: <span>৳<span id="total">0</span></span></h4>
+        <h4 style="display:flex;justify-content:space-between;color:#204521;font-size:18px;margin:0;">মোট: <span>৳<span id="total">0</span></span></h4>
       </div>
-      <button onclick="goCheckout()" style="width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#1A56DB,#2979FF);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 4px 16px rgba(41,121,255,0.40);">অর্ডার কনফার্ম করুন →</button>
+      <button onclick="goCheckout()" style="width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 4px 16px rgba(121,176,123,0.40);">অর্ডার কনফার্ম করুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
   </div>
 </div>
-
-<!-- ═══════ WISHLIST MODAL ═══════ -->
 <div id="wishlistBox" onclick="if(event.target===this)closeWishlist()">
   <div>
-    <div style="padding:18px 20px;background:linear-gradient(135deg,#0D1A3A,#1A56DB);color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:24px 24px 0 0;">
-      <h3 style="margin:0;font-size:18px;font-weight:800;">❤️ উইশলিস্ট</h3>
+    <div style="padding:18px 20px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;display:flex;justify-content:space-between;align-items:center;border-radius:24px 24px 0 0;">
+      <h3 style="margin:0;font-size:18px;font-weight:800;"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg> উইশলিস্ট</h3>
       <span onclick="closeWishlist()" style="cursor:pointer;font-size:24px;">&times;</span>
     </div>
     <div id="wishlistItems" style="flex:1;overflow-y:auto;padding:16px;max-height:60vh;"></div>
   </div>
 </div>
-
-<!-- ═══════ NAVBAR ═══════ -->
 <nav class="navbar">
   <div class="navbar-top">
     <button class="nav-back-btn" onclick="goBack()" aria-label="ফিরে যান">
@@ -304,27 +290,25 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
     </div>
   </div>
 </nav>
-
-<!-- ═══════ BREADCRUMB ═══════ -->
 <div class="crumb" id="crumbBox">
-  <a href="index.html">হোম</a>
+  <a href="al_azliz_index.html">হোম</a>
   <span class="sep">/</span>
   <a href="#" id="crumbCat">ক্যাটাগরি</a>
   <span class="sep">/</span>
   <span class="cur" id="crumbName">বই</span>
 </div>
-
-<!-- ═══════ MAIN ═══════ -->
 <div class="detail-wrap" id="detailWrap">
   <div class="detail-grid">
-
-    <!-- ═══ COVER ═══ -->
     <div class="cover-col">
       <div class="cover-panel">
+        <div class="cover-niche">
+          <svg class="girih-band" viewBox="0 0 300 40" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><pattern id="gpb" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="translate(0 -4)"><g fill="none" stroke="#e0a32f" stroke-width="1" opacity=".8"><path d="M20 5l4.3 9.5 10.4.9-7.8 6.9 2.4 10.2L20 27.1l-9.7 5.3 2.4-10.2-7.8-6.9 10.4-.9z"/></g></pattern></defs><rect width="300" height="40" fill="url(#gpb)"/></svg>
         <div class="cover-disc-flag" id="discFlag" style="display:none;"><span id="discPctTxt">0%</span></div>
-        <button class="cover-wl-btn" id="coverWlBtn" onclick="toggleDetailWL()">🤍</button>
+        <button class="cover-wl-btn" id="coverWlBtn" onclick="toggleDetailWL()"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg></button>
         <div class="cover-frame">
           <img id="bookImg" src="" alt="" onerror="this.src='logo.png'">
+          <div class="cover-cap" id="coverCap"></div>
+        </div>
         </div>
         <div class="stock-strip">
           <span class="stock-dot"></span>
@@ -337,23 +321,17 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
         </div>
       </div>
     </div>
-
-    <!-- ═══ DETAILS ═══ -->
     <div class="detail-col">
       <span class="subject-pill" id="subjectPill">বিষয়</span>
       <h1 class="book-title" id="bookTitle">বইয়ের নাম লোড হচ্ছে...</h1>
       <div class="book-author-row">লেখক: <b id="bookAuthor">—</b></div>
-
       <div class="meta-chip-row" id="metaChipRow"></div>
-
-      <!-- PRICE CARD -->
       <div class="price-card">
         <div class="price-line">
           <span class="price-now-big"><span class="cur">৳</span><span id="priceNow">0</span></span>
           <span class="price-old-big" id="priceOldWrap" style="display:none;">৳<span id="priceOld">0</span></span>
           <span class="price-save-chip" id="saveChip" style="display:none;"></span>
         </div>
-
         <div class="qty-buy-row">
           <div class="qty-box">
             <button type="button" onclick="changeQty(-1)" aria-label="কমান">−</button>
@@ -369,7 +347,6 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
         </div>
-
         <div class="delivery-mini">
           <div class="row">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="6" width="15" height="13" rx="1.5"/><path d="M16 10h3.5L22 13.5V19h-6"/><circle cx="6" cy="19.5" r="1.6"/><circle cx="17.5" cy="19.5" r="1.6"/></svg>
@@ -381,8 +358,6 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
           </div>
         </div>
       </div>
-
-      <!-- DESCRIPTION -->
       <div class="dsec">
         <div class="dsec-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>
@@ -390,8 +365,6 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
         </div>
         <div class="desc-body" id="bookDesc">শীঘ্রই আপডেট করা হবে</div>
       </div>
-
-      <!-- SPECS -->
       <div class="dsec">
         <div class="dsec-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
@@ -399,8 +372,6 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
         </div>
         <table class="specs-tbl" id="specsTable"></table>
       </div>
-
-      <!-- RELATED -->
       <div class="dsec" style="margin-bottom:0;">
         <div class="dsec-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -408,12 +379,23 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
         </div>
         <div class="related-row" id="relatedRow"></div>
       </div>
-
     </div>
   </div>
 </div>
-
-<!-- ═══════ MOBILE STICKY BUY BAR ═══════ -->
+<div class="detail-wrap" style="margin-top:0;">
+  <div class="dsec" id="reviewSection">
+    <div class="dsec-title"><svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2l3 7 7 .5-5.5 4.5L18 21l-6-4-6 4 1.5-7L2 9.5 9 9z"/></svg> ক্রেতাদের রিভিউ</div>
+    <div class="rv-summary" id="rvSummary" style="display:none;"></div>
+    <div class="rv-list" id="rvList"></div>
+    <div class="rv-form">
+      <div class="rv-form-title">আপনার মতামত দিন</div>
+      <input class="rv-name" id="rvName" placeholder="আপনার নাম" maxlength="40">
+      <div class="rv-stars" id="rvStars" aria-label="রেটিং"><span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span></div>
+      <textarea class="rv-text" id="rvText" placeholder="বইটি সম্পর্কে আপনার মতামত..." rows="3" maxlength="400"></textarea>
+      <button class="rv-submit" onclick="submitReview()">রিভিউ জমা দিন</button>
+    </div>
+  </div>
+</div>
 <div class="mobile-buybar" id="mobileBar">
   <div class="qty-box">
     <button type="button" onclick="changeQty(-1)" aria-label="কমান">−</button>
@@ -426,13 +408,9 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
   </div>
   <button class="btn-flat btn-buy-solid" onclick="buyNow()">অর্ডার করুন</button>
 </div>
-
-<!-- ═══════ TOAST ═══════ -->
 <div class="toast" id="toast"></div>
-
-<!-- ═══════ BOTTOM NAV ═══════ -->
 <div class="bottom-nav">
-  <div class="bnav-item" onclick="navigateTo('index.html')">
+  <div class="bnav-item" onclick="navigateTo('al_azliz_index.html')">
     <svg class="bnav-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span class="bnav-label">হোম</span>
   </div>
@@ -458,7 +436,6 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
     </div>
   </div>
 </div>
-
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
@@ -466,30 +443,21 @@ h1.book-title{font-size:23px;font-weight:800;line-height:1.4;color:var(--text);m
 <script src="Aafirebase-config.js"></script>
 <script src="book.js" defer></script>
 <script src="AAcommon.js"></script>
-
 <script>
-/* ═══════════════════════════════════════════
-   AAbook.html — Book details page logic
-   Reads books[] from book.js, ?id= from URL
-═══════════════════════════════════════════ */
-
 let currentBook = null;
 let currentIdx = -1;
 let cart = JSON.parse(localStorage.getItem('alaziz_cart') || '[]');
 let wishlist = JSON.parse(localStorage.getItem('alaziz_wishlist') || '[]');
 let discountPercent = 0;
-
 function getImg(b){ return b.img || b.image || b.cover || 'logo.png'; }
 function discPct(b){ if(!b.original_price || b.original_price<=b.price) return 0; return Math.round((b.original_price-b.price)/b.original_price*100); }
 function isWL(name){ return wishlist.includes(name); }
-
 function showToastMsg(msg){
   const t = document.getElementById('toast');
   t.innerText = msg;
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'), 2000);
 }
-
 function changeQty(delta){
   const a = document.getElementById('qtyInput');
   const b = document.getElementById('qtyInputMobile');
@@ -505,9 +473,7 @@ document.addEventListener('input', (e)=>{
     document.getElementById('qtyInputMobile').value = v;
   }
 });
-
 function getQty(){ return parseInt(document.getElementById('qtyInput').value) || 1; }
-
 function addCurrentToCart(redirect){
   if(!currentBook) return;
   const qty = getQty();
@@ -519,11 +485,8 @@ function addCurrentToCart(redirect){
   showToastMsg('✅ কার্টে যোগ হয়েছে!');
   if(redirect) goCheckout();
 }
-
 function buyNow(){ addCurrentToCart(true); }
-
 function goCheckout(){ window.location.href = 'AAcheckout.html'; }
-
 function toggleDetailWL(){
   if(!currentBook) return;
   const name = currentBook.name;
@@ -537,12 +500,10 @@ function toggleDetailWL(){
   updateWLCount();
   showToastMsg(active ? '❤️ উইশলিস্টে যোগ হয়েছে' : '💔 উইশলিস্ট থেকে সরানো হয়েছে');
 }
-
 function updateWLCount(){
   const el = document.getElementById('navWishBadge');
   if(el){ el.innerText = wishlist.length; el.classList.toggle('show', wishlist.length>0); }
 }
-
 function updateCartUI(){
   const count = cart.length;
   ['cartCount','bnavBadge'].forEach(id=>{
@@ -551,7 +512,6 @@ function updateCartUI(){
   });
   renderCartItems();
 }
-
 function renderCartItems(){
   const box = document.getElementById('cartItems');
   if(!box) return;
@@ -578,7 +538,6 @@ function renderCartItems(){
   document.getElementById('discountAmt').innerText = discount;
   document.getElementById('total').innerText = subtotal - discount;
 }
-
 function showCart(){
   updateCartUI();
   const box = document.getElementById('cartBox');
@@ -590,7 +549,6 @@ function closeCart(){
   box.classList.remove('sliding');
   setTimeout(()=>box.classList.remove('open'), 380);
 }
-
 function showWishlist(){
   const box = document.getElementById('wishlistItems');
   if(!wishlist.length){
@@ -608,17 +566,13 @@ function showWishlist(){
   document.getElementById('wishlistBox').classList.add('open');
 }
 function closeWishlist(){ document.getElementById('wishlistBox').classList.remove('open'); }
-
 function goToBook(idx){
   window.location.href = 'AAbook.html?id=' + idx;
 }
-
 function closeSidebars(){
   document.getElementById('sidebar')?.classList.remove('active');
   document.getElementById('overlay')?.classList.remove('active');
 }
-
-/* ═══ RELATED BOOKS CARD ═══ */
 function makeRelCard(b){
   const idx = books.indexOf(b);
   return `<div class="rel-card" onclick="goToBook(${idx})">
@@ -629,8 +583,6 @@ function makeRelCard(b){
     </div>
   </div>`;
 }
-
-/* ═══ RENDER BOOK ═══ */
 function renderBook(){
   if(typeof books === 'undefined' || !books.length){
     document.getElementById('bookTitle').innerText = 'বই খুঁজে পাওয়া যায়নি';
@@ -640,28 +592,25 @@ function renderBook(){
   const idParam = params.get('id');
   currentIdx = idParam !== null ? parseInt(idParam) : 0;
   currentBook = books[currentIdx];
-
   if(!currentBook){
     document.getElementById('bookTitle').innerText = 'বই খুঁজে পাওয়া যায়নি';
-    document.getElementById('detailWrap').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:14px;">📚</div><p style="font-size:15px;">দুঃখিত, এই বইটি খুঁজে পাওয়া যায়নি।</p><a href="index.html" style="display:inline-block;margin-top:16px;color:#1A56DB;font-weight:700;text-decoration:none;">হোম পেজে ফিরে যান →</a></div>';
+    document.getElementById('detailWrap').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:14px;">📚</div><p style="font-size:15px;">দুঃখিত, এই বইটি খুঁজে পাওয়া যায়নি।</p><a href="al_azliz_index.html" style="display:inline-block;margin-top:16px;color:#204521;font-weight:700;text-decoration:none;">হোম পেজে ফিরে যান →</a></div>';
     return;
   }
-
   const b = currentBook;
   const pct = discPct(b);
-
-  document.title = b.name + ' — আল আজিজ বুকশপ';
+  document.title = b.name + ' — NafahLife';
   document.getElementById('navTitle').innerText = b.name;
   document.getElementById('crumbCat').innerText = b.cat || 'বই';
-  document.getElementById('crumbCat').setAttribute('onclick', `navigateTo('index.html')`);
+  document.getElementById('crumbCat').setAttribute('onclick', `navigateTo('al_azliz_index.html')`);
   document.getElementById('crumbName').innerText = b.name;
   document.getElementById('subjectPill').innerText = b.subject || b.cat || 'বই';
   document.getElementById('bookTitle').innerText = b.name;
+  var _cc=document.getElementById('coverCap'); if(_cc)_cc.textContent=b.name;
   document.getElementById('bookAuthor').innerText = b.author || 'অজানা';
   document.getElementById('bookImg').src = getImg(b);
   document.getElementById('bookImg').alt = b.name;
   document.getElementById('bookDesc').innerHTML = '<p>' + (b.desc || 'শীঘ্রই আপডেট করা হবে') + '</p>';
-
   document.getElementById('priceNow').innerText = b.price;
   document.getElementById('priceNowMobile').innerText = b.price;
   if(pct>0){
@@ -674,12 +623,9 @@ function renderBook(){
     document.getElementById('discFlag').style.display = 'flex';
     document.getElementById('discPctTxt').innerText = pct + '%';
   }
-
   const wlActive = isWL(b.name);
   document.getElementById('coverWlBtn').innerText = wlActive ? '❤️' : '🤍';
   document.getElementById('coverWlBtn').classList.toggle('active', wlActive);
-
-  /* meta chips */
   const chips = [];
   if(b.pub) chips.push({icon:'building', label:b.pub});
   if(b.pages) chips.push({icon:'pages', label:b.pages});
@@ -692,8 +638,6 @@ function renderBook(){
     lang: '<path d="M5 8l6 6 6-6"/>'
   };
   document.getElementById('metaChipRow').innerHTML = chips.map(c=>`<div class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconPaths[c.icon]}</svg>${c.label}</div>`).join('');
-
-  /* specs table */
   const specRows = [];
   if(b.author) specRows.push(['লেখক', b.author]);
   if(b.pub) specRows.push(['প্রকাশনী', b.pub]);
@@ -702,24 +646,61 @@ function renderBook(){
   if(b.cat) specRows.push(['ক্যাটাগরি', b.cat]);
   if(b.subject) specRows.push(['বিষয়', b.subject]);
   document.getElementById('specsTable').innerHTML = specRows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
-
-  /* related books — same category, exclude current */
   const related = books.filter((bk,i)=> i!==currentIdx && bk.cat===b.cat).slice(0,8);
   const relList = related.length ? related : books.filter((bk,i)=>i!==currentIdx).slice(0,8);
   document.getElementById('relatedRow').innerHTML = relList.map(makeRelCard).join('');
-
-  /* save to recently viewed */
   let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent') || '[]');
   recentlyViewed = [currentIdx, ...recentlyViewed.filter(i=>i!==currentIdx)].slice(0,8);
   localStorage.setItem('alaziz_recent', JSON.stringify(recentlyViewed));
 }
-
 document.addEventListener('DOMContentLoaded', ()=>{
   renderBook();
   updateCartUI();
   updateWLCount();
 });
 </script>
-
+<script>
+(function(){
+  var RID=(new URLSearchParams(location.search).get('id'))||'0';
+  var KEY='reviews/b'+RID, LKEY='alaziz_reviews_b'+RID, picked=0, RDB=null;
+  try{ if(typeof firebase!=='undefined' && firebase.database) RDB=firebase.database(); }catch(e){ RDB=null; }
+  function bn(n){return String(n).replace(/[0-9]/g,function(d){return '\u09e6\u09e7\u09e8\u09e9\u09ea\u09eb\u09ec\u09ed\u09ee\u09ef'[d];});}
+  function stars(r){var s='';for(var i=1;i<=5;i++)s+=(i<=Math.round(r))?'\u2605':'\u2606';return s;}
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function render(list){
+    list=list||[]; list.sort(function(a,b){return (b.ts||0)-(a.ts||0);});
+    var sum=document.getElementById('rvSummary'), lst=document.getElementById('rvList'); if(!sum||!lst)return;
+    if(!list.length){ sum.style.display='none'; lst.classList.add('empty'); lst.innerHTML='<div class="rv-empty">\u098f\u0996\u09a8\u09cb \u0995\u09cb\u09a8\u09cb \u09b0\u09bf\u09ad\u09bf\u0989 \u09a8\u09c7\u0987 \u2014 \u09aa\u09cd\u09b0\u09a5\u09ae \u09b0\u09bf\u09ad\u09bf\u0989\u099f\u09bf \u0986\u09aa\u09a8\u09bf\u0987 \u09a6\u09bf\u09a8!</div>'; return; }
+    var avg=list.reduce(function(a,r){return a+(+r.rating||0);},0)/list.length;
+    lst.classList.remove('empty'); sum.style.display='flex';
+    sum.innerHTML='<div class="rv-avg">'+bn(avg.toFixed(1))+'</div><div class="rv-sum-r"><div class="rv-sum-stars">'+stars(avg)+'</div><div class="rv-sum-count">'+bn(list.length)+' \u099f\u09bf \u09b0\u09bf\u09ad\u09bf\u0989</div></div>';
+    lst.innerHTML=list.map(function(r){
+      var nm=esc(r.name||'\u0995\u09cd\u09b0\u09c7\u09a4\u09be'), ini=(nm.trim().charAt(0)||'\u0995');
+      var d=r.ts?new Date(r.ts):null, ds=d?bn(d.getDate())+'/'+bn(d.getMonth()+1)+'/'+bn(d.getFullYear()):'';
+      return '<div class="rv-item"><div class="rv-head"><div class="rv-av">'+ini+'</div><div><div class="rv-nm">'+nm+'</div><div class="rv-it-stars">'+stars(r.rating)+'</div></div><div class="rv-dt">'+ds+'</div></div><div class="rv-tx">'+esc(r.text)+'</div></div>';
+    }).join('');
+  }
+  function load(){
+    if(RDB){ RDB.ref(KEY).once('value').then(function(snap){var v=snap.val(),a=[];if(v)Object.keys(v).forEach(function(k){a.push(v[k]);});render(a);}).catch(function(){render(JSON.parse(localStorage.getItem(LKEY)||'[]'));}); }
+    else { render(JSON.parse(localStorage.getItem(LKEY)||'[]')); }
+  }
+  function paint(){ document.querySelectorAll('#rvStars span').forEach(function(x){ x.classList.toggle('on',(+x.dataset.v)<=picked); }); }
+  window.submitReview=function(){
+    var nm=(document.getElementById('rvName').value||'').trim(), tx=(document.getElementById('rvText').value||'').trim();
+    if(!nm){ if(window.showToastMsg)showToastMsg('\u26a0\ufe0f \u0986\u09aa\u09a8\u09be\u09b0 \u09a8\u09be\u09ae \u09b2\u09bf\u0996\u09c1\u09a8'); return; }
+    if(!picked){ if(window.showToastMsg)showToastMsg('\u26a0\ufe0f \u09b0\u09c7\u099f\u09bf\u0982 \u09a6\u09bf\u09a8'); return; }
+    if(!tx){ if(window.showToastMsg)showToastMsg('\u26a0\ufe0f \u09ae\u09a4\u09be\u09ae\u09a4 \u09b2\u09bf\u0996\u09c1\u09a8'); return; }
+    var rec={name:nm,rating:picked,text:tx,ts:Date.now()};
+    function sl(r){var a=JSON.parse(localStorage.getItem(LKEY)||'[]');a.push(r);localStorage.setItem(LKEY,JSON.stringify(a));}
+    function done(){document.getElementById('rvName').value='';document.getElementById('rvText').value='';picked=0;paint();if(window.showToastMsg)showToastMsg('\u09a7\u09a8\u09cd\u09af\u09ac\u09be\u09a6! \u09b0\u09bf\u09ad\u09bf\u0989 \u09af\u09c1\u0995\u09cd\u09a4 \u09b9\u09df\u09c7\u099b\u09c7');load();}
+    if(RDB){ RDB.ref(KEY).push(rec).then(done).catch(function(){sl(rec);done();}); } else { sl(rec); done(); }
+  };
+  document.addEventListener('DOMContentLoaded',function(){
+    var sw=document.getElementById('rvStars');
+    if(sw) sw.querySelectorAll('span').forEach(function(x){ x.addEventListener('click',function(){picked=+x.dataset.v;paint();}); });
+    load();
+  });
+})();
+</script>
 </body>
 </html>
