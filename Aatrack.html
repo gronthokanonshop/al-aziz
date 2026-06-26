@@ -4,124 +4,101 @@
     <meta charset="UTF-8">
     <link rel="icon" href="logo.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>অর্ডার ট্র্যাক — আল আযীয বুকশপ</title>
-    <meta name="theme-color" content="#0D1F44">
+    <title>অর্ডার ট্র্যাক — NafahLife</title>
+    <meta name="theme-color" content="#2a562b">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="AAcommon.css">
     <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
-        /* ═══ AL AZIZ COLOR TOKENS ═══ */
         :root {
-            --primary:#1B3A6B; --primary-dark:#0D1F44; --primary-light:#2550A0;
-            --accent:#C9920A; --accent-light:#E6B800;
-            --bg:var(--bg-body,#F3F4F8); --bg2:#E8ECF5; --card:rgba(255,255,255,0.9);
-            --text:#1F2937; --text2:#6B7280; --border:rgba(27,58,107,0.14);
-            --green:#1B3A6B; --green-light:#2550A0; --dark:#0D1F44;
-            --red:#DC2626; --shadow:rgba(27,58,107,0.12);
+            --primary:#2a562b; --primary-dark:#1a2e1b; --primary-light:#3a7c3c;
+            --accent:#437f45; --accent-light:#4d8a4f;
+            --bg:var(--bg-body,#ffffff); --bg2:#f7f5f5; --card:rgba(255,255,255,0.9);
+            --text:#1c2e1d; --text2:#6B7280; --border:rgba(42,86,43,0.14);
+            --green:#2a562b; --green-light:#3a7c3c; --dark:#1a2e1b;
+            --red:#DC2626; --shadow:rgba(42,86,43,0.12);
         }
         [data-theme="dark"]{
-            --bg:#0A1628; --bg2:#0D1F44; --card:rgba(13,31,68,0.9);
-            --text:#E0E8F8; --text2:#8A9EC0; --border:rgba(201,146,10,0.18);
+            --bg:#ffffff; --bg2:#1a2e1b; --card:rgba(26,46,27,0.9);
+            --text:#eaeeec; --text2:#9bb69c; --border:rgba(67,127,69,0.18);
             --shadow:rgba(0,0,0,0.3);
         }
-
-        body{-webkit-tap-highlight-color:transparent;font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-
-        /* NAVBAR */
-        .navbar{background:var(--primary-dark);padding:0;border-bottom:2px solid rgba(201,146,10,0.35);position:sticky;top:0;z-index:100;}
+        body{-webkit-tap-highlight-color:#204521;font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        .navbar{background:#fff;color:#204521;padding:0;border-bottom:2px solid rgba(67,127,69,0.35);position:sticky;top:0;z-index:100;}
         .navbar-top{display:flex;align-items:center;padding:12px 16px;gap:12px;height:56px;}
-        .back-btn{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);color:#E0E8F8;border-radius:8px;width:36px;height:36px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
-        .back-btn:hover{background:rgba(201,146,10,0.25);border-color:var(--accent);}
-        .navbar-title{flex:1;font-size:15px;font-weight:700;color:#E0E8F8;}
-        .dark-pill{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);color:#E0E8F8;border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s;}
-        .dark-pill:hover{background:rgba(201,146,10,0.25);}
-
-        /* PAGE */
+        .back-btn{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);color:#fff;border-radius:8px;width:36px;height:36px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:.2s;}
+        .back-btn:hover{background:rgba(67,127,69,0.25);border-color:#204521;}
+        .navbar-title{flex:1;font-size:15px;font-weight:700;color:#204521;}
+        .dark-pill{background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);color:#fff;border-radius:8px;width:36px;height:36px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.2s;}
+        .dark-pill:hover{background:rgba(67,127,69,0.25);}
         .page-wrap{padding:16px;max-width:500px;margin:0 auto;padding-bottom:60px;}
-
-        /* TABS */
         .track-tabs{display:flex;gap:8px;margin-bottom:16px;}
         .ttab{flex:1;padding:10px;border-radius:10px;border:1.5px solid var(--border);background:var(--card);color:var(--text2);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:.2s;}
-        .ttab.active{background:var(--primary-dark);color:#E6B800;border-color:rgba(201,146,10,0.5);}
-
-        /* SEARCH BOX */
+        .ttab.active{background:var(--primary-dark);color:#fff;border-color:rgba(67,127,69,0.5);}
         .track-search{background:var(--card);border-radius:16px;padding:20px;margin-bottom:16px;box-shadow:0 2px 14px var(--shadow);border:1px solid var(--border);}
         .track-search h3{font-size:16px;margin-bottom:4px;color:var(--text);font-weight:700;}
         .track-search p{font-size:12px;color:var(--text2);margin-bottom:14px;}
         .track-input-row{display:flex;gap:8px;}
-        .track-input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;transition:.2s;}
-        .track-input:focus{border-color:var(--primary-light);box-shadow:0 0 0 3px rgba(27,58,107,0.12);}
-        .track-btn{padding:11px 18px;background:var(--primary-dark);color:#E6B800;border:1.5px solid rgba(201,146,10,0.4);border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s;}
+        .track-input{flex:1;padding:11px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:#204521;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;outline:none;transition:.2s;}
+        .track-input:focus{border-color:#204521;box-shadow:0 0 0 3px rgba(42,86,43,0.12);}
+        .track-btn{padding:11px 18px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:1.5px solid rgba(67,127,69,0.4);border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;transition:.2s;}
         .track-btn:hover{background:var(--primary);color:#fff;}
-
-        /* ORDER CARDS */
         .my-order-item{background:var(--card);border-radius:14px;padding:14px 16px;margin-bottom:10px;box-shadow:0 2px 10px var(--shadow);cursor:pointer;border:1.5px solid var(--border);transition:.2s;}
-        .my-order-item:hover{border-color:var(--accent);}
+        .my-order-item:hover{border-color:#204521;}
         .my-order-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
-        .my-oid{font-size:13px;font-weight:800;color:var(--accent);}
+        .my-oid{font-size:13px;font-weight:800;color:#204521;}
         .my-status{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;}
         .my-info{font-size:12px;color:var(--text2);line-height:1.7;}
-
-        /* ORDER DETAIL CARD */
         .order-card{background:var(--card);border-radius:16px;padding:20px;box-shadow:0 2px 12px var(--shadow);margin-bottom:14px;display:none;border:1px solid var(--border);}
-        .order-id-badge{display:inline-block;background:rgba(27,58,107,0.08);color:var(--primary);border:1.5px solid rgba(27,58,107,0.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:14px;}
-        [data-theme="dark"] .order-id-badge{background:rgba(201,146,10,0.10);color:#E6B800;border-color:rgba(201,146,10,0.35);}
+        .order-id-badge{display:inline-block;background:rgba(42,86,43,0.08);color:#204521;border:1.5px solid rgba(42,86,43,0.25);border-radius:20px;padding:4px 14px;font-size:12px;font-weight:800;letter-spacing:1px;margin-bottom:14px;}
+        [data-theme="dark"] .order-id-badge{background:rgba(67,127,69,0.10);color:#204521;border-color:rgba(67,127,69,0.35);}
         .order-info-row{display:flex;justify-content:space-between;font-size:13px;padding:5px 0;border-bottom:1px solid var(--border);}
         .order-info-row:last-child{border:none;}
         .order-info-row span:first-child{color:var(--text2);}
         .order-info-row span:last-child{font-weight:600;color:var(--text);}
-        .order-total-val{color:var(--accent)!important;font-size:15px;}
-
-        /* TIMELINE */
+        .order-total-val{color:#204521!important;font-size:15px;}
         .timeline{margin-top:20px;}
         .timeline-title{font-size:13px;font-weight:700;color:var(--text2);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em;}
         .tl-step{display:flex;gap:14px;margin-bottom:0;position:relative;}
         .tl-left{display:flex;flex-direction:column;align-items:center;width:28px;flex-shrink:0;}
         .tl-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;z-index:1;}
-        .tl-dot.done{background:var(--primary-dark);color:#E6B800;}
-        .tl-dot.active{background:var(--primary-dark);color:#E6B800;box-shadow:0 0 0 4px rgba(27,58,107,0.22);}
-        .tl-dot.pending{background:var(--bg);border:2px solid var(--border);color:var(--text2);}
+        .tl-dot.done{background:var(--primary-dark);color:#fff;}
+        .tl-dot.active{background:var(--primary-dark);color:#fff;box-shadow:0 0 0 4px rgba(42,86,43,0.22);}
+        .tl-dot.pending{background:var(--bg);border:2px solid var(--border);color:#204521;}
         .tl-line{width:2px;flex:1;background:var(--border);margin:2px 0;}
         .tl-line.done{background:var(--primary-dark);}
         .tl-right{padding:4px 0 20px;}
         .tl-label{font-size:14px;font-weight:700;color:var(--text);}
         .tl-label.pending-txt{color:var(--text2);}
         .tl-sub{font-size:11px;color:var(--text2);margin-top:2px;}
-
-        /* ERROR / LOADING */
-        .track-error{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px;color:#dc2626;font-size:13px;text-align:center;display:none;margin-bottom:14px;}
+        .track-error{background:#fef2f2;border:1.5px solid #fca5a5;border-radius:12px;padding:14px;color:#204521;font-size:13px;text-align:center;display:none;margin-bottom:14px;}
         [data-theme="dark"] .track-error{background:rgba(220,38,38,0.10);border-color:rgba(220,38,38,0.3);}
         .loading-spinner{text-align:center;padding:20px;color:var(--text2);font-size:13px;}
     </style>
 </head>
 <body>
-
 <nav class="navbar">
     <div class="navbar-top">
         <button class="back-btn" onclick="navigateTo('al_azliz_index.html')">‹</button>
-        <span class="navbar-title">📦 অর্ডার ট্র্যাক করুন</span>
-        <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+        <span class="navbar-title"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার ট্র্যাক করুন</span>
+        <button class="dark-pill" onclick="toggleDark()" id="darkBtn"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
     </div>
 </nav>
-
 <div class="page-wrap">
-
     <div class="track-tabs">
-        <button class="ttab active" id="tab1" onclick="switchTab('id')">🔍 ID দিয়ে খুঁজুন</button>
-        <button class="ttab" id="tab2" onclick="switchTab('phone')">📱 আমার অর্ডারসমূহ</button>
+        <button class="ttab active" id="tab1" onclick="switchTab('id')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg> ID দিয়ে খুঁজুন</button>
+        <button class="ttab" id="tab2" onclick="switchTab('phone')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg> আমার অর্ডারসমূহ</button>
     </div>
-
-    <!-- Search by Order ID -->
     <div id="panelId">
         <div class="track-search">
-            <h3>📦 অর্ডার খুঁজুন</h3>
+            <h3><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার খুঁজুন</h3>
             <p>অর্ডার কনফার্মের পর আপনি যে ID পেয়েছেন সেটি লিখুন</p>
             <div class="track-input-row">
                 <input class="track-input" id="trackInput" placeholder="যেমন: AA-ABC123" oninput="this.value=this.value.toUpperCase()">
                 <button class="track-btn" onclick="searchOrder()">খুঁজুন</button>
             </div>
         </div>
-        <div class="track-error" id="trackError">❌ এই ID দিয়ে কোনো অর্ডার পাওয়া যায়নি</div>
+        <div class="track-error" id="trackError"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg> এই ID দিয়ে কোনো অর্ডার পাওয়া যায়নি</div>
         <div class="order-card" id="orderCard">
             <div id="orderIdBadge" class="order-id-badge"></div>
             <div id="orderInfoRows"></div>
@@ -132,36 +109,29 @@
         </div>
         <div id="lastOrderHint" style="text-align:center;padding:10px;font-size:12px;color:var(--text2);"></div>
     </div>
-
-    <!-- Search by Phone -->
     <div id="panelPhone" style="display:none;">
         <div class="track-search">
-            <h3>📱 আমার সব অর্ডার</h3>
+            <h3><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg> আমার সব অর্ডার</h3>
             <p>আপনার মোবাইল নম্বর দিয়ে সকল অর্ডার দেখুন</p>
             <div class="track-input-row">
                 <input class="track-input" id="phoneInput" placeholder="01XXXXXXXXX" type="tel" maxlength="11">
                 <button class="track-btn" onclick="searchByPhone()">দেখুন</button>
             </div>
         </div>
-        <div class="track-error" id="phoneError">❌ এই নম্বরে কোনো অর্ডার পাওয়া যায়নি</div>
+        <div class="track-error" id="phoneError"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg> এই নম্বরে কোনো অর্ডার পাওয়া যায়নি</div>
         <div id="myOrdersList"></div>
     </div>
-
 </div>
-
 <script>
 const DB = 'https://gronthokanon-8573e-default-rtdb.firebaseio.com';
-
 function escapeHTML(str){
     return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 async function fbGet(path){
     const res = await fetch(DB + path + '.json', {method:'GET', headers:{'Accept':'application/json'}});
     if(!res.ok) throw new Error('HTTP ' + res.status);
     return await res.json();
 }
-
 const STATUSES=[
     {key:'pending',   icon:'🕐', label:'অর্ডার গৃহীত',     sub:'আপনার অর্ডারটি আমরা পেয়েছি'},
     {key:'confirmed', icon:'✅', label:'অর্ডার কনফার্ম',    sub:'অর্ডার নিশ্চিত করা হয়েছে'},
@@ -171,13 +141,12 @@ const STATUSES=[
 ];
 const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
 const STATUS_COLORS={
-    pending:'background:#fef3c7;color:#92400e;',
-    confirmed:'background:#dbeafe;color:#1e40af;',
-    processing:'background:#ede9fe;color:#5b21b6;',
+    pending:'background:#e6dfe0;color:#204521;',
+    confirmed:'background:#efeaeb;color:#923b48;',
+    processing:'background:#f5f2f2;color:#993e4c;',
     shipped:'background:#fff7ed;color:#9a3412;',
-    delivered:'background:rgba(27,58,107,0.10);color:#1B3A6B;'
+    delivered:'background:rgba(42,86,43,0.10);color:#2a562b;'
 };
-
 function switchTab(tab){
     const isId=tab==='id';
     document.getElementById('panelId').style.display=isId?'block':'none';
@@ -185,7 +154,6 @@ function switchTab(tab){
     document.getElementById('tab1').classList.toggle('active',isId);
     document.getElementById('tab2').classList.toggle('active',!isId);
 }
-
 async function searchOrder(){
     const id=document.getElementById('trackInput').value.trim();
     if(!id){showToast('অর্ডার ID লিখুন','#DC2626');return;}
@@ -199,7 +167,6 @@ async function searchOrder(){
         showToast('সংযোগ সমস্যা হয়েছে, আবার চেষ্টা করুন','#DC2626');
     }
 }
-
 async function searchByPhone(){
     const phone=document.getElementById('phoneInput').value.trim();
     if(!phone||!/^01[3-9]\d{8}$/.test(phone)){
@@ -233,7 +200,6 @@ async function searchByPhone(){
         document.getElementById('myOrdersList').innerHTML='';
     }
 }
-
 function renderMyOrders(orders){
     const el=document.getElementById('myOrdersList');
     el.innerHTML=orders.map(o=>`
@@ -243,21 +209,19 @@ function renderMyOrders(orders){
                 <span class="my-status" style="${STATUS_COLORS[o.status]||STATUS_COLORS.pending}">${STATUS_LABELS[o.status]||escapeHTML(o.status)}</span>
             </div>
             <div class="my-info">
-                📚 ${escapeHTML(o.books)}<br>
-                💰 <strong>${escapeHTML(o.total)}</strong> · 💳 ${escapeHTML(o.payment)}<br>
-                🗓️ ${new Date(o.createdAt).toLocaleDateString('bn-BD')}
+                <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h6v16h-6z"/><path d="M16 5l4 .8-2.5 15.4-4-.8"/></svg> ${escapeHTML(o.books)}<br>
+                <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M14.5 9a2.5 2 0 0 0-2.5-1.5c-1.5 0-2.5.8-2.5 2s1 1.7 2.5 2 2.5.8 2.5 2-1 2-2.5 2A2.5 2 0 0 1 9.5 16M12 6v1.5M12 16.5V18"/></svg> <strong>${escapeHTML(o.total)}</strong> · <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg> ${escapeHTML(o.payment)}<br>
+                <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg> ${new Date(o.createdAt).toLocaleDateString('bn-BD')}
             </div>
         </div>
     `).join('');
 }
-
 function viewOrder(id){
     switchTab('id');
     document.getElementById('trackInput').value=id;
     searchOrder();
 }
 function fillLastOrder(id){document.getElementById('trackInput').value=id;}
-
 function renderOrder(o){
     document.getElementById('orderIdBadge').innerText=o.orderId;
     const discRow=o.discount>0?`<div class="order-info-row"><span>ছাড় (${escapeHTML(o.coupon||'')})</span><span style="color:#dc2626;">-৳${o.discount}</span></div>`:'';
@@ -279,7 +243,7 @@ function renderOrder(o){
         const showLine=i<STATUSES.length-1;
         html+=`<div class="tl-step">
             <div class="tl-left">
-                <div class="tl-dot ${dotClass}">${isDone?'✓':s.icon}</div>
+                <div class="tl-dot ${dotClass}">${isDone?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg>':s.icon}</div>
                 ${showLine?`<div class="tl-line ${isDone?'done':''}"></div>`:''}
             </div>
             <div class="tl-right">
@@ -291,7 +255,6 @@ function renderOrder(o){
     document.getElementById('timelineSteps').innerHTML=html;
     document.getElementById('orderCard').style.display='block';
 }
-
 window.onload=function(){
     const urlId=new URLSearchParams(window.location.search).get('id');
     const lastId=localStorage.getItem('alaziz_lastorder');
@@ -299,7 +262,7 @@ window.onload=function(){
         document.getElementById('trackInput').value=urlId;
         searchOrder();
     } else if(lastId){
-        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:var(--accent);cursor:pointer;" data-id="${escapeHTML(lastId)}" onclick="fillLastOrder(this.dataset.id)">${escapeHTML(lastId)}</strong>`;
+        document.getElementById('lastOrderHint').innerHTML=`আপনার সর্বশেষ অর্ডার: <strong style="color:#204521;cursor:pointer;" data-id="${escapeHTML(lastId)}" onclick="fillLastOrder(this.dataset.id)">${escapeHTML(lastId)}</strong>`;
     }
 };
 </script>
