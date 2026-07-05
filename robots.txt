@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin_Aa.html
+Disallow: /AAcheckout.html
+
+Sitemap: https://nafahlife.com/sitemap.xml

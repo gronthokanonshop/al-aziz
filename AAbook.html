@@ -2,7 +2,7 @@
 <html lang="bn" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="logo.png" type="image/png">
+<link rel="icon" href="nafah-logo.png" type="image/png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>বই বিস্তারিত — NafahLife</title>
 <meta name="theme-color" content="#2a562b">
@@ -231,7 +231,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
     <button style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;" onclick="closeSidebars()">×</button>
   </div>
   <div>
-    <div class="sidebar-item" onclick="navigateTo('al_azliz_index.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg> হোম</div>
+    <div class="sidebar-item" onclick="navigateTo('index.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg> হোম</div>
     <div class="sidebar-item" onclick="navigateTo('Aatrack.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার ট্র্যাক</div>
     <div class="sidebar-item" onclick="navigateTo('contact.html')"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19 19 0 0 1 3 5.2 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 11a16 16 0 0 0 5 5l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg> যোগাযোগ</div>
   </div>
@@ -247,6 +247,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
     </div>
     <div id="cartItems" style="flex:1;overflow-y:auto;padding:16px;"></div>
     <div style="padding:16px;background:var(--bg);border-top:1px solid var(--border);">
+      <div id="aaGiftBar"></div>
       <div id="couponSection" style="margin-bottom:12px;"></div>
       <div style="font-size:14px;line-height:2;color:var(--text);">
         <p style="display:flex;justify-content:space-between;margin:0;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
@@ -291,7 +292,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
   </div>
 </nav>
 <div class="crumb" id="crumbBox">
-  <a href="al_azliz_index.html">হোম</a>
+  <a href="index.html">হোম</a>
   <span class="sep">/</span>
   <a href="#" id="crumbCat">ক্যাটাগরি</a>
   <span class="sep">/</span>
@@ -306,7 +307,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
         <div class="cover-disc-flag" id="discFlag" style="display:none;"><span id="discPctTxt">0%</span></div>
         <button class="cover-wl-btn" id="coverWlBtn" onclick="toggleDetailWL()"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg></button>
         <div class="cover-frame">
-          <img id="bookImg" src="" alt="" onerror="this.src='logo.png'">
+          <img id="bookImg" src="" alt="" onerror="this.onerror=null;this.src='book-placeholder.svg'">
           <div class="cover-cap" id="coverCap"></div>
         </div>
         </div>
@@ -410,7 +411,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
 </div>
 <div class="toast" id="toast"></div>
 <div class="bottom-nav">
-  <div class="bnav-item" onclick="navigateTo('al_azliz_index.html')">
+  <div class="bnav-item" onclick="navigateTo('index.html')">
     <svg class="bnav-svg" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span class="bnav-label">হোম</span>
   </div>
@@ -442,6 +443,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="Aafirebase-config.js"></script>
 <script src="book.js" defer></script>
+<script src="aabooks-live.js"></script>
 <script src="AAcommon.js"></script>
 <script>
 let currentBook = null;
@@ -449,7 +451,7 @@ let currentIdx = -1;
 let cart = JSON.parse(localStorage.getItem('alaziz_cart') || '[]');
 let wishlist = JSON.parse(localStorage.getItem('alaziz_wishlist') || '[]');
 let discountPercent = 0;
-function getImg(b){ return b.img || b.image || b.cover || 'logo.png'; }
+function getImg(b){ const u = b.img || b.image || ''; return (u.indexOf('http')===0 || u.indexOf('data:')===0) ? u : 'book-placeholder.svg'; }
 function discPct(b){ if(!b.original_price || b.original_price<=b.price) return 0; return Math.round((b.original_price-b.price)/b.original_price*100); }
 function isWL(name){ return wishlist.includes(name); }
 function showToastMsg(msg){
@@ -525,7 +527,7 @@ function renderCartItems(){
     });
     box.innerHTML = Object.values(grouped).map(item=>`
       <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
-        <img src="${item.img}" style="width:48px;height:64px;object-fit:cover;border-radius:6px;" onerror="this.src='logo.png'">
+        <img src="${item.img}" style="width:48px;height:64px;object-fit:cover;border-radius:6px;" onerror="this.onerror=null;this.src='book-placeholder.svg'">
         <div style="flex:1;">
           <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;">${item.name}</div>
           <div style="font-size:12px;color:var(--danger);font-weight:700;">৳${item.price} × ${item.qty}</div>
@@ -533,6 +535,8 @@ function renderCartItems(){
       </div>`).join('');
   }
   const subtotal = cart.reduce((s,i)=>s+Number(i.price),0);
+  const gb=document.getElementById('aaGiftBar');
+  if(gb && typeof aaGiftBarHTML==='function') gb.innerHTML=aaGiftBarHTML(subtotal);
   const discount = Math.round(subtotal*discountPercent/100);
   document.getElementById('subtotal').innerText = subtotal;
   document.getElementById('discountAmt').innerText = discount;
@@ -558,7 +562,7 @@ function showWishlist(){
       const b = books.find(bk=>bk.name===name); if(!b) return '';
       const idx = books.indexOf(b);
       return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="closeWishlist();goToBook(${idx})">
-        <img src="${getImg(b)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;" onerror="this.src='logo.png'">
+        <img src="${getImg(b)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;" onerror="this.onerror=null;this.src='book-placeholder.svg'">
         <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${b.name}</div><div style="font-size:12px;color:var(--danger);font-weight:bold;">৳${b.price}</div></div>
       </div>`;
     }).join('');
@@ -576,7 +580,7 @@ function closeSidebars(){
 function makeRelCard(b){
   const idx = books.indexOf(b);
   return `<div class="rel-card" onclick="goToBook(${idx})">
-    <img src="${getImg(b)}" alt="${b.name}" loading="lazy" onerror="this.src='logo.png'">
+    <img src="${getImg(b)}" alt="${b.name}" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'">
     <div class="rel-body">
       <div class="rel-title">${b.name}</div>
       <div class="rel-price">৳${b.price}</div>
@@ -594,7 +598,7 @@ function renderBook(){
   currentBook = books[currentIdx];
   if(!currentBook){
     document.getElementById('bookTitle').innerText = 'বই খুঁজে পাওয়া যায়নি';
-    document.getElementById('detailWrap').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:14px;">📚</div><p style="font-size:15px;">দুঃখিত, এই বইটি খুঁজে পাওয়া যায়নি।</p><a href="al_azliz_index.html" style="display:inline-block;margin-top:16px;color:#204521;font-weight:700;text-decoration:none;">হোম পেজে ফিরে যান →</a></div>';
+    document.getElementById('detailWrap').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:14px;">📚</div><p style="font-size:15px;">দুঃখিত, এই বইটি খুঁজে পাওয়া যায়নি।</p><a href="index.html" style="display:inline-block;margin-top:16px;color:#204521;font-weight:700;text-decoration:none;">হোম পেজে ফিরে যান →</a></div>';
     return;
   }
   const b = currentBook;
@@ -602,7 +606,7 @@ function renderBook(){
   document.title = b.name + ' — NafahLife';
   document.getElementById('navTitle').innerText = b.name;
   document.getElementById('crumbCat').innerText = b.cat || 'বই';
-  document.getElementById('crumbCat').setAttribute('onclick', `navigateTo('al_azliz_index.html')`);
+  document.getElementById('crumbCat').setAttribute('onclick', `navigateTo('index.html')`);
   document.getElementById('crumbName').innerText = b.name;
   document.getElementById('subjectPill').innerText = b.subject || b.cat || 'বই';
   document.getElementById('bookTitle').innerText = b.name;
@@ -652,11 +656,31 @@ function renderBook(){
   let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent') || '[]');
   recentlyViewed = [currentIdx, ...recentlyViewed.filter(i=>i!==currentIdx)].slice(0,8);
   localStorage.setItem('alaziz_recent', JSON.stringify(recentlyViewed));
+  /* SEO: বইটির structured data */
+  try{
+    const ld=document.createElement('script');
+    ld.type='application/ld+json';
+    ld.textContent=JSON.stringify({
+      "@context":"https://schema.org",
+      "@type":"Product",
+      "name":b.name,
+      "image":getImg(b),
+      "description":(b.desc&&b.desc!=='শীঘ্রই আপডেট করা হবে')?b.desc:(b.name+' — '+(b.author||'')+' | NafahLife'),
+      "brand":{"@type":"Brand","name":b.pub||'NafahLife'},
+      "offers":{"@type":"Offer","priceCurrency":"BDT","price":String(b.price),"availability":"https://schema.org/InStock"}
+    });
+    document.head.appendChild(ld);
+    document.title=b.name+' — NafahLife';
+    const md=document.querySelector('meta[name="description"]')||(function(){const m=document.createElement('meta');m.name='description';document.head.appendChild(m);return m;})();
+    md.content=b.name+' — '+(b.author||'')+' | মাত্র ৳'+b.price+' | NafahLife থেকে ক্যাশ অন ডেলিভারিতে অর্ডার করুন।';
+  }catch(e){}
 }
 document.addEventListener('DOMContentLoaded', ()=>{
   renderBook();
   updateCartUI();
   updateWLCount();
+  /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে রিফ্রেশ */
+  if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{ if(ok) renderBook(); });
 });
 </script>
 <script>

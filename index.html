@@ -2,11 +2,37 @@
 <html lang="bn" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="logo.png" type="image/png">
+<link rel="icon" href="nafah-logo.png" type="image/png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ</title>
 <meta name="description" content="NafahLife — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
 <meta name="theme-color" content="#2a562b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ">
+<meta property="og:description" content="সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
+<meta property="og:image" content="nafah-logo.png">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BookStore",
+  "name": "NafahLife",
+  "alternateName": "NafahLife Bookshop",
+  "url": "https://nafahlife.com/",
+  "logo": "https://nafahlife.com/nafah-logo.png",
+  "description": "সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।",
+  "telephone": "+8801577272305",
+  "address": {"@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD"},
+  "sameAs": ["https://www.facebook.com/share/1DAXTV8v3a/"]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "NafahLife",
+  "url": "https://nafahlife.com/"
+}
+</script>
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="AAcommon.css">
 <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
@@ -370,6 +396,78 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 .footer-social{justify-content:center}
 .footer-payment{justify-content:center}
 .footer-payment img{background:#fff;border:1px solid #ecdfc9;filter:none;height:30px;padding:3px 9px;border-radius:7px}
+
+/* ═══ REVIEW SLIDER (পাঠকদের ভালোবাসা) ═══ */
+.rvs-section{margin:0 14px 16px;display:none;}
+.rvs-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:12px;border-left:4px solid #cf6f33;display:flex;align-items:center;gap:8px;}
+.rvs-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 10px;scroll-snap-type:x mandatory;}
+.rvs-row::-webkit-scrollbar{display:none;}
+.rvs-card{flex-shrink:0;width:230px;scroll-snap-align:start;background:rgba(255,255,255,0.90);border:1px solid rgba(79,141,81,0.15);border-radius:14px;padding:14px 15px 12px;cursor:pointer;position:relative;box-shadow:0 1px 5px rgba(16,24,40,0.06);transition:transform .2s,box-shadow .2s;}
+.rvs-card:hover{transform:translateY(-4px);box-shadow:0 10px 22px rgba(47,117,49,0.14);}
+[data-theme="dark"] .rvs-card{background:rgba(16,30,20,0.75);border-color:rgba(121,176,123,0.15);}
+.rvs-card::before{content:'❝';position:absolute;top:8px;right:14px;font-size:26px;color:rgba(47,117,49,0.18);font-family:Georgia,serif;}
+.rvs-stars{color:#f59e0b;font-size:13px;letter-spacing:2px;margin-bottom:7px;}
+.rvs-comment{font-size:12.5px;color:var(--text);line-height:1.55;height:58px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;margin-bottom:10px;}
+.rvs-meta{border-top:1px dashed rgba(79,141,81,0.25);padding-top:8px;}
+.rvs-name{font-size:12px;font-weight:800;color:var(--text);display:flex;align-items:center;gap:6px;}
+.rvs-name .rvs-av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+.rvs-book{font-size:10.5px;color:#2f7531;font-weight:600;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
+[data-theme="dark"] .rvs-book{color:#79b07b;}
+
+/* ═══ থিম-অনুযায়ী লোগো ═══ */
+.logo-dark{display:none!important;}
+[data-theme="dark"] .logo-light{display:none!important;}
+[data-theme="dark"] .logo-dark{display:block!important;}
+
+/* ═══ DARK MODE FIXES — সব লেখা ও লোগো স্পষ্ট ═══ */
+[data-theme="dark"] .navbar{background:rgba(9,20,9,0.96);border-bottom-color:rgba(121,176,123,0.25);box-shadow:0 2px 16px rgba(0,0,0,0.4);}
+[data-theme="dark"] .brand-name,[data-theme="dark"] .brand-ar,[data-theme="dark"] .brand-tagline{color:#dde6df;}
+[data-theme="dark"] .navbar-search-bar{background:rgba(16,30,20,0.85);border-color:rgba(121,176,123,0.25);}
+[data-theme="dark"] .navbar-search-input{color:#dde6df;}
+[data-theme="dark"] .navbar-search-input::placeholder{color:#9ab8a4;}
+[data-theme="dark"] .nav-icon-btn{color:#dde6df!important;}
+[data-theme="dark"] .nav-icon-btn svg{stroke:#dde6df!important;}
+[data-theme="dark"] .navbar-top button svg{stroke:#dde6df!important;}
+[data-theme="dark"] .cat-nav{background:#0f1e12;border-bottom-color:rgba(121,176,123,0.15);}
+[data-theme="dark"] .cat-pill{background:#142114;color:#dde6df;border-color:rgba(121,176,123,0.25);box-shadow:none;}
+[data-theme="dark"] .cat-pill.active{background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;}
+[data-theme="dark"] .cat-section{border-color:rgba(121,176,123,0.15);}
+[data-theme="dark"] .book-card{border-color:rgba(121,176,123,0.15)!important;}
+[data-theme="dark"] .bc-pub{color:#9ab8a4;}
+[data-theme="dark"] .cat-section-title a{color:#79b07b;}
+[data-theme="dark"] .info-card-title{color:#dde6df;}
+[data-theme="dark"] .info-card-sub{color:#9ab8a4;}
+[data-theme="dark"] .coupon-section-title{color:#dde6df;}
+[data-theme="dark"] .coupon-chip{background:#142114;}
+[data-theme="dark"] .coupon-code{color:#e3b489;}
+[data-theme="dark"] .coupon-desc{color:#9ab8a4;}
+[data-theme="dark"] footer{background:#0f1e12;border-top-color:#2f7531;color:#9ab8a4;}
+[data-theme="dark"] .footer-col-title{color:#dde6df!important;background:rgba(121,176,123,0.12);}
+[data-theme="dark"] .footer-link{color:#b6cfb9!important;}
+[data-theme="dark"] .footer-link:hover{color:#dde6df!important;}
+[data-theme="dark"] .footer-tagline,[data-theme="dark"] .footer-brand-name,[data-theme="dark"] .footer-copy{color:#9ab8a4!important;}
+[data-theme="dark"] .footer-social-btn{background:rgba(121,176,123,0.12);}
+[data-theme="dark"] .bottom-nav{background:rgba(9,20,9,0.97);border-top-color:rgba(121,176,123,0.2);}
+[data-theme="dark"] .bnav-item{color:#b6cfb9!important;}
+[data-theme="dark"] .bnav-svg{stroke:#b6cfb9!important;}
+[data-theme="dark"] .bnav-item.active{color:#79b07b!important;}
+[data-theme="dark"] .bnav-item.active .bnav-svg{stroke:#79b07b!important;}
+[data-theme="dark"] .bnav-login-pill .bnav-label{color:#9ab8a4!important;}
+[data-theme="dark"] .bnav-badge{border-color:#0f1e12;}
+[data-theme="dark"] .search-item{background:rgba(16,30,20,0.85);}
+[data-theme="dark"] .si-name{color:#dde6df;}
+[data-theme="dark"] .si-author{color:#9ab8a4;}
+[data-theme="dark"] .si-pub{color:#7d987f;}
+[data-theme="dark"] .search-screen{background:rgba(10,20,12,0.97);}
+[data-theme="dark"] .search-hint p{color:#9ab8a4;}
+[data-theme="dark"] .banner-dots{background:rgba(10,20,12,0.75);}
+[data-theme="dark"] .drawer-item:hover{color:#79b07b;}
+[data-theme="dark"] .drawer-header{color:#dde6df;}
+[data-theme="dark"] .coupon-applied-label{color:#79b07b;}
+[data-theme="dark"] .auth-tab{color:#dde6df;}
+[data-theme="dark"] .auth-tab-active{color:#79b07b;border-bottom-color:#79b07b;}
+[data-theme="dark"] #cartBox h4{color:#dde6df!important;}
+[data-theme="dark"] ::selection{background:rgba(121,176,123,0.3);color:#dde6df;}
 </style>
 </head>
 <body>
@@ -426,6 +524,7 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
     </div>
     <div id="cartItems" style="flex:1;overflow-y:auto;padding:16px;"></div>
     <div style="padding:16px;background:var(--bg);border-top:1px solid var(--border);">
+      <div id="aaGiftBar"></div>
       <div id="couponSection" style="margin-bottom:12px;"></div>
       <div style="font-size:14px;line-height:2;color:var(--text);">
         <p style="display:flex;justify-content:space-between;margin:0;">বইয়ের দাম: <span>৳<span id="subtotal">0</span></span></p>
@@ -455,7 +554,8 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <div class="navbar-brand" onclick="scrollToTop()" style="height:46px;display:flex;align-items:center;">
-      <img src="nafah-logo.png" alt="NafahLife" style="height:46px;width:auto;">
+      <img class="logo-light" src="nafah-logo.png" alt="NafahLife" style="height:46px;width:auto;">
+      <img class="logo-dark" src="nafah-logo-dark.png" alt="NafahLife" style="height:46px;width:auto;">
     </div>
     <div class="navbar-search-bar">
       <input class="navbar-search-input" id="navSearchInput" placeholder="বই, লেখক বা প্রকাশনী খুঁজুন..." oninput="navSearchLive(this.value)" onfocus="openSearch()" autocomplete="off">
@@ -575,6 +675,10 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
   <div class="book-row" id="recentlyRow"></div>
 </div>
 <div class="sections" id="sectionsWrapper" style="display:none;"></div>
+<div class="rvs-section" id="reviewSliderSection">
+  <div class="rvs-title">💬 পাঠকদের ভালোবাসা</div>
+  <div class="rvs-row" id="rvsRow"></div>
+</div>
 <div class="coupon-section-wrap">
   <div class="coupon-section-title"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8a2 2 0 0 1 2-2z"/></svg> বিশেষ কুপন অফার</div>
   <div class="coupon-list">
@@ -589,7 +693,8 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 </div>
 <footer>
   <div class="footer-logo-row" style="flex-direction:column;gap:8px;">
-    <img src="nafah-logo.png" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
+    <img class="logo-light" src="nafah-logo.png" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
+    <img class="logo-dark" src="nafah-logo-dark.png" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
     <div class="footer-tagline">বাংলাদেশের বিশ্বস্ত অনলাইন ইসলামিক বুকশপ</div>
   </div>
   <div class="footer-grid">
@@ -698,6 +803,7 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script src="Aafirebase-config.js"></script>
 <script src="book.js" defer></script>
+<script src="aabooks-live.js"></script>
 <script>
 const categoryConfig = [
   {key:"প্যাকেজসমূহ",   label:"🔥 প্যাকেজসমূহ"},
@@ -715,7 +821,7 @@ let cart = JSON.parse(localStorage.getItem('alaziz_cart')) || [];
 let discountPercent = 0;
 let wishlist = JSON.parse(localStorage.getItem('alaziz_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent')) || [];
-function getImg(b){ return b.img || b.image || b.cover || 'logo.png'; }
+function getImg(b){ const u = b.img || b.image || ''; return (u.indexOf('http')===0 || u.indexOf('data:')===0) ? u : 'book-placeholder.svg'; }
 function discPct(b){ if(!b.original_price||b.original_price<=b.price) return 0; return Math.round((b.original_price-b.price)/b.original_price*100); }
 function isWL(name){ return wishlist.includes(name); }
 function updateWLCount(){
@@ -816,7 +922,7 @@ function handleSearch(){
     const item=document.createElement('div');
     item.className='search-item';
     item.onclick=()=>{ closeSearch(); goToBook(idx); };
-    item.innerHTML=`<img class="search-item-img" src="${getImg(b)}" onerror="this.src='logo.png'" alt="${b.name}">
+    item.innerHTML=`<img class="search-item-img" src="${getImg(b)}" onerror="this.onerror=null;this.src='book-placeholder.svg'" alt="${b.name}">
       <div>
         <div class="si-name">${b.name}${pct>0?`<span class="si-badge">${pct}% ছাড়</span>`:''}</div>
         <div class="si-author">${b.author||''}</div>
@@ -854,7 +960,7 @@ function showWishlist(){
       const b=books.find(bk=>bk.name===name); if(!b) return '';
       const idx=books.indexOf(b);
       return `<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="closeWishlist();goToBook(${idx})">
-        <img src="${getImg(b)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;" onerror="this.src='logo.png'">
+        <img src="${getImg(b)}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;" onerror="this.onerror=null;this.src='book-placeholder.svg'">
         <div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">${b.name}</div><div style="font-size:12px;color:var(--danger);font-weight:bold;">৳${b.price}</div></div>
         <button onclick="event.stopPropagation();toggleWL(event,'${b.name.replace(/'/g,"\\'")}');showWishlist();" style="background:none;border:none;font-size:18px;cursor:pointer;"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 9l6 6M15 9l-6 6"/></svg></button>
       </div>`;
@@ -867,7 +973,7 @@ function makeCard(b){
   const pct=discPct(b), idx=books.indexOf(b), wl=isWL(b.name);
   return `<div class="book-card" onclick="goToBook(${idx})">
     <div class="book-cover">
-      <img src="${getImg(b)}" alt="${b.name}" loading="lazy" onerror="this.src='logo.png'">
+      <img src="${getImg(b)}" alt="${b.name}" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'">
       ${pct>0?`<div class="disc-badge"><span style="display:block;font-size:11px;font-weight:900;line-height:1;">${pct}%</span></div>`:''}
       <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>':'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>'}</button>
     </div>
@@ -987,7 +1093,7 @@ function updateCartUI(){
     for(let name in grouped){
       const item=grouped[name]; subtotal+=item.price*item.qty; const en=name.replace(/'/g,"\\'");
       box.innerHTML+=`<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px;">
-        <img src="${item.img}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" onerror="this.src='logo.png'">
+        <img src="${item.img}" style="width:44px;height:58px;object-fit:cover;border-radius:6px;border:1px solid var(--border);" onerror="this.onerror=null;this.src='book-placeholder.svg'">
         <div style="flex:1;"><h4 style="font-size:13px;margin:0;color:var(--text);">${name}</h4><span style="color:var(--danger);font-size:13px;font-weight:bold;">৳${item.price}</span></div>
         <div style="display:flex;align-items:center;gap:8px;">
           <button class="qty-ctrl-btn" onclick="changeQty('${en}',-1)">-</button>
@@ -1000,6 +1106,8 @@ function updateCartUI(){
   const count=cart.length;
   const cc=document.getElementById('cartCount'); if(cc){ cc.innerText=count; cc.classList.toggle('show',count>0); }
   const nb=document.getElementById('bnavBadge'); if(nb){ nb.innerText=count; nb.classList.toggle('show',count>0); }
+  const gb=document.getElementById('aaGiftBar');
+  if(gb && typeof aaGiftBarHTML==='function') gb.innerHTML=aaGiftBarHTML(subtotal);
   const disc=Math.round(subtotal*discountPercent/100);
   if(document.getElementById('subtotal')) document.getElementById('subtotal').innerText=subtotal;
   if(document.getElementById('discountAmt')) document.getElementById('discountAmt').innerText=disc;
@@ -1123,7 +1231,56 @@ window.onload=()=>{
     setTimeout(()=>showCart(),500);
   }
   if(typeof auth!=='undefined') auth.onAuthStateChanged(user=>updateAuthUI(user));
+  loadReviewSlider();
+  /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
+  if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{
+    if(!ok || typeof books==='undefined') return;
+    books.forEach((b,i)=>{ if(!b.id) b.id=i+1; });
+    renderSections(books); renderRecent(); buildPubList(); buildAuthorList();
+  });
 };
+
+/* ═══ রিভিউ স্লাইডার — Firebase থেকে সেরা রিভিউগুলো (৪-৫ স্টার) ═══ */
+function loadReviewSlider(){
+  if(typeof db==='undefined'||!db)return;
+  db.ref('reviews').get().then(snap=>{
+    if(!snap.exists())return;
+    const all=[];
+    snap.forEach(bk=>{bk.forEach(r=>{const v=r.val();if(v&&Number(v.rating)>=4&&v.text&&String(v.text).trim())all.push({...v,bookKey:bk.key});});});
+    if(!all.length)return;
+    all.sort((a,b)=>(b.ts||0)-(a.ts||0));
+    const list=all.slice(0,12);
+    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    document.getElementById('rvsRow').innerHTML=list.map(r=>{
+      const bid=parseInt(String(r.bookKey).replace(/^b/,''),10);
+      const b=(!isNaN(bid)&&typeof books!=='undefined'&&books[bid])?books[bid]:null;
+      const nm=String(r.name||'পাঠক');
+      const rt=Math.min(5,Math.max(1,Math.round(Number(r.rating)||5)));
+      const stars='★'.repeat(rt)+'☆'.repeat(5-rt);
+      return `<div class="rvs-card" ${b?`onclick="goToBook(${bid})"`:''}>
+        <div class="rvs-stars">${stars}</div>
+        <div class="rvs-comment">${esc(r.text)}</div>
+        <div class="rvs-meta">
+          <div class="rvs-name"><span class="rvs-av">${esc(nm.trim()[0]||'প')}</span> ${esc(nm)}</div>
+          ${b?`<span class="rvs-book">📖 ${esc(b.name)}</span>`:''}
+        </div>
+      </div>`;
+    }).join('');
+    document.getElementById('reviewSliderSection').style.display='block';
+    /* অটো-স্ক্রল — হোভার/টাচে থামে */
+    const sl=document.getElementById('rvsRow');
+    let paused=false;
+    sl.addEventListener('mouseenter',()=>paused=true);
+    sl.addEventListener('mouseleave',()=>paused=false);
+    sl.addEventListener('touchstart',()=>{paused=true;setTimeout(()=>paused=false,5000);},{passive:true});
+    setInterval(()=>{
+      if(paused)return;
+      const max=sl.scrollWidth-sl.clientWidth;
+      if(max<=5)return;
+      sl.scrollTo({left:sl.scrollLeft>=max-10?0:sl.scrollLeft+242,behavior:'smooth'});
+    },3200);
+  }).catch(()=>{});
+}
 </script>
 <script src="AAcommon.js"></script>
 </body>

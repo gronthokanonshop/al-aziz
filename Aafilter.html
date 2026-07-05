@@ -2,7 +2,7 @@
 <html lang="bn" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" href="logo.png" type="image/png">
+    <link rel="icon" href="nafah-logo.png" type="image/png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>বই খুঁজুন — NafahLife</title>
     <meta name="theme-color" content="#2a562b">
@@ -184,6 +184,7 @@
 </div>
 <button class="scroll-top" id="scrollTopBtn" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M6 11l6-6 6 6"/></svg></button>
 <script src="book.js"></script>
+<script src="aabooks-live.js"></script>
 <script>
 let cart=JSON.parse(localStorage.getItem('alaziz_cart'))||[];
 let wishlist=JSON.parse(localStorage.getItem('alaziz_wishlist'))||[];
@@ -192,7 +193,7 @@ const PER_PAGE=30; let currentPage=1; let currentCat=null;
 function updateCounts(){const c=cart.length;document.getElementById('cartCount').innerText=c;document.getElementById('floatCount').innerText=c;}
 updateCounts();
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
-function getImg(b){return (typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';}
+function getImg(b){const u=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';return (u.indexOf('http')===0||u.indexOf('data:')===0)?u:'book-placeholder.svg';}
 function isWL(name){return wishlist.includes(name);}
 function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toggleWL(e,name){
@@ -206,7 +207,7 @@ function makeCard(b,delay){
     return `<div class="book-card" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
         ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
         <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>':'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>'}</button>
-        <img src="${getImg(b)}" alt="বই" loading="lazy">
+        <img src="${getImg(b)}" alt="বই" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'">
         <div class="bc-info">
             <div class="bc-pub">${b.pub}</div>
             <div class="bc-name">${b.name}</div>
@@ -252,12 +253,17 @@ function addToCart(name,price,img){
     cart.push({name:name.trim(),price:Number(price),img});
     localStorage.setItem('alaziz_cart',JSON.stringify(cart));
     updateCounts();showToast('কার্টে যোগ হয়েছে!');
+    if(typeof aaRenderCart==='function' && document.getElementById('aaCartDrawer')?.classList.contains('open')) aaRenderCart();
 }
 function showToast(msg){
     const t=document.createElement('div');t.className='toast';t.innerText=msg;
     document.body.appendChild(t);setTimeout(()=>t.remove(),2200);
 }
-function goToCart(){localStorage.setItem('alaziz_opencart','1');navigateTo('al_azliz_index.html');}
+function goToCart(){
+    /* গ্লোবাল কার্ট ড্রয়ার (AAcommon.js) থাকলে সেটিই খোলে */
+    if(typeof showCart==='function'){ cart=JSON.parse(localStorage.getItem('alaziz_cart'))||[]; showCart(); return; }
+    localStorage.setItem('alaziz_opencart','1');navigateTo('index.html');
+}
 function goBack(){window.history.back();}
 window.addEventListener('scroll',()=>{
     const btn=document.getElementById('scrollTopBtn');
@@ -308,6 +314,14 @@ document.getElementById('titleText').innerHTML=(iconMap[type]||'<svg viewBox="0 
 document.getElementById('pageTitle').innerText=value;
 currentCat=(type==='cat')?value:null; buildCats();
 setTimeout(()=>{document.getElementById('skelGrid').style.display='none';document.getElementById('bookGrid').style.display='block';renderBooks(getList());},600);
+/* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
+if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{
+    if(!ok) return;
+    if(currentCat) filtered=books.filter(b=>b.cat===currentCat);
+    else if(type==='author') filtered=books.filter(b=>b.author===value);
+    else if(type==='pub') filtered=books.filter(b=>b.pub===value);
+    buildCats(); renderBooks(getList());
+});
 </script>
 <script src="AAcommon.js"></script>
 </body>

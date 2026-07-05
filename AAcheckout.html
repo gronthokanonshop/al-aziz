@@ -4,12 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>চেকআউট — NafahLife</title>
+<link rel="icon" href="nafah-logo.png" type="image/png">
+<meta name="description" content="NafahLife চেকআউট — ক্যাশ অন ডেলিভারিতে ইসলামিক বই অর্ডার করুন। ঢাকায় ডেলিভারি ৳৬০, ঢাকার বাইরে ৳৯০।">
+<meta name="robots" content="noindex">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="AAcommon.css">
 <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
 :root{--primary:#b85a26;--primary-dark:#b85a26;--primary-light:#3a7c3c;--accent:#c66a30;--accent-light:#c66a30;--danger:#DC2626;--success:#158019;--bg-body:#ffffff;--bg-card:#FFFFFF;--text-main:#000000;--text-muted:#333333;--border:#e3ede9;--radius:12px;--shadow:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -1px rgba(0,0,0,.03);--shadow-lg:0 10px 15px -3px rgba(0,0,0,.08),0 4px 6px -2px rgba(0,0,0,.04)}
 [data-theme="dark"]{--bg-body:#102311;--bg-card:#1d3a1e;--text-main:#f4f6f5;--text-muted:#9bb69c;--border:#335334}
+[data-theme="dark"] .navbar{background:#0d1b0e;}
+[data-theme="dark"] .nav-brand,[data-theme="dark"] .nav-brand-sub,[data-theme="dark"] .nav-link,[data-theme="dark"] .ni,[data-theme="dark"] .nav-logo-icon{color:#eaf2eb!important;}
+[data-theme="dark"] .nav-link:hover,[data-theme="dark"] .nav-link.active{color:#a8cca9!important;}
+[data-theme="dark"] .ni:hover{background:rgba(121,176,123,0.15);}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Inter','Hind Siliguri',sans-serif;background:var(--bg-body);color:var(--text-main);line-height:1.5;transition:background .3s,color .3s}
 .bng{font-family:'Hind Siliguri',sans-serif}
@@ -168,17 +175,17 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <nav class="navbar">
   <div class="nav-container">
     <div class="nav-top">
-      <a href="al_azliz_index.html" class="nav-logo">
+      <a href="index.html" class="nav-logo">
         <img src="nafah-logo.png" alt="NafahLife" style="height:42px;width:auto;">
       </a>
       <div class="nav-links" style="margin-left:auto">
-        <a href="al_azliz_index.html" class="nav-link bng">হোম</a>
+        <a href="index.html" class="nav-link bng">হোম</a>
         <a href="AAcheckout.html" class="nav-link active bng">চেকআউট</a>
       </div>
       <div class="nav-icons">
-        <a href="al_azliz_index.html" class="ni" title="পেছনে যান">‹</a>
+        <a href="index.html" class="ni" title="পেছনে যান">‹</a>
         <button class="ni" id="darkBtn" onclick="toggleDark()" title="ডার্ক মোড"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-        <a href="al_azliz_index.html" class="ni"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><div class="badge" id="cartBadge">0</div></a>
+        <a href="index.html" class="ni"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg><div class="badge" id="cartBadge">0</div></a>
       </div>
       <button class="hamburger" onclick="toggleMenu()"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
     </div>
@@ -353,7 +360,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
     <div class="success-info bng" id="successInfo"></div>
     <p class="success-note bng">আমরা শীঘ্রই আপনার নম্বরে যোগাযোগ করব। ধন্যবাদ! <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h6v16h-6z"/><path d="M16 5l4 .8-2.5 15.4-4-.8"/></svg></p>
     <button onclick="downloadInvoice()" style="width:100%;padding:13px;background:#923b48;color:white;border:none;border-radius:12px;font-family:'Hind Siliguri',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;" class="bng"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/></svg> Invoice PDF ডাউনলোড করুন</button>
-    <button class="home-btn bng" onclick="window.location.href='al_azliz_index.html'">চমৎকার! <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l5-14 9 9z"/><path d="M14 6c1-1 3-1 4 0M17 9c1 0 2 1 2 2M12 4c0 1 .5 2 1 2"/></svg></button>
+    <button class="home-btn bng" onclick="window.location.href='index.html'">চমৎকার! <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l5-14 9 9z"/><path d="M14 6c1-1 3-1 4 0M17 9c1 0 2 1 2 2M12 4c0 1 .5 2 1 2"/></svg></button>
   </div>
 </div>
 <div class="v-toast" id="vToast"></div>
@@ -369,7 +376,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
     <div>
       <h3 class="bng">দ্রুত লিংক</h3>
       <ul class="footer-links">
-        <li><a href="al_azliz_index.html" class="bng"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg> হোম পেজে ফিরে যান</a></li>
+        <li><a href="index.html" class="bng"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-8 9 8"/><path d="M5 9.5V21h14V9.5"/></svg> হোম পেজে ফিরে যান</a></li>
         <li><a href="Aatrack.html" class="bng"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg> অর্ডার ট্র্যাক করুন</a></li>
       </ul>
     </div>
@@ -385,6 +392,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 <script src="Aafirebase-config.js"></script>
 <script src="book.js"></script>
+<script src="aabooks-live.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
@@ -641,6 +649,46 @@ async function confirmOrder(){
   btn.innerHTML = '✅ অর্ডার নিশ্চিত করুন';
   isSubmitting = false;
   document.getElementById('successModal').classList.add('show');
+  aaConfetti();
+}
+
+/* ══════════════════════════════════
+   কনফেত্তি — অর্ডার সফল হলে সেলিব্রেশন 🎊
+══════════════════════════════════ */
+function aaConfetti(){
+  const c = document.createElement('canvas');
+  c.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:100000;';
+  document.body.appendChild(c);
+  const ctx = c.getContext('2d');
+  c.width = innerWidth; c.height = innerHeight;
+  const colors = ['#2f7531','#79b07b','#e3b489','#cf6f33','#ef4444','#3b82f6','#a855f7'];
+  const P = [];
+  for(let i=0;i<150;i++){
+    P.push({
+      x: Math.random()*c.width,
+      y: -20 - Math.random()*c.height*0.6,
+      w: 6+Math.random()*6, h: 8+Math.random()*8,
+      vy: 2.2+Math.random()*3.5,
+      vx: -1.5+Math.random()*3,
+      rot: Math.random()*Math.PI,
+      vr: -0.12+Math.random()*0.24,
+      col: colors[i%colors.length]
+    });
+  }
+  let frame = 0;
+  (function draw(){
+    frame++;
+    ctx.clearRect(0,0,c.width,c.height);
+    P.forEach(p=>{
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+      ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot);
+      ctx.fillStyle = p.col;
+      ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      ctx.restore();
+    });
+    if(frame < 280) requestAnimationFrame(draw);
+    else c.remove();
+  })();
 }
 let lastOrderData = null;
 function buildInvoiceHTML(o){
