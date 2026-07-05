@@ -707,7 +707,7 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
     </div>
     <div>
       <div class="footer-col-title">যোগাযোগ</div>
-      <a href="tel:+880" class="footer-link"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19 19 0 0 1 3 5.2 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 11a16 16 0 0 0 5 5l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg> 01XXX-XXXXXX</a>
+      <a href="tel:+8801577272305" class="footer-link"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19 19 0 0 1 3 5.2 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.4 2.1L8.1 11a16 16 0 0 0 5 5l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg> 01577272305</a>
       <a href="https://wa.me/8801577272305" target="_blank" class="footer-link"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> WhatsApp</a>
       <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" class="footer-link"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h12a2 2 0 0 1 2 2v14H7a2 2 0 0 1-2-2z"/><path d="M5 16h14"/></svg> Facebook</a>
       <span class="footer-link" style="cursor:default;"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg> ঢাকা, বাংলাদেশ</span>
@@ -1114,8 +1114,7 @@ function updateCartUI(){
   if(document.getElementById('total')) document.getElementById('total').innerText=subtotal-disc;
 }
 function goCheckout(){
-  localStorage.setItem('alaziz_opencart','1');
-  navigateTo('AAcheckout.html');
+  window.location.href='AAcheckout.html';
 }
 function renderCouponSection(){
   const sec=document.getElementById('couponSection');
@@ -1191,14 +1190,47 @@ function updateAuthUI(user){
   else{ txt.innerText='লগইন'; lbl.innerText='একাউন্ট'; document.querySelector('.bnav-login-pill').onclick=showLoginModal; }
 }
 let curBanner=0;
-const totalBannerSlides=3;
+let totalBannerSlides=3;
 function goBannerSlide(idx){
   curBanner=idx;
   const slider=document.getElementById('mainSlider');
   if(slider) slider.style.transform=`translateX(-${idx*100}%)`;
   document.querySelectorAll('.banner-dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
 }
-setInterval(()=>{ goBannerSlide((curBanner+1)%totalBannerSlides); },3800);
+setInterval(()=>{ if(totalBannerSlides>0) goBannerSlide((curBanner+1)%totalBannerSlides); },3800);
+
+/* ═══ অ্যাডমিন-নিয়ন্ত্রিত ব্যানার — Firebase থেকে লোড ═══ */
+/* অ্যাডমিন প্যানেলে ব্যানার সেট করলে এখানে লাইভ দেখাবে; না থাকলে উপরের ডিফল্ট স্লাইড থাকবে */
+function loadBanners(){
+  if(typeof db==='undefined'||!db) return;
+  db.ref('banners').get().then(snap=>{
+    if(!snap.exists()) return;
+    let list=snap.val();
+    if(!Array.isArray(list)) list=Object.values(list||{});
+    list=list.filter(b=>b && (b.img||b.title));
+    if(!list.length) return;
+    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    const slider=document.getElementById('mainSlider');
+    const dots=document.getElementById('bannerDots');
+    if(!slider) return;
+    const bg=['#152716','#4f8d51','#79b07b','#224f23','#2f7531'];
+    slider.innerHTML=list.map((b,i)=>{
+      const link=b.link?`onclick="location.href='${esc(b.link)}'" style="cursor:pointer;"`:'';
+      const img=b.img?`<img src="${esc(b.img)}" alt="${esc(b.title||'ব্যানার')}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`:'';
+      return `<div class="banner-slide" style="background:${bg[i%bg.length]};" ${link}>
+        ${img}
+        <div class="banner-slide-placeholder" style="display:${b.img?'none':'flex'};">
+          <div style="font-size:16px;font-weight:800;color:#fff;">${esc(b.title||'')}</div>
+          <div style="font-size:12px;color:rgba(255,255,255,0.75);">${esc(b.subtitle||'')}</div>
+        </div>
+      </div>`;
+    }).join('');
+    if(dots) dots.innerHTML=list.map((b,i)=>`<button class="banner-dot ${i===0?'active':''}" onclick="goBannerSlide(${i})"></button>`).join('');
+    totalBannerSlides=list.length;
+    curBanner=0;
+    goBannerSlide(0);
+  }).catch(()=>{});
+}
 (function(){
   let sx=0; const sl=document.getElementById('mainSlider'); if(!sl) return;
   sl.addEventListener('touchstart',e=>{ sx=e.touches[0].clientX; },{passive:true});
@@ -1232,6 +1264,7 @@ window.onload=()=>{
   }
   if(typeof auth!=='undefined') auth.onAuthStateChanged(user=>updateAuthUI(user));
   loadReviewSlider();
+  loadBanners();
   /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
   if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{
     if(!ok || typeof books==='undefined') return;
