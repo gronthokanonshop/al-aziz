@@ -5,8 +5,11 @@
 <link rel="icon" href="nafah-logo.png" type="image/png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ</title>
+<link rel="canonical" href="https://nafahlife.com/">
 <meta name="description" content="NafahLife — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
 <meta name="theme-color" content="#2a562b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="nafah-logo.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ">
 <meta property="og:description" content="সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
@@ -413,6 +416,32 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 .rvs-name .rvs-av{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
 .rvs-book{font-size:10.5px;color:#2f7531;font-weight:600;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;}
 [data-theme="dark"] .rvs-book{color:#79b07b;}
+/* ═══ হোমপেজ ব্লগ প্রতিযোগিতা কার্ড ═══ */
+.home-comp-card{display:flex;align-items:stretch;margin:4px 14px 14px;background:var(--card-solid);border:1px solid rgba(79,141,81,0.15);border-radius:18px;overflow:hidden;box-shadow:0 8px 26px rgba(21,39,22,0.10);text-decoration:none;transition:transform .2s,box-shadow .2s;}
+.home-comp-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(21,39,22,0.16);}
+.hcomp-left{flex-shrink:0;width:104px;background:linear-gradient(160deg,#152716,#2f7531);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;position:relative;}
+.hcomp-left::after{content:'';position:absolute;top:0;right:0;width:2px;height:100%;background:linear-gradient(#e3b489,#cf6f33);}
+.hcomp-trophy{font-size:32px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));}
+.hcomp-left small{font-size:9px;font-weight:700;letter-spacing:.4px;color:#e3b489;text-align:center;padding:0 6px;}
+.hcomp-right{flex:1;padding:14px 16px;min-width:0;}
+.hcomp-ribbon{display:inline-block;font-size:10px;font-weight:800;color:#a85320;background:rgba(207,111,51,0.14);padding:3px 11px;border-radius:20px;margin-bottom:7px;letter-spacing:.3px;}
+.hcomp-right h3{font-size:15px;font-weight:900;color:var(--text);line-height:1.35;margin-bottom:5px;}
+.hcomp-right p{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px;}
+.hcomp-right p b{color:#a85320;}
+.hcomp-btn{display:inline-block;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;padding:9px 18px;border-radius:10px;font-size:12.5px;font-weight:800;box-shadow:0 4px 12px rgba(47,117,49,0.3);}
+@media(max-width:480px){.hcomp-left{width:80px;}.hcomp-trophy{font-size:27px;}}
+/* ═══ হোমপেজ ব্লগ সেকশন (রিভিউয়ের নিচে) ═══ */
+.hblog-section{margin:4px 14px 16px;display:none;}
+.hblog-row{display:flex;gap:12px;overflow-x:auto;scrollbar-width:none;padding:4px 2px 10px;scroll-snap-type:x mandatory;}
+.hblog-row::-webkit-scrollbar{display:none;}
+.hblog-card{flex-shrink:0;width:250px;scroll-snap-align:start;background:rgba(255,255,255,0.90);border:1px solid rgba(79,141,81,0.15);border-radius:14px;padding:15px 16px;cursor:pointer;text-decoration:none;display:block;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.hblog-card:hover{transform:translateY(-4px);box-shadow:0 10px 22px rgba(47,117,49,0.14);border-color:rgba(47,117,49,0.4);}
+[data-theme="dark"] .hblog-card{background:rgba(16,30,20,0.75);border-color:rgba(121,176,123,0.15);}
+.hblog-card .tag{display:inline-block;font-size:10px;font-weight:800;color:#a85320;background:rgba(207,111,51,0.12);padding:3px 10px;border-radius:20px;margin-bottom:8px;letter-spacing:.4px;}
+.hblog-card h3{font-size:14px;font-weight:800;color:var(--text);line-height:1.4;margin-bottom:6px;}
+.hblog-card p{font-size:12px;color:var(--text2);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.hblog-card .more{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;color:#2f7531;}
+[data-theme="dark"] .hblog-card .more{color:#79b07b;}
 
 /* ═══ থিম-অনুযায়ী লোগো ═══ */
 .logo-dark{display:none!important;}
@@ -471,6 +500,7 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 </style>
 </head>
 <body>
+<h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;">NafahLife — ইসলামিক ও সাধারণ বইয়ের অনলাইন বুকশপ, সারা বাংলাদেশে ক্যাশ অন ডেলিভারি</h1>
 <div class="overlay" id="overlay" onclick="closeSidebars()"></div>
 <div class="search-overlay" id="searchOverlay" onclick="closeSearch()"></div>
 <div class="search-screen" id="searchScreen">
@@ -679,6 +709,19 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
   <div class="rvs-title">💬 পাঠকদের ভালোবাসা</div>
   <div class="rvs-row" id="rvsRow"></div>
 </div>
+<a href="blog.html" class="home-comp-card">
+  <div class="hcomp-left"><div class="hcomp-trophy">🏆</div><small>মাসিক আয়োজন</small></div>
+  <div class="hcomp-right">
+    <span class="hcomp-ribbon">✨ লেখা প্রতিযোগিতা</span>
+    <h3>আপনার লেখা প্রকাশ করুন, হাদিয়া জিতুন</h3>
+    <p>বই বা ইসলামি বিষয়ে নিজের লেখা জমা দিন — নির্বাচিত সেরা লেখকরা পাবেন <b>🎁 আকর্ষণীয় হাদিয়া!</b></p>
+    <span class="hcomp-btn">✍️ লেখা জমা দিন →</span>
+  </div>
+</a>
+<div class="hblog-section" id="homeBlogSection">
+  <div class="rvs-title" style="border-left-color:#cf6f33;">📝 ব্লগ ও পাঠপরামর্শ <a href="blog.html" style="margin-left:auto;font-size:12px;font-weight:600;color:#2f7531;text-decoration:none;">সব লেখা →</a></div>
+  <div class="hblog-row" id="hblogRow"></div>
+</div>
 <div class="coupon-section-wrap">
   <div class="coupon-section-title"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16a2 2 0 0 1 2 2v2a2 2 0 0 0 0 4v2a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-2a2 2 0 0 0 0-4V8a2 2 0 0 1 2-2z"/></svg> বিশেষ কুপন অফার</div>
   <div class="coupon-list">
@@ -703,6 +746,8 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
       <a href="about.html" class="footer-link">আমাদের সম্পর্কে</a>
       <a href="delivery.html" class="footer-link">ডেলিভারি নীতি</a>
       <a href="return.html" class="footer-link">রিটার্ন নীতি</a>
+      <a href="faq.html" class="footer-link">সাধারণ জিজ্ঞাসা (FAQ)</a>
+      <a href="blog.html" class="footer-link">ব্লগ ও লেখা প্রতিযোগিতা</a>
       <a href="contact.html" class="footer-link">যোগাযোগ</a>
     </div>
     <div>
@@ -1265,6 +1310,8 @@ window.onload=()=>{
   if(typeof auth!=='undefined') auth.onAuthStateChanged(user=>updateAuthUI(user));
   loadReviewSlider();
   loadBanners();
+  loadRecentSalesTicker();
+  loadHomeBlogs();
   /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে সেকশনগুলো রিফ্রেশ */
   if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{
     if(!ok || typeof books==='undefined') return;
@@ -1272,6 +1319,72 @@ window.onload=()=>{
     renderSections(books); renderRecent(); buildPubList(); buildAuthorList();
   });
 };
+
+/* ═══ হোমপেজ ব্লগ সেকশন — বিল্ট-ইন লেখা + পাঠকদের প্রকাশিত লেখা ═══ */
+function loadHomeBlogs(){
+  const row=document.getElementById('hblogRow'), sec=document.getElementById('homeBlogSection');
+  if(!row||!sec)return;
+  const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const builtin=[
+    {slug:'keno-boi-porbo',tag:'পাঠাভ্যাস',title:'কেন নিয়মিত বই পড়া জরুরি — ব্যস্ত জীবনেও',ex:'বই কেবল জ্ঞানের উৎস নয়, এটি চিন্তা ও চরিত্র গঠনের অন্যতম মাধ্যম।'},
+    {slug:'notun-pathok-boi',tag:'পাঠ-পরামর্শ',title:'নতুন পাঠকদের জন্য যেসব বই দিয়ে শুরু করা যায়',ex:'সহজ ভাষার ও হৃদয়স্পর্শী কিছু বইয়ের ধরন — শুরুটা যেভাবে করবেন।'},
+    {slug:'boi-upohar',tag:'উপহার',title:'বই — সবচেয়ে অর্থবহ উপহার',ex:'যেকোনো উপলক্ষে একটি ভালো বই হতে পারে সবচেয়ে সুন্দর ও দীর্ঘস্থায়ী উপহার।'}
+  ];
+  function paint(reader){
+    let html=(reader||[]).map(b=>`<a class="hblog-card" href="blog.html?pb=${encodeURIComponent(b.id)}">
+        <span class="tag">🏆 পাঠকের লেখা</span>
+        <h3>${esc(b.title)}</h3>
+        <p>${esc(String(b.content).slice(0,120))}</p>
+        <span class="more">পড়ুন →</span>
+      </a>`).join('');
+    html+=builtin.map(p=>`<a class="hblog-card" href="blog.html?post=${encodeURIComponent(p.slug)}">
+        <span class="tag">${esc(p.tag)}</span>
+        <h3>${esc(p.title)}</h3>
+        <p>${esc(p.ex)}</p>
+        <span class="more">পড়ুন →</span>
+      </a>`).join('');
+    row.innerHTML=html;
+    sec.style.display='block';
+  }
+  /* প্রকাশিত পাঠক-লেখা আগে, তারপর বিল্ট-ইন */
+  if(typeof db!=='undefined'&&db){
+    db.ref('publishedBlogs').limitToLast(6).get().then(snap=>{
+      const arr=[];
+      if(snap.exists())snap.forEach(c=>{const v=c.val();if(v&&v.title&&v.content)arr.push({id:c.key,...v});});
+      arr.sort((a,b)=>(b.publishedAt||0)-(a.publishedAt||0));
+      paint(arr);
+    }).catch(()=>paint([]));
+  } else { paint([]); }
+}
+
+/* ═══ আসল recent-sales নোটিফিকেশন — Firebase-এর সত্যিকার অর্ডার থেকে (কোনো ভুয়া নয়) ═══ */
+function loadRecentSalesTicker(){
+  if(typeof db==='undefined'||!db)return;
+  db.ref('recentSales').limitToLast(15).get().then(snap=>{
+    if(!snap.exists())return;
+    const arr=[];snap.forEach(c=>{const v=c.val();if(v&&v.book)arr.push(v);});
+    if(!arr.length)return;
+    arr.sort((a,b)=>(b.t||0)-(a.t||0));
+    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const st=document.createElement('style');
+    st.textContent='.aa-sale-toast{position:fixed;left:14px;bottom:92px;z-index:9985;max-width:250px;background:var(--card-solid);border:1px solid var(--border);border-left:3px solid #2f7531;border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,0.16);padding:10px 12px;display:flex;align-items:center;gap:10px;transform:translateX(-130%);transition:transform .45s cubic-bezier(.2,.8,.2,1);font-family:\'Hind Siliguri\',Arial,sans-serif;}.aa-sale-toast.show{transform:translateX(0);}.aa-sale-ico{width:30px;height:30px;border-radius:8px;background:rgba(47,117,49,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}.aa-sale-txt{font-size:11.5px;line-height:1.45;color:var(--text);min-width:0;}.aa-sale-txt b{color:#2f7531;}[data-theme="dark"] .aa-sale-txt b{color:#79b07b;}.aa-sale-time{font-size:10px;color:var(--text2);margin-top:2px;}@media(max-width:600px){.aa-sale-toast{bottom:86px;max-width:210px;}}';
+    document.head.appendChild(st);
+    const el=document.createElement('div');el.className='aa-sale-toast';
+    el.innerHTML='<div class="aa-sale-ico">📦</div><div class="aa-sale-txt"><div id="aaSaleMsg"></div><div class="aa-sale-time" id="aaSaleTime"></div></div>';
+    document.body.appendChild(el);
+    const rel=t=>{const d=Date.now()-(t||Date.now());const m=Math.floor(d/60000);if(m<1)return'এইমাত্র';if(m<60)return m+' মিনিট আগে';const h=Math.floor(m/60);if(h<24)return h+' ঘণ্টা আগে';return Math.floor(h/24)+' দিন আগে';};
+    let i=0;
+    function showOne(){
+      const s=arr[i%arr.length];i++;
+      document.getElementById('aaSaleMsg').innerHTML='<b>'+esc(s.area||'বাংলাদেশ')+'</b> থেকে কেউ<br>"'+esc(s.book)+'" অর্ডার করেছেন';
+      document.getElementById('aaSaleTime').innerText='🕐 '+rel(s.t);
+      el.classList.add('show');
+      setTimeout(()=>el.classList.remove('show'),5000);
+    }
+    setTimeout(showOne,4500);
+    setInterval(showOne,13000);
+  }).catch(()=>{});
+}
 
 /* ═══ রিভিউ স্লাইডার — Firebase থেকে সেরা রিভিউগুলো (৪-৫ স্টার) ═══ */
 function loadReviewSlider(){

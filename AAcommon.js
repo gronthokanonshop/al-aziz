@@ -333,3 +333,10 @@ window.aaGiftBarHTML = function (subtotal) {
 
 /* Auto-run on load */
 document.addEventListener('DOMContentLoaded', updateCartCount);
+
+/* ═══ PWA — service worker রেজিস্টার (ফোনে অ্যাপের মতো ইনস্টল) ═══ */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+        navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+}

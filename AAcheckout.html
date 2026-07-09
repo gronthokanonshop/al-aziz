@@ -402,8 +402,18 @@ const SHEET_TOKEN = 'GK_SECRET_2026';
 function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 let cart = JSON.parse(localStorage.getItem('alaziz_cart')) || [];
 let discPct = parseInt(localStorage.getItem('alaziz_discount') || '0');
+let discFlat = parseInt(localStorage.getItem('alaziz_discflat') || '0');
+let freeDeliv = localStorage.getItem('alaziz_freedeliv') === '1';
 let coupon = localStorage.getItem('alaziz_coupon') || '';
 let delivCharge = 60;
+/* কুপন অনুযায়ী মোট হিসাব (%/৳/ফ্রি ডেলিভারি সব ধরন) */
+function calcTotals(){
+  const sub = getSubtotal();
+  const pctOff = Math.round(sub * discPct / 100);
+  const discountAmt = Math.min(sub, pctOff + discFlat);
+  const deliv = freeDeliv ? 0 : delivCharge;
+  return { sub, discountAmt, deliv, grand: sub + deliv - discountAmt };
+}
 function toggleDark(){
   const cur = document.documentElement.getAttribute('data-theme');
   const nxt = cur === 'dark' ? 'light' : 'dark';
@@ -453,13 +463,11 @@ function getSubtotal(){
   return cart.reduce((s,i) => s + (i.price||0), 0);
 }
 function updateTotal(){
-  const sub = getSubtotal();
-  const discountAmt = Math.round(sub * discPct / 100);
-  const grand = sub + delivCharge - discountAmt;
+  const { sub, discountAmt, deliv, grand } = calcTotals();
   document.getElementById('subtotalShow').textContent = '৳' + sub;
-  document.getElementById('deliveryShow').textContent = '৳' + delivCharge;
+  document.getElementById('deliveryShow').innerHTML = freeDeliv ? '<s style="opacity:.6">৳'+delivCharge+'</s> <b style="color:var(--success)">ফ্রি</b>' : '৳' + deliv;
   document.getElementById('grandTotal').textContent = '৳' + grand;
-  if(discountAmt > 0){
+  if(discountAmt > 0 || freeDeliv){
     document.getElementById('discountRow').style.display = 'flex';
     document.getElementById('couponCodeShow').textContent = coupon;
     document.getElementById('discountShow').textContent = discountAmt;
@@ -493,20 +501,34 @@ function renderSummary(){
     </div>`).join('');
   updateTotal();
 }
-function applyCoupon(){
+function persistCoupon(){
+  localStorage.setItem('alaziz_coupon', coupon);
+  localStorage.setItem('alaziz_discount', discPct);
+  localStorage.setItem('alaziz_discflat', discFlat);
+  localStorage.setItem('alaziz_freedeliv', freeDeliv ? '1' : '0');
+}
+async function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();
   const msg = document.getElementById('couponMsg');
   msg.style.display = 'block';
   if(!code){ msg.style.color = 'var(--danger)'; msg.textContent = '⚠️ কুপন কোড লিখুন!'; return; }
+  discPct = 0; discFlat = 0; freeDeliv = false;
   if(code === 'FIRSTORDER'){
-    coupon = code; discPct = 10;
-    localStorage.setItem('alaziz_coupon', coupon);
-    localStorage.setItem('alaziz_discount', discPct);
-    msg.style.color = 'var(--success)'; msg.textContent = '✅ FIRSTORDER কোড সক্রিয় — ১০% ছাড় পাচ্ছেন!';
-    updateTotal();
-  } else {
-    msg.style.color = 'var(--danger)'; msg.textContent = '❌ অবৈধ কুপন কোড!';
+    coupon = code; discPct = 5; persistCoupon();
+    msg.style.color = 'var(--success)'; msg.textContent = '✅ FIRSTORDER — ৫% ছাড় (এক নম্বরে একবার)';
+    updateTotal(); return;
   }
+  try{
+    const snap = await firebase.database().ref('coupons/' + code).get();
+    const c = snap.val();
+    if(!c || c.active === false){ coupon=''; persistCoupon(); msg.style.color='var(--danger)'; msg.textContent='❌ অবৈধ বা বন্ধ কুপন কোড!'; updateTotal(); return; }
+    coupon = code;
+    if(c.type === 'delivery'){ freeDeliv = true; msg.textContent = '✅ ' + code + ' — ফ্রি ডেলিভারি!'; }
+    else if(c.type === 'taka'){ discFlat = Number(c.value) || 0; msg.textContent = '✅ ' + code + ' — ৳' + discFlat + ' ছাড়!'; }
+    else { discPct = Number(c.value != null ? c.value : c.discount) || 0; msg.textContent = '✅ ' + code + ' — ' + discPct + '% ছাড়!'; }
+    msg.style.color = 'var(--success)';
+    persistCoupon(); updateTotal();
+  }catch(e){ msg.style.color='var(--danger)'; msg.textContent='❌ যাচাই করা যায়নি, আবার চেষ্টা করুন'; }
 }
 function selectPay(el, type){
   document.querySelectorAll('.pay-opt:not(.disabled)').forEach(o => o.classList.remove('selected'));
@@ -585,9 +607,11 @@ async function confirmOrder(){
   const g = {};
   cart.forEach(i => { g[i.name] = (g[i.name]||0)+1; });
   const bookList = Object.entries(g).map(([k,v]) => `${k} (${v}টি)`).join(', ');
-  const sub = getSubtotal();
-  const discountAmt = Math.round(sub * discPct / 100);
-  const grand = sub + delivCharge - discountAmt;
+  const _t = calcTotals();
+  const sub = _t.sub;
+  const discountAmt = _t.discountAmt;
+  const grand = _t.grand;
+  const effDeliv = _t.deliv;
   const fullAddr = `${thana}, ${district}, ${division} — ${address}`;
   const orderId = 'AA-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
   const orderData = {
@@ -596,7 +620,7 @@ async function confirmOrder(){
     items: cart,
     books: bookList,
     payment: payMethod + (txId ? ` (TxID: ${txId})` : ''),
-    delivery: '৳' + delivCharge,
+    delivery: '৳' + effDeliv,
     total: '৳' + grand,
     discount: discountAmt,
     discountPct: discPct,
@@ -608,6 +632,8 @@ async function confirmOrder(){
   try{
     await firebase.database().ref('orders/' + orderId).set(orderData);
     await firebase.database().ref('phoneIndex/' + phone + '/' + orderId).set(true);
+    /* আসল recent-sales — শুধু এলাকা ও বইয়ের নাম (কোনো গোপন তথ্য নয়) */
+    try{ firebase.database().ref('recentSales').push({ area: district || division || 'বাংলাদেশ', book: Object.keys(g)[0] || 'একটি বই', t: Date.now() }); }catch(e){}
     localStorage.setItem('alaziz_lastorder', orderId);
     if(coupon === 'FIRSTORDER'){
       await firebase.database().ref('usedCoupons/FIRSTORDER/' + phone.replace(/\+/g,'_')).set(true);
@@ -628,6 +654,8 @@ async function confirmOrder(){
   }catch(e){}
   localStorage.removeItem('alaziz_cart');
   localStorage.removeItem('alaziz_discount');
+  localStorage.removeItem('alaziz_discflat');
+  localStorage.removeItem('alaziz_freedeliv');
   localStorage.removeItem('alaziz_coupon');
   document.getElementById('successInfo').innerHTML = `
     <div style="background:var(--bg-body);border-radius:10px;padding:12px;margin-bottom:10px;text-align:left;">

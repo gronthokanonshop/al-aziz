@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="bn" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<link rel="icon" href="nafah-logo.png" type="image/png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>ব্লগ — NafahLife</title>
+<meta name="description" content="বই, পাঠ ও ইসলামি জ্ঞান নিয়ে NafahLife-এর ব্লগ — বই পড়ার উপকারিতা, পাঠ-পরামর্শ ও পাঠকদের নির্বাচিত লেখা।" id="metaDesc">
+<meta name="theme-color" content="#2a562b">
+<link rel="canonical" href="https://nafahlife.com/blog.html" id="canonicalLink">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="AAcommon.css">
+<script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
+<style>
+.page-wrap{max-width:680px;margin:0 auto;padding:22px 16px 100px;}
+.blog-hero{background:linear-gradient(135deg,#152716,#2f7531);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:22px;}
+.blog-hero h1{font-size:24px;font-weight:900;color:#fff;margin-bottom:6px;}
+.blog-hero p{font-size:13px;color:#a8cca9;line-height:1.7;}
+.blog-card{display:block;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:14px;text-decoration:none;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.blog-card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(47,117,49,0.12);border-color:rgba(47,117,49,0.4);}
+.blog-card .tag{display:inline-block;font-size:10px;font-weight:800;color:#2f7531;background:rgba(47,117,49,0.1);padding:3px 10px;border-radius:20px;margin-bottom:8px;letter-spacing:.4px;}
+[data-theme="dark"] .blog-card .tag{color:#79b07b;}
+.blog-card h2{font-size:16px;font-weight:800;color:var(--text);line-height:1.4;margin-bottom:6px;}
+.blog-card p{font-size:13px;color:var(--text2);line-height:1.7;}
+.blog-card .more{display:inline-block;margin-top:8px;font-size:12.5px;font-weight:700;color:#2f7531;}
+[data-theme="dark"] .blog-card .more{color:#79b07b;}
+.article .tag{display:inline-block;font-size:10px;font-weight:800;color:#2f7531;background:rgba(47,117,49,0.1);padding:3px 10px;border-radius:20px;margin-bottom:12px;letter-spacing:.4px;}
+.article h1{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:var(--text);line-height:1.4;margin-bottom:16px;}
+.article p{font-size:14.5px;color:var(--text);line-height:1.95;margin-bottom:14px;}
+.article h3{font-size:16px;font-weight:800;color:var(--text);margin:20px 0 8px;padding-left:10px;border-left:3px solid #2f7531;}
+.article ul{padding-left:20px;margin-bottom:14px;}
+.article li{font-size:14px;color:var(--text2);line-height:1.95;}
+.article a{color:#2f7531;font-weight:600;text-decoration:none;}
+.article-cta{margin-top:20px;text-align:center;}
+.article-cta a{display:inline-block;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;padding:12px 26px;border-radius:11px;font-size:14px;font-weight:700;text-decoration:none;box-shadow:0 4px 14px rgba(47,117,49,0.3);}
+.back-to-blog{display:inline-flex;align-items:center;gap:6px;color:#2f7531;font-weight:700;font-size:13px;text-decoration:none;margin-bottom:16px;}
+/* ══ মাসিক ব্লগ প্রতিযোগিতা — NafahLife-এর নিজস্ব ডিজাইন (দুই-অংশ ব্যানার) ══ */
+.comp-card{display:flex;align-items:stretch;gap:0;background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:22px;box-shadow:0 8px 26px rgba(21,39,22,0.10);position:relative;}
+.comp-left{flex-shrink:0;width:110px;background:linear-gradient(160deg,#152716,#2f7531);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#fff;position:relative;}
+.comp-left::after{content:'';position:absolute;top:0;right:-1px;width:2px;height:100%;background:linear-gradient(#e3b489,#cf6f33);}
+.comp-trophy{font-size:34px;line-height:1;filter:drop-shadow(0 3px 6px rgba(0,0,0,0.3));}
+.comp-left small{font-size:9.5px;font-weight:700;letter-spacing:.5px;color:#e3b489;text-align:center;padding:0 6px;}
+.comp-right{flex:1;padding:16px 18px;min-width:0;}
+.comp-ribbon{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#a85320;background:rgba(207,111,51,0.14);padding:4px 12px;border-radius:20px;margin-bottom:8px;letter-spacing:.3px;}
+.comp-card h2{font-size:17px;font-weight:900;color:var(--text);margin-bottom:6px;line-height:1.35;}
+.comp-topic{display:none;margin-bottom:8px;}
+.comp-topic span{display:inline-block;font-size:11px;font-weight:800;color:#2f7531;background:rgba(47,117,49,0.12);padding:4px 12px;border-radius:8px;}
+[data-theme="dark"] .comp-topic span{color:#79b07b;}
+.comp-card p{font-size:12.5px;color:var(--text2);line-height:1.75;margin-bottom:12px;}
+.comp-card p b{color:#a85320;}
+.comp-card button{display:inline-flex;align-items:center;gap:7px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border:none;padding:11px 22px;border-radius:11px;font-size:13.5px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 4px 14px rgba(47,117,49,0.3);transition:.2s;}
+.comp-card button:hover{transform:translateY(-2px);box-shadow:0 7px 20px rgba(47,117,49,0.45);}
+@media(max-width:480px){.comp-left{width:84px;}.comp-trophy{font-size:28px;}}
+.sec-label{font-size:14px;font-weight:800;color:var(--text);margin:22px 0 12px;padding-left:10px;border-left:3px solid #2f7531;}
+.reader-badge{display:inline-block;font-size:9.5px;font-weight:800;color:#a85320;background:rgba(207,111,51,0.18);padding:3px 9px;border-radius:20px;margin-left:6px;}
+.blog-card .meta{font-size:11px;color:var(--text2);margin-top:6px;}
+#submitOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(3px);z-index:9998;}
+#submitModal{display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;padding:16px;overflow-y:auto;}
+#submitModal.open,#submitOverlay.open{display:flex;}
+.sub-box{background:var(--card-solid);border-radius:16px;padding:20px;width:100%;max-width:520px;max-height:88vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.3);margin:auto;}
+.sub-box h3{font-size:16px;font-weight:800;color:var(--text);margin-bottom:4px;}
+.sub-box .hint{font-size:11.5px;color:var(--text2);line-height:1.7;margin-bottom:14px;}
+.sub-input{width:100%;padding:11px 13px;border:1.5px solid var(--border);border-radius:10px;background:var(--input-bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13.5px;margin-bottom:10px;outline:none;box-sizing:border-box;}
+.sub-input:focus{border-color:#2f7531;}
+textarea.sub-input{min-height:180px;resize:vertical;line-height:1.8;}
+.sub-count{font-size:11px;color:var(--text2);text-align:right;margin:-6px 0 10px;}
+.sub-actions{display:flex;gap:10px;}
+.sub-actions button{flex:1;padding:12px;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;border:none;}
+.sub-cancel{background:var(--bg);color:var(--text);border:1.5px solid var(--border)!important;}
+.sub-send{background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;box-shadow:0 3px 12px rgba(47,117,49,0.3);}
+.sub-send:disabled{opacity:.6;cursor:wait;}
+</style>
+</head>
+<body>
+<nav class="navbar">
+  <div class="navbar-top">
+    <button class="back-btn" onclick="goBack()">‹</button>
+    <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">ব্লগ</span>
+    <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
+  </div>
+</nav>
+
+<div class="page-wrap" id="blogWrap"></div>
+
+<script>
+/* ═══ আসল আর্টিকেল (কোনো ভুয়া তথ্য নয়) ═══ */
+const POSTS = [
+  {
+    slug:'keno-boi-porbo',
+    tag:'পাঠাভ্যাস',
+    title:'কেন নিয়মিত বই পড়া জরুরি — ব্যস্ত জীবনেও',
+    excerpt:'বই কেবল জ্ঞানের উৎস নয়, এটি চিন্তা ও চরিত্র গঠনের অন্যতম মাধ্যম। কেন প্রতিদিন কিছুটা সময় বই পড়া উচিত, জানুন।',
+    body:`
+      <p>প্রযুক্তির এই যুগে আমরা অনেকেই বই পড়া থেকে দূরে সরে যাচ্ছি। অথচ একটি ভালো বই আমাদের চিন্তার জগৎকে যেভাবে প্রসারিত করে, তা আর কিছুতেই সম্ভব নয়। ইসলামের প্রথম নির্দেশই ছিল "পড়ো" (ইকরা) — যা পাঠের গুরুত্ব কতটা, তা স্পষ্ট করে দেয়।</p>
+      <h3>নিয়মিত বই পড়ার উপকারিতা</h3>
+      <ul>
+        <li>জ্ঞান ও অন্তর্দৃষ্টি বৃদ্ধি পায়, সিদ্ধান্ত নেওয়া সহজ হয়</li>
+        <li>মন প্রশান্ত হয়, দুশ্চিন্তা কমে</li>
+        <li>শব্দভাণ্ডার ও ভাষার দক্ষতা বাড়ে</li>
+        <li>ভালো বই চরিত্র ও আখলাক গঠনে সাহায্য করে</li>
+        <li>সন্তানরা বাবা-মাকে দেখে পড়ার অভ্যাস শেখে</li>
+      </ul>
+      <p>শুরুটা ছোট করে করুন — প্রতিদিন মাত্র ১০-১৫ মিনিট। একটি বিষয়ভিত্তিক বই বেছে নিন, যেটি আপনার জীবনে কাজে লাগবে। ধীরে ধীরে এটি একটি সুন্দর অভ্যাসে পরিণত হবে ইন শা আল্লাহ।</p>
+    `,
+    cta:{text:'📚 পড়ার জন্য বই বেছে নিন', link:'index.html'}
+  },
+  {
+    slug:'notun-pathok-boi',
+    tag:'পাঠ-পরামর্শ',
+    title:'নতুন পাঠকদের জন্য যেসব বই দিয়ে শুরু করা যায়',
+    excerpt:'যারা সবেমাত্র ইসলামি বই পড়া শুরু করতে চাইছেন, তাদের জন্য সহজ ভাষার ও হৃদয়স্পর্শী কিছু বইয়ের ধরন।',
+    body:`
+      <p>নতুন পাঠক হিসেবে কোন বই দিয়ে শুরু করবেন, তা নিয়ে দ্বিধায় পড়া স্বাভাবিক। খুব কঠিন বা তাত্ত্বিক বই দিয়ে শুরু করলে আগ্রহ হারিয়ে যেতে পারে। তাই সহজ ভাষার, অনুপ্রেরণামূলক বই দিয়ে যাত্রা শুরু করাই ভালো।</p>
+      <h3>যে ধরনের বই দিয়ে শুরু করবেন</h3>
+      <ul>
+        <li><b>আত্মশুদ্ধি ও অনুপ্রেরণামূলক বই</b> — অন্তরকে নাড়া দেয়, দ্বীনের পথে টানে</li>
+        <li><b>সীরাত (নবীজি ﷺ-এর জীবনী)</b> — জীবনের আদর্শ মডেল</li>
+        <li><b>সাহাবিদের জীবনী</b> — বাস্তব উদাহরণ থেকে শিক্ষা</li>
+        <li><b>ছোট গল্প ও ইসলামি উপন্যাস</b> — পড়ার আনন্দ ধরে রাখে</li>
+      </ul>
+      <p>NafahLife-এ এই প্রতিটি বিষয়ের সাশ্রয়ী মূল্যের বই রয়েছে। ক্যাটাগরি থেকে সহজেই আপনার পছন্দের বিষয় বেছে নিতে পারবেন।</p>
+    `,
+    cta:{text:'☪️ ইসলামি বই দেখুন', link:'Aafilter.html?type=cat&value=ইসলামি বই'}
+  },
+  {
+    slug:'boi-upohar',
+    tag:'উপহার',
+    title:'বই — সবচেয়ে অর্থবহ উপহার',
+    excerpt:'জন্মদিন, বিয়ে কিংবা যেকোনো উপলক্ষে একটি ভালো বই হতে পারে সবচেয়ে সুন্দর ও দীর্ঘস্থায়ী উপহার।',
+    body:`
+      <p>একটি উপহার কিছুদিন পর হারিয়ে যায় বা পুরনো হয়ে যায়। কিন্তু একটি ভালো বই সারাজীবন সঙ্গী হয়ে থাকে — বারবার পড়া যায়, অন্যকে ধার দেওয়া যায়, প্রজন্ম থেকে প্রজন্মে রেখে যাওয়া যায়।</p>
+      <h3>বই উপহার দেওয়ার কারণ</h3>
+      <ul>
+        <li>জ্ঞান ও দ্বীনি চেতনার উপহার — সদকায়ে জারিয়ার মতো</li>
+        <li>যেকোনো বাজেটে মানানসই — সাশ্রয়ী থেকে প্রিমিয়াম</li>
+        <li>প্রাপকের রুচি অনুযায়ী বেছে নেওয়া যায়</li>
+        <li>দীর্ঘস্থায়ী ও অর্থবহ — স্মৃতিতে থেকে যায়</li>
+      </ul>
+      <p>NafahLife থেকে সহজেই উপহারের বই অর্ডার করতে পারেন — সারা বাংলাদেশে ক্যাশ অন ডেলিভারিতে পৌঁছে যাবে।</p>
+    `,
+    cta:{text:'🎁 উপহারের বই খুঁজুন', link:'index.html'}
+  }
+];
+
+const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const SITE='https://nafahlife.com';
+const DBURL='https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app';
+function goBack(){ if(new URLSearchParams(location.search).toString()){ location.href='blog.html'; } else { history.length>1?history.back():location.href='index.html'; } }
+
+function renderList(){
+  document.title='ব্লগ — NafahLife';
+  document.getElementById('blogWrap').innerHTML=
+    '<div class="blog-hero"><h1>NafahLife ব্লগ</h1><p>বই, পাঠ ও ইসলামি জ্ঞান নিয়ে লেখা — আমাদের এবং আপনাদের</p></div>'+
+    `<div class="comp-card">
+        <div class="comp-left"><div class="comp-trophy">🏆</div><small>মাসিক আয়োজন</small></div>
+        <div class="comp-right">
+          <span class="comp-ribbon">✨ লেখা প্রতিযোগিতা</span>
+          <h2>আপনার লেখা প্রকাশ করুন, হাদিয়া জিতুন</h2>
+          <p id="compTopicLine" class="comp-topic"><span>📌 এ মাসের বিষয়: <span id="compTopicText"></span></span></p>
+          <p>বই, পাঠ বা ইসলামি বিষয়ে নিজের লেখা জমা দিন। নির্বাচিত সেরা লেখাগুলো এখানে প্রকাশিত হবে এবং লেখকরা পাবেন <b>🎁 আকর্ষণীয় হাদিয়া!</b></p>
+          <button onclick="openSubmitForm()">✍️ আপনার লেখা জমা দিন</button>
+        </div>
+    </div>`+
+    '<div id="readerBlogs"></div>'+
+    '<div class="sec-label">📖 NafahLife-এর লেখা</div>'+
+    POSTS.map(p=>`<a class="blog-card" href="blog.html?post=${encodeURIComponent(p.slug)}">
+        <span class="tag">${esc(p.tag)}</span>
+        <h2>${esc(p.title)}</h2>
+        <p>${esc(p.excerpt)}</p>
+        <span class="more">পড়ুন →</span>
+    </a>`).join('');
+  loadReaderBlogs();
+  loadCompTopic();
+}
+
+function loadCompTopic(){
+  fetch(DBURL+'/siteConfig/blogTopic.json').then(r=>r.ok?r.json():null).then(t=>{
+    if(!t||typeof t!=='string'||!t.trim())return;
+    const line=document.getElementById('compTopicLine');
+    const txt=document.getElementById('compTopicText');
+    if(line&&txt){txt.innerText=t.trim();line.style.display='block';}
+  }).catch(()=>{});
+}
+
+function loadReaderBlogs(){
+  fetch(DBURL+'/publishedBlogs.json').then(r=>r.ok?r.json():null).then(data=>{
+    const box=document.getElementById('readerBlogs');
+    if(!box||!data)return;
+    const list=Object.entries(data).map(([id,b])=>({id,...b})).filter(b=>b&&b.title&&b.content);
+    if(!list.length)return;
+    list.sort((a,b)=>(b.publishedAt||0)-(a.publishedAt||0));
+    box.innerHTML='<div class="sec-label">🏆 পাঠকদের নির্বাচিত লেখা</div>'+
+      list.map(b=>`<a class="blog-card" href="blog.html?pb=${encodeURIComponent(b.id)}">
+        <span class="tag">পাঠকের লেখা</span><span class="reader-badge">🏆 প্রতিযোগিতা বিজয়ী</span>
+        <h2>${esc(b.title)}</h2>
+        <p>${esc(String(b.content).slice(0,140))}${String(b.content).length>140?'…':''}</p>
+        <div class="meta">✍️ ${esc(b.author||'পাঠক')} ${b.publishedAt?'· '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):''}</div>
+        <span class="more">পড়ুন →</span>
+      </a>`).join('');
+  }).catch(()=>{});
+}
+
+function renderReaderPost(id){
+  fetch(DBURL+'/publishedBlogs/'+encodeURIComponent(id)+'.json').then(r=>r.ok?r.json():null).then(b=>{
+    if(!b||!b.title){renderList();return;}
+    document.title=b.title+' — NafahLife ব্লগ';
+    const md=document.getElementById('metaDesc'); if(md)md.setAttribute('content',String(b.content).slice(0,150));
+    const paras=String(b.content).split(/\n+/).filter(x=>x.trim()).map(x=>'<p>'+esc(x)+'</p>').join('');
+    document.getElementById('blogWrap').innerHTML=
+      '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
+      `<div class="article">
+        <span class="tag">পাঠকের লেখা</span><span class="reader-badge">🏆 প্রতিযোগিতা বিজয়ী</span>
+        <h1>${esc(b.title)}</h1>
+        <p style="font-size:12.5px;color:var(--text2);">✍️ ${esc(b.author||'পাঠক')} ${b.publishedAt?'· '+new Date(b.publishedAt).toLocaleDateString('bn-BD'):''}</p>
+        ${paras}
+        <div class="article-cta"><a href="blog.html" onclick="event.preventDefault();location.href='blog.html';setTimeout(openSubmitForm,600);">✍️ আপনিও লিখুন — হাদিয়া জিতুন</a></div>
+      </div>`;
+  }).catch(()=>renderList());
+}
+
+function openSubmitForm(){
+  document.getElementById('submitOverlay').classList.add('open');
+  document.getElementById('submitModal').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeSubmitForm(){
+  document.getElementById('submitOverlay').classList.remove('open');
+  document.getElementById('submitModal').classList.remove('open');
+  document.body.style.overflow='';
+}
+function updateCount(){
+  const n=(document.getElementById('sbContent').value||'').length;
+  document.getElementById('sbCount').innerText=n+' অক্ষর';
+}
+let sbSending=false;
+function submitBlog(){
+  if(sbSending)return;
+  const name=(document.getElementById('sbName').value||'').trim();
+  const phone=(document.getElementById('sbPhone').value||'').trim();
+  const title=(document.getElementById('sbTitle').value||'').trim();
+  const content=(document.getElementById('sbContent').value||'').trim();
+  const msg=document.getElementById('sbMsg');
+  function err(t){msg.style.display='block';msg.style.color='#dc2626';msg.innerText=t;}
+  /* কোনো মিনিমাম দৈর্ঘ্য নেই — শুধু ফাঁকা না হলেই চলবে; ফোন লাগে হাদিয়া পাঠাতে */
+  if(!name)return err('⚠️ আপনার নাম লিখুন');
+  if(!/^01[3-9]\d{8}$/.test(phone))return err('⚠️ সঠিক মোবাইল নম্বর দিন (হাদিয়া পাঠাতে লাগবে)');
+  if(!title)return err('⚠️ লেখার শিরোনাম দিন');
+  if(!content)return err('⚠️ আপনার লেখাটি লিখুন');
+  sbSending=true;
+  const btn=document.getElementById('sbSend');btn.disabled=true;btn.innerText='পাঠানো হচ্ছে...';
+  fetch(DBURL+'/blogSubmissions.json',{
+    method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name,phone,title,content,createdAt:Date.now()})
+  }).then(r=>{
+    if(!r.ok)throw new Error();
+    document.querySelector('.sub-box').innerHTML=
+      '<div style="text-align:center;padding:24px 10px;"><div style="font-size:46px;margin-bottom:12px;">🎉</div>'+
+      '<h3 style="margin-bottom:8px;">লেখা জমা হয়েছে!</h3>'+
+      '<p style="font-size:13px;color:var(--text2);line-height:1.9;">আপনার লেখাটি আমরা পেয়েছি। নির্বাচিত হলে এখানে প্রকাশ করা হবে এবং আপনার নম্বরে যোগাযোগ করে হাদিয়া পাঠানো হবে ইন শা আল্লাহ। ✨</p>'+
+      '<button class="sub-send" style="margin-top:14px;padding:12px 30px;border:none;border-radius:10px;font-family:\'Hind Siliguri\',Arial,sans-serif;font-weight:700;cursor:pointer;" onclick="closeSubmitForm()">ঠিক আছে</button></div>';
+  }).catch(()=>{
+    sbSending=false;btn.disabled=false;btn.innerText='📨 জমা দিন';
+    err('❌ পাঠানো যায়নি — ইন্টারনেট চেক করে আবার চেষ্টা করুন');
+  });
+}
+
+function renderPost(post){
+  document.title=post.title+' — NafahLife ব্লগ';
+  const md=document.getElementById('metaDesc'); if(md)md.setAttribute('content',post.excerpt);
+  const cn=document.getElementById('canonicalLink'); if(cn)cn.setAttribute('href',SITE+'/blog.html?post='+encodeURIComponent(post.slug));
+  const ld={"@context":"https://schema.org","@type":"Article","headline":post.title,"description":post.excerpt,"author":{"@type":"Organization","name":"NafahLife"},"publisher":{"@type":"Organization","name":"NafahLife","logo":{"@type":"ImageObject","url":SITE+"/nafah-logo.png"}},"mainEntityOfPage":SITE+"/blog.html?post="+encodeURIComponent(post.slug)};
+  const s=document.createElement('script');s.type='application/ld+json';s.textContent=JSON.stringify(ld);document.head.appendChild(s);
+  document.getElementById('blogWrap').innerHTML=
+    '<a class="back-to-blog" href="blog.html">‹ সব লেখা</a>'+
+    `<div class="article"><span class="tag">${esc(post.tag)}</span><h1>${esc(post.title)}</h1>${post.body}
+      <div class="article-cta"><a href="${esc(post.cta.link)}">${esc(post.cta.text)}</a></div>
+    </div>`;
+}
+
+(function(){
+  const params=new URLSearchParams(location.search);
+  const pb=params.get('pb');
+  if(pb){renderReaderPost(pb);return;}
+  const slug=params.get('post');
+  const post=slug?POSTS.find(p=>p.slug===slug):null;
+  if(post)renderPost(post); else renderList();
+})();
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSubmitForm();});
+</script>
+
+<div id="submitOverlay" onclick="closeSubmitForm()"></div>
+<div id="submitModal">
+  <div class="sub-box" onclick="event.stopPropagation()">
+    <h3>✍️ আপনার লেখা জমা দিন</h3>
+    <p class="hint">বই, পাঠাভ্যাস বা ইসলামি বিষয়ে নিজের ভাষায় লিখুন। নির্বাচিত লেখা সাইটে প্রকাশিত হবে এবং সেই লেখক পাবেন 🎁 হাদিয়া। (নম্বরটি শুধু হাদিয়া পাঠাতে ব্যবহৃত হবে — সাইটে দেখানো হবে না।)</p>
+    <p id="sbMsg" style="display:none;font-size:12px;font-weight:700;margin-bottom:10px;"></p>
+    <input class="sub-input" id="sbName" placeholder="আপনার নাম *" maxlength="60">
+    <input class="sub-input" id="sbPhone" type="tel" placeholder="মোবাইল নম্বর (01XXXXXXXXX) *" maxlength="11">
+    <input class="sub-input" id="sbTitle" placeholder="লেখার শিরোনাম *" maxlength="120">
+    <textarea class="sub-input" id="sbContent" placeholder="আপনার লেখা এখানে লিখুন... ✍️" maxlength="20000" oninput="updateCount()"></textarea>
+    <div class="sub-count" id="sbCount">০ অক্ষর</div>
+    <div class="sub-actions">
+      <button class="sub-cancel" onclick="closeSubmitForm()">বাতিল</button>
+      <button class="sub-send" id="sbSend" onclick="submitBlog()">📨 জমা দিন</button>
+    </div>
+  </div>
+</div>
+
+<script src="AAcommon.js"></script>
+</body>
+</html>

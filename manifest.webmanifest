@@ -1,0 +1,16 @@
+{
+  "name": "NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ",
+  "short_name": "NafahLife",
+  "description": "সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#faf8f3",
+  "theme_color": "#2a562b",
+  "lang": "bn",
+  "icons": [
+    { "src": "nafah-logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "nafah-logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
