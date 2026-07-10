@@ -171,7 +171,7 @@ body::after{content:'';position:fixed;bottom:100px;left:-100px;width:300px;heigh
 .cat-pill.active{background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border-color:#fff;box-shadow:0 3px 12px rgba(121,176,123,0.38);}
 .search-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:4999;}
 .search-overlay.open{display:block;}
-.search-screen{position:fixed;top:0;left:0;right:0;height:88vh;background:rgba(255,255,255,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:5000;display:flex;flex-direction:column;transform:translateY(-105%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);visibility:hidden;border-radius:0 0 20px 20px;box-shadow:0 6px 30px rgba(79,141,81,0.12);}
+.search-screen{position:fixed;top:0;left:0;right:0;max-height:88vh;background:rgba(255,255,255,0.94);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:5000;display:flex;flex-direction:column;transform:translateY(-105%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);visibility:hidden;border-radius:0 0 20px 20px;box-shadow:0 6px 30px rgba(79,141,81,0.12);}
 .search-screen.open{transform:translateY(0);visibility:visible;}
 .search-screen-header{display:flex;align-items:center;gap:10px;padding:10px 14px;background:linear-gradient(135deg,#224f23,#2f7531);border-bottom:2px solid #79b07b;flex-shrink:0;}
 .search-back{background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.2);border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:20px;color:#fff;display:flex;align-items:center;justify-content:center;}
@@ -182,7 +182,7 @@ body::after{content:'';position:fixed;bottom:100px;left:-100px;width:300px;heigh
 .search-clear-btn{background:#51373b;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer;font-size:14px;display:none;align-items:center;justify-content:center;color:#fff;}
 .search-clear-btn.show{display:flex;}
 .search-body{flex:1;overflow-y:auto;}
-.search-hint{padding:50px 20px;text-align:center;}
+.search-hint{padding:26px 20px;text-align:center;}
 .search-hint-icon{font-size:52px;margin-bottom:14px;}
 .search-hint p{font-size:15px;color:var(--text2);}
 .search-count{padding:10px 16px;font-size:13px;color:#fff;border-bottom:1px solid var(--border);background:var(--card);display:none;}
@@ -1430,4 +1430,4 @@ function loadReviewSlider(){
 </script>
 <script src="AAcommon.js"></script>
 </body>
-</html> 
+</html>
