@@ -618,6 +618,10 @@
                     <div class="text-xs text-muted"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg> ঠিকানা</div>
                     <div id="modalAddress" style="margin-top:4px;"></div>
                 </div>
+                <div id="modalCustNoteWrap" style="display:none;margin-top:12px;padding:10px 12px;background:#fdf8e8;border:1px solid #f3e6b8;border-left:3px solid #cf6f33;border-radius:8px;">
+                    <div class="text-xs" style="color:#a85320;font-weight:800;margin-bottom:4px;">💬 কাস্টমারের বিশেষ নির্দেশনা</div>
+                    <div id="modalCustNote" style="font-size:13px;color:#5a4a1a;white-space:pre-wrap;"></div>
+                </div>
             </div>
             <div class="m-section">
                 <span class="m-label"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> অর্ডারকৃত বই</span>
@@ -698,9 +702,13 @@
         <div class="login-icon">
             <svg class="icon icon-lg" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
         </div>
-        <h2>Admin লগইন</h2>
-        <p>শুধুমাত্র অনুমোদিত admin এর জন্য</p>
+        <h2 id="loginTitle">Admin লগইন</h2>
+        <p id="loginSub">শুধুমাত্র অনুমোদিত admin এর জন্য</p>
         <p id="loginErr" class="text-xs" style="color:#f87171;margin-bottom:12px;min-height:16px;"></p>
+        <div class="form-group" id="modNameGroup" style="display:none;">
+            <label class="form-label">আপনার নাম</label>
+            <input class="form-input" id="modName" type="text" placeholder="আপনার পুরো নাম">
+        </div>
         <div class="form-group">
             <label class="form-label">ইমেইল</label>
             <input class="form-input" id="adminEmail" type="email" placeholder="name@example.com">
@@ -709,7 +717,10 @@
             <label class="form-label">পাসওয়ার্ড</label>
             <input class="form-input" id="adminPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
-        <button class="btn btn-primary w-full" onclick="adminLogin()">লগইন করুন →</button>
+        <button class="btn btn-primary w-full" id="loginBtn" onclick="adminLogin()">লগইন করুন →</button>
+        <div style="margin-top:14px;text-align:center;">
+            <a href="#" id="modSignupLink" onclick="toggleModSignup(event)" style="font-size:12px;color:#94a3b8;text-decoration:none;">মডারেটর হতে চান? অ্যাকাউন্ট খুলুন</a>
+        </div>
     </div>
 </div>
 
@@ -755,6 +766,10 @@
             <button class="nav-item" id="navReport" onclick="switchTab('report',this)">
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
                 বিক্রয় রিপোর্ট
+            </button>
+            <button class="nav-item" id="navReviews" onclick="switchTab('reviews',this)">
+                <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+                রিভিউ
             </button>
             <div class="nav-section-label" style="margin-top:8px;">SYSTEM</div>
             <button class="nav-item" id="navTools" onclick="switchTab('tools',this)">
@@ -1030,7 +1045,7 @@
                         <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="fa_cover" placeholder="Paperback"></div>
                         <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="fa_cat" placeholder="ইসলামি বই"></div>
                         <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
-                        <div class="form-group"><label class="be-label">ছবির লিংক</label><input class="form-input" id="fa_img" placeholder="https://..."></div>
+                        <div class="form-group"><label class="be-label">ছবির লিংক</label><div style="display:flex;gap:8px;align-items:center;"><input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;"><label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="faUploadImg(this)"></label></div></div>
                         <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
                     </div>
                     <div class="flex gap-2">
@@ -1108,6 +1123,12 @@
                 </div>
             </div>
 
+            <!-- ═══ REVIEWS TAB ═══ -->
+            <div id="tabPanelReviews" style="display:none;">
+                <div class="sec-title">পাঠকদের রিভিউ</div>
+                <div id="reviewsAdminList"><div class="text-sm text-muted" style="padding:14px;">লোড হচ্ছে...</div></div>
+            </div>
+
             <!-- ═══ TOOLS TAB ═══ -->
             <div id="tabPanelTools" style="display:none;">
                 <div class="sec-title">টুলস ও ইউটিলিটি</div>
@@ -1137,7 +1158,10 @@
                     <div id="bannerList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
                         <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ব্যানার যোগ করুন</div>
-                        <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL (যেমন: https://i.ibb.co/....jpg) — ঐচ্ছিক" style="margin-bottom:8px;">
+                        <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+                            <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL — ঐচ্ছিক" style="flex:1;margin-bottom:0;">
+                            <label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="bnUploadImg(this)"></label>
+                        </div>
                         <input class="form-input" id="bnTitle" placeholder="বড় লেখা (যেমন: ঈদ অফার — ৩০% ছাড়)" style="margin-bottom:8px;">
                         <input class="form-input" id="bnSub" placeholder="ছোট লেখা (যেমন: সীমিত সময়ের জন্য)" style="margin-bottom:8px;">
                         <input class="form-input" id="bnLink" placeholder="ক্লিক করলে কোথায় যাবে (যেমন: Aafilter.html?type=cat&value=Best Selling) — ঐচ্ছিক" style="margin-bottom:10px;">
@@ -1183,6 +1207,31 @@
                 </div>
 
                 <div class="tool-card">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> ছবি আপলোড (imgbb API)</h3>
+                    <p style="margin-bottom:12px;">একবার imgbb-র ফ্রি API key বসিয়ে সেভ করলে বই/ব্যানারে সরাসরি ছবি আপলোড করা যাবে — আর লিংক কপি-পেস্ট লাগবে না। key নিন: imgbb.com → About → API।</p>
+                    <input class="form-input" id="imgbbKeyInput" placeholder="imgbb API Key" style="margin-bottom:10px;">
+                    <button class="btn btn-primary w-full" onclick="saveImgbbKey()">imgbb key সেভ করুন</button>
+                    <div id="imgbbKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(47,117,49,0.07);border:1px solid rgba(47,117,49,0.25);border-radius:8px;"></div>
+                </div>
+
+                <div class="tool-card">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg> Facebook Pixel (বিজ্ঞাপন)</h3>
+                    <p style="margin-bottom:12px;">Facebook/Instagram বিজ্ঞাপন চালাতে চাইলে Meta Events Manager থেকে Pixel ID কপি করে এখানে বসান। সেভ করলেই সাইটের সব পেজে চালু হবে। খালি রেখে সেভ করলে বন্ধ হবে।</p>
+                    <input class="form-input" id="pixelIdInput" placeholder="Meta Pixel ID (শুধু সংখ্যা)" style="margin-bottom:10px;">
+                    <button class="btn btn-primary w-full" onclick="savePixelId()">Pixel ID সেভ করুন</button>
+                    <div id="pixelStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(47,117,49,0.07);border:1px solid rgba(47,117,49,0.25);border-radius:8px;"></div>
+                </div>
+
+                <div class="tool-card" id="modManageCard" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg> মডারেটর ম্যানেজ</h3>
+                    <p style="margin-bottom:12px;">অনুমোদন দিলে মডারেটর নিজের ইমেইল-পাসওয়ার্ড দিয়ে এই প্যানেলে ঢুকে সব মেইনটেইন করতে পারবে। শুধু Courier API আর মডারেটর ম্যানেজ আপনার হাতে থাকবে।</p>
+                    <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">নতুন আবেদন</div>
+                    <div id="modReqList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"><div class="text-sm text-muted">লোড হচ্ছে...</div></div>
+                    <div style="font-size:11px;font-weight:700;color:var(--text-muted);margin-bottom:6px;letter-spacing:.5px;">বর্তমান মডারেটর</div>
+                    <div id="modList" style="display:flex;flex-direction:column;gap:8px;"><div class="text-sm text-muted">লোড হচ্ছে...</div></div>
+                </div>
+
+                <div class="tool-card" id="courierCard">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg> Courier API Settings</h3>
                     <p style="margin-bottom:14px;">এখানে key বসিয়ে সেভ করুন। Firebase এ encrypted হয়ে থাকবে।</p>
 
@@ -1273,6 +1322,7 @@ function renderBooksWithPublisher(booksStr){
 function isRealUrl(img){ return img && String(img).startsWith('http'); }
 
 const ADMIN_EMAIL='alazizbookshop@gmail.com';
+let IS_OWNER=false;
 let allOrders=[];
 let curFilter='all';
 let stockData={};
@@ -1306,21 +1356,69 @@ function toggleDark(){
 /* ══════════════════════════════════════════════
    LOGIN
 ══════════════════════════════════════════════ */
+let modMode=false;
+function toggleModSignup(e){
+    if(e)e.preventDefault();
+    modMode=!modMode;
+    const err=document.getElementById('loginErr');
+    err.innerText='';err.style.color='#f87171';
+    document.getElementById('modNameGroup').style.display=modMode?'block':'none';
+    document.getElementById('loginTitle').innerText=modMode?'মডারেটর অ্যাকাউন্ট':'Admin লগইন';
+    document.getElementById('loginSub').innerText=modMode?'অ্যাকাউন্ট খোলার পর মালিকের অনুমোদন লাগবে':'শুধুমাত্র অনুমোদিত admin এর জন্য';
+    document.getElementById('loginBtn').innerText=modMode?'অ্যাকাউন্ট খুলুন →':'লগইন করুন →';
+    document.getElementById('modSignupLink').innerText=modMode?'← লগইনে ফিরে যান':'মডারেটর হতে চান? অ্যাকাউন্ট খুলুন';
+}
 async function adminLogin(){
     const email=document.getElementById('adminEmail').value.trim();
     const pass=document.getElementById('adminPass').value;
     const err=document.getElementById('loginErr');
-    err.innerText='';
+    err.innerText='';err.style.color='#f87171';
+    if(modMode){
+        const name=document.getElementById('modName').value.trim();
+        if(name.length<2){err.innerText='আপনার নাম লিখুন';return;}
+        if(!email||pass.length<6){err.innerText='ইমেইল দিন এবং পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন';return;}
+        try{
+            const cred=await auth.createUserWithEmailAndPassword(email,pass);
+            await db.ref('modRequests/'+cred.user.uid).set({email:email,name:name,t:Date.now()});
+            await auth.signOut();
+            toggleModSignup();
+            err.style.color='#34d399';
+            err.innerText='আবেদন জমা হয়েছে! মালিক অনুমোদন দিলে এই ইমেইল-পাসওয়ার্ড দিয়েই লগইন করতে পারবেন।';
+        }catch(e){
+            if(e.code==='auth/email-already-in-use')err.innerText='এই ইমেইলে আগেই অ্যাকাউন্ট খোলা আছে — লগইন করে দেখুন';
+            else if(e.code==='auth/weak-password')err.innerText='পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের দিন';
+            else if(e.code==='auth/invalid-email')err.innerText='ইমেইলটা ঠিকমতো লিখুন';
+            else err.innerText='অ্যাকাউন্ট খোলা যায়নি — আবার চেষ্টা করুন';
+        }
+        return;
+    }
     try{
         const cred=await auth.signInWithEmailAndPassword(email,pass);
-        if(cred.user.email!==ADMIN_EMAIL){await auth.signOut();err.innerHTML='<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> Admin access নেই';return;}
-        showDashboard();
-    }catch(e){err.innerHTML='<svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg> ইমেইল বা পাসওয়ার্ড ভুল';}
+        if(cred.user.email===ADMIN_EMAIL){IS_OWNER=true;showDashboard();return;}
+        const modSnap=await db.ref('moderators/'+cred.user.uid).once('value').catch(()=>null);
+        if(modSnap&&modSnap.exists()){IS_OWNER=false;showDashboard();return;}
+        const reqSnap=await db.ref('modRequests/'+cred.user.uid).once('value').catch(()=>null);
+        await auth.signOut();
+        if(reqSnap&&reqSnap.exists())err.innerText='আপনার আবেদন এখনো অনুমোদনের অপেক্ষায় আছে — মালিককে জানান';
+        else err.innerText='Admin access নেই';
+    }catch(e){err.innerText='ইমেইল বা পাসওয়ার্ড ভুল';}
 }
 
 function showDashboard(){
     document.getElementById('loginGate').style.display='none';
     document.getElementById('appShell').classList.remove('hidden');
+    /* মডারেটর হলে মালিক-only অংশ লুকাও */
+    const courierCard=document.getElementById('courierCard');
+    const modCard=document.getElementById('modManageCard');
+    if(!IS_OWNER){
+        if(courierCard)courierCard.style.display='none';
+        if(modCard)modCard.style.display='none';
+        const av=document.querySelector('.sidebar-avatar');if(av)av.innerText='MD';
+        const ui=document.querySelector('.sidebar-user-info strong');if(ui)ui.innerText='Moderator';
+    }else{
+        if(courierCard)courierCard.style.display='';
+        if(modCard)modCard.style.display='';
+    }
     const days=['রবিবার','সোমবার','মঙ্গলবার','বুধবার','বৃহস্পতিবার','শুক্রবার','শনিবার'];
     const months=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
     const now=new Date();
@@ -1329,6 +1427,7 @@ function showDashboard(){
     setTimeout(()=>{
         loadOrders();
         loadBooksFromFirebase();
+        loadImgbbKey(); // ছবি আপলোডের জন্য key আগেই লোড
         loadCourierApiKeys(); // auto-load API keys
     },300);
 }
@@ -1339,14 +1438,15 @@ function showDashboard(){
 function switchTab(tab, btnEl){
     document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
     if(btnEl) btnEl.classList.add('active');
-    const titles={dashboard:'Dashboard',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস',report:'বিক্রয় রিপোর্ট',analytics:'Analytics'};
+    const titles={dashboard:'Dashboard',orders:'অর্ডার',daily:'দৈনিক অর্ডার',books:'স্টক ম্যানেজ',editor:'বই এডিট',tools:'টুলস',report:'বিক্রয় রিপোর্ট',analytics:'Analytics',reviews:'রিভিউ'};
     document.getElementById('topbarTitle').innerText=titles[tab]||tab;
-    ['Dashboard','Orders','Daily','Books','Editor','Tools','Report','Analytics'].forEach(t=>{
+    ['Dashboard','Orders','Daily','Books','Editor','Tools','Report','Analytics','Reviews'].forEach(t=>{
         const el=document.getElementById('tabPanel'+t);
         if(el) el.style.display=(tab===t.toLowerCase())?'block':'none';
     });
     if(tab==='books') renderBookManage();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); }
+    if(tab==='reviews') loadReviewsAdmin();
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -1749,7 +1849,10 @@ function beRenderList(){
                     <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="be_subject_${i}" value="${escapeHTML(b.subject||'')}"></div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
-                        <input class="form-input" id="be_img_${i}" value="${escapeHTML(b.img||'')}" oninput="beUpdateImgPreview(${i})">
+                        <div style="display:flex;gap:8px;align-items:center;">
+                            <input class="form-input" id="be_img_${i}" value="${escapeHTML(b.img||'')}" oninput="beUpdateImgPreview(${i})" style="flex:1;">
+                            <label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="beUploadImg(${i},this)"></label>
+                        </div>
                         <div class="be-img-preview" id="beImgPrev_${i}">${imgPrevHtml}</div>
                     </div>
                     <div class="form-group editor-full">
@@ -1864,6 +1967,226 @@ function loadCouponsAdmin(){
         couponData = snap.val() || {};
         renderCouponList();
     }).catch(()=>{ couponData={}; renderCouponList(); });
+}
+
+/* ══════════════════════════════════════════════
+   IMGBB ছবি আপলোড (লিংক কপি-পেস্ট ছাড়াই)
+══════════════════════════════════════════════ */
+let IMGBB_KEY='';
+async function loadImgbbKey(){
+    try{
+        const snap=await db.ref('imgbbKey').once('value');
+        IMGBB_KEY=snap.val()||'';
+        const st=document.getElementById('imgbbKeyStatus');
+        if(st){
+            st.style.display='block';
+            st.innerHTML=IMGBB_KEY?'✅ imgbb key সেভ করা আছে — ছবি আপলোড চালু':'⚠️ key সেভ করা নেই — imgbb.com থেকে key নিয়ে সেভ করুন';
+        }
+    }catch(e){}
+}
+async function saveImgbbKey(){
+    const inp=document.getElementById('imgbbKeyInput');
+    const v=inp.value.trim();
+    if(!v){showToast('আগে API key লিখুন','#dc2626');return;}
+    try{
+        await db.ref('imgbbKey').set(v);
+        IMGBB_KEY=v;
+        inp.value='';
+        loadImgbbKey();
+        showToast('imgbb key সেভ হলো','#2f7531');
+    }catch(e){showToast('সেভ ব্যর্থ — Rules Publish আছে কিনা দেখুন','#dc2626');}
+}
+function nfCompressImg(file,maxW,cb){
+    if(file.type==='image/gif'||file.size<150*1024){cb(file);return;}
+    const img=new Image();
+    const url=URL.createObjectURL(file);
+    img.onload=function(){
+        URL.revokeObjectURL(url);
+        let w=img.width,h=img.height;
+        if(w>maxW){h=Math.round(h*maxW/w);w=maxW;}
+        try{
+            const c=document.createElement('canvas');
+            c.width=w;c.height=h;
+            const ctx=c.getContext('2d');
+            ctx.fillStyle='#ffffff';ctx.fillRect(0,0,w,h);
+            ctx.drawImage(img,0,0,w,h);
+            c.toBlob(function(b){cb(b&&b.size<file.size?b:file);},'image/jpeg',0.82);
+        }catch(e){cb(file);}
+    };
+    img.onerror=function(){URL.revokeObjectURL(url);cb(file);};
+    img.src=url;
+}
+async function uploadToImgbb(file,cb,maxW){
+    if(!file)return;
+    if(!IMGBB_KEY){showToast('আগে টুলস ট্যাবে imgbb API key সেভ করুন','#dc2626');return;}
+    if(!file.type||!file.type.startsWith('image/')){showToast('ছবির ফাইল বাছুন','#dc2626');return;}
+    showToast('ছবি আপলোড হচ্ছে... ⏳','#0369a1');
+    try{
+        const small=await new Promise(res=>nfCompressImg(file,maxW||900,res));
+        const fd=new FormData();
+        fd.append('image',small,'photo.jpg');
+        const res=await fetch('https://api.imgbb.com/1/upload?key='+encodeURIComponent(IMGBB_KEY),{method:'POST',body:fd});
+        const j=await res.json();
+        if(j&&j.success&&j.data&&j.data.url){
+            cb(j.data.url);
+            showToast('ছবি আপলোড হয়েছে ✅','#2f7531');
+        }else{
+            showToast('আপলোড ব্যর্থ — API key ঠিক আছে কিনা দেখুন','#dc2626');
+        }
+    }catch(e){showToast('আপলোড ব্যর্থ — ইন্টারনেট দেখুন','#dc2626');}
+}
+function beUploadImg(i,inp){
+    const f=inp.files[0];inp.value='';
+    uploadToImgbb(f,url=>{
+        document.getElementById('be_img_'+i).value=url;
+        if(typeof beUpdateImgPreview==='function')beUpdateImgPreview(i);
+    },800);
+}
+function faUploadImg(inp){
+    const f=inp.files[0];inp.value='';
+    uploadToImgbb(f,url=>{document.getElementById('fa_img').value=url;},800);
+}
+function bnUploadImg(inp){
+    const f=inp.files[0];inp.value='';
+    uploadToImgbb(f,url=>{document.getElementById('bnImg').value=url;},1280);
+}
+
+/* ══════════════════════════════════════════════
+   META PIXEL (Facebook বিজ্ঞাপন ট্র্যাকিং)
+══════════════════════════════════════════════ */
+async function loadPixelId(){
+    try{
+        const snap=await db.ref('siteConfig/metaPixelId').once('value');
+        const v=snap.val()||'';
+        const st=document.getElementById('pixelStatus');
+        if(st){
+            st.style.display='block';
+            st.innerHTML=v?'✅ Pixel চালু আছে — ID: '+escapeHTML(String(v)):'⚠️ Pixel ID সেট করা নেই';
+        }
+    }catch(e){}
+}
+async function savePixelId(){
+    const inp=document.getElementById('pixelIdInput');
+    const v=inp.value.trim();
+    if(v&&!/^\d{5,20}$/.test(v)){showToast('Pixel ID শুধু সংখ্যা হয় — Events Manager থেকে কপি করুন','#dc2626');return;}
+    try{
+        await db.ref('siteConfig/metaPixelId').set(v||null);
+        inp.value='';
+        loadPixelId();
+        showToast(v?'Pixel ID সেভ হলো — সাইটে চালু ✅':'Pixel বন্ধ করা হলো','#2f7531');
+    }catch(e){showToast('সেভ ব্যর্থ হলো','#dc2626');}
+}
+
+/* ══════════════════════════════════════════════
+   মডারেটর ম্যানেজ (শুধু মালিক)
+══════════════════════════════════════════════ */
+let __modReqs={};
+async function loadModAdmin(){
+    if(!IS_OWNER)return;
+    const rq=document.getElementById('modReqList'),ml=document.getElementById('modList');
+    if(!rq||!ml)return;
+    try{
+        const [reqSnap,modSnap]=await Promise.all([
+            db.ref('modRequests').once('value'),
+            db.ref('moderators').once('value')
+        ]);
+        __modReqs={};
+        const reqs=[];reqSnap.forEach(c=>{const v=c.val()||{};__modReqs[c.key]=v;reqs.push({uid:c.key,email:v.email||'',name:v.name||''});});
+        const mods=[];modSnap.forEach(c=>{const v=c.val()||{};mods.push({uid:c.key,email:v.email||'',name:v.name||''});});
+        rq.innerHTML=reqs.length?reqs.map(r=>
+            '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
+            +'<div style="min-width:0;"><div style="font-weight:700;">'+escapeHTML(r.name)+'</div><div class="text-sm text-muted" style="word-break:break-all;">'+escapeHTML(r.email)+'</div></div>'
+            +'<div style="display:flex;gap:6px;flex-shrink:0;">'
+            +'<button class="btn btn-primary" style="padding:6px 12px;" onclick="approveMod(\''+r.uid+'\')">অনুমোদন</button>'
+            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="rejectMod(\''+r.uid+'\')">বাতিল</button>'
+            +'</div></div>'
+        ).join(''):'<div class="text-sm text-muted">কোনো নতুন আবেদন নেই</div>';
+        ml.innerHTML=mods.length?mods.map(m=>
+            '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:8px 10px;border:1px solid var(--border);border-radius:8px;">'
+            +'<div style="min-width:0;"><div style="font-weight:700;">'+escapeHTML(m.name)+'</div><div class="text-sm text-muted" style="word-break:break-all;">'+escapeHTML(m.email)+'</div></div>'
+            +'<button class="btn" style="padding:6px 12px;background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="removeMod(\''+m.uid+'\')">সরান</button>'
+            +'</div>'
+        ).join(''):'<div class="text-sm text-muted">এখনো কোনো মডারেটর নেই</div>';
+    }catch(e){
+        rq.innerHTML='<div class="text-sm text-muted">লোড করা যায়নি — Firebase Rules Publish করা আছে কিনা দেখুন</div>';
+        ml.innerHTML='';
+    }
+}
+async function approveMod(uid){
+    const r=__modReqs[uid];if(!r)return;
+    try{
+        await db.ref('moderators/'+uid).set({email:r.email||'',name:r.name||'',t:Date.now()});
+        await db.ref('modRequests/'+uid).remove();
+        showToast('মডারেটর অনুমোদন হলো','#2f7531');
+        loadModAdmin();
+    }catch(e){showToast('অনুমোদন ব্যর্থ হলো','#dc2626');}
+}
+async function rejectMod(uid){
+    if(!confirm('আবেদনটি বাতিল করবেন?'))return;
+    try{
+        await db.ref('modRequests/'+uid).remove();
+        showToast('আবেদন বাতিল হলো','#2f7531');
+        loadModAdmin();
+    }catch(e){showToast('ব্যর্থ হলো','#dc2626');}
+}
+async function removeMod(uid){
+    if(!confirm('এই মডারেটরকে সরাবেন? সে আর প্যানেলে ঢুকতে পারবে না।'))return;
+    try{
+        await db.ref('moderators/'+uid).remove();
+        showToast('মডারেটর সরানো হলো','#2f7531');
+        loadModAdmin();
+    }catch(e){showToast('ব্যর্থ হলো','#dc2626');}
+}
+
+/* ══════════════════════════════════════════════
+   রিভিউ ট্যাব — সব প্রোডাক্টের সব রিভিউ + মুছে ফেলা
+══════════════════════════════════════════════ */
+function bookNameById(bid){
+    const m=String(bid).match(/(\d+)/);
+    const idx=m?parseInt(m[1]):NaN;
+    if(!isNaN(idx) && typeof books!=='undefined' && books[idx]) return books[idx].name||('বই #'+idx);
+    return 'বই ('+bid+')';
+}
+async function loadReviewsAdmin(){
+    const el=document.getElementById('reviewsAdminList'); if(!el)return;
+    el.innerHTML='<div class="text-sm text-muted" style="padding:14px;">লোড হচ্ছে...</div>';
+    try{
+        const snap=await db.ref('reviews').once('value');
+        const rows=[];
+        snap.forEach(bk=>{
+            bk.forEach(rv=>{
+                const v=rv.val()||{};
+                if(v && (v.text!==undefined||v.comment!==undefined)) rows.push({bid:bk.key,rid:rv.key,name:v.name||'',text:v.text||v.comment||'',rating:Number(v.rating)||0,ts:v.ts||v.createdAt||0});
+            });
+        });
+        rows.sort((a,b)=>(b.ts||0)-(a.ts||0));
+        if(!rows.length){el.innerHTML='<div class="text-sm text-muted" style="padding:20px;text-align:center;">এখনো কোনো রিভিউ আসেনি</div>';return;}
+        el.innerHTML='<p class="text-sm text-muted" style="margin-bottom:12px;">মোট রিভিউ: '+rows.length+'টি</p>'+rows.map(r=>{
+            const rt=Math.max(0,Math.min(5,Math.round(r.rating)));
+            const stars='★'.repeat(rt)+'☆'.repeat(5-rt);
+            const d=r.ts?new Date(r.ts).toLocaleDateString('bn-BD',{day:'numeric',month:'long',year:'numeric'}):'';
+            return '<div class="tool-card" style="margin-bottom:10px;">'
+                +'<div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;">'
+                +'<div style="min-width:0;flex:1;">'
+                +'<div style="font-weight:700;">'+escapeHTML(r.name)+' <span style="color:#f59e0b;letter-spacing:2px;">'+stars+'</span></div>'
+                +'<a href="AAbook.html?id='+encodeURIComponent(String(r.bid).replace(/^b/,''))+'" target="_blank" class="text-sm" style="color:#2f7531;text-decoration:none;">📖 '+escapeHTML(bookNameById(r.bid))+'</a>'
+                +'<div class="text-sm" style="margin-top:6px;white-space:pre-wrap;word-break:break-word;">'+escapeHTML(r.text)+'</div>'
+                +(d?'<div class="text-sm text-muted" style="margin-top:4px;">🕒 '+d+'</div>':'')
+                +'</div>'
+                +'<button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" onclick="deleteReviewAdmin(\''+r.bid+'\',\''+r.rid+'\')">মুছুন</button>'
+                +'</div></div>';
+        }).join('');
+    }catch(e){
+        el.innerHTML='<div class="text-sm text-muted" style="padding:20px;text-align:center;">রিভিউ লোড করা যায়নি — ইন্টারনেট বা Firebase Rules দেখুন</div>';
+    }
+}
+async function deleteReviewAdmin(bid,rid){
+    if(!confirm('রিভিউটি মুছে ফেলবেন?'))return;
+    try{
+        await db.ref('reviews/'+bid+'/'+rid).remove();
+        showToast('রিভিউ মুছে ফেলা হয়েছে','#2f7531');
+        loadReviewsAdmin();
+    }catch(e){showToast('মুছতে ব্যর্থ হলো','#dc2626');}
 }
 
 /* ══════════════════════════════════════════════
@@ -2078,6 +2401,7 @@ function openModal(orderId){
     document.getElementById('modalName').innerText=o.name;
     document.getElementById('modalPhone').innerText=o.phone;
     document.getElementById('modalAddress').innerText=o.address;
+    (function(){ const w=document.getElementById('modalCustNoteWrap'); if(o.customerNote && String(o.customerNote).trim()){ document.getElementById('modalCustNote').innerText=o.customerNote; w.style.display='block'; } else { w.style.display='none'; } })();
     document.getElementById('modalBooks').innerHTML=renderBookItemsTable(o);
     document.getElementById('modalPayment').innerText=o.payment;
     document.getElementById('modalTotal').innerText=o.total;
@@ -2541,8 +2865,13 @@ async function createCourierOrder(provider){
 /* ══════════════════════════════════════════════
    AUTH STATE
 ══════════════════════════════════════════════ */
-auth.onAuthStateChanged(user=>{
-    if(user&&user.email===ADMIN_EMAIL)showDashboard();
+auth.onAuthStateChanged(async user=>{
+    if(!user)return;
+    if(user.email===ADMIN_EMAIL){IS_OWNER=true;showDashboard();return;}
+    try{
+        const snap=await db.ref('moderators/'+user.uid).once('value');
+        if(snap.exists()){IS_OWNER=false;showDashboard();}
+    }catch(e){}
 });
 
 
@@ -2748,6 +3077,7 @@ function buildInvoiceHTML(o){
         </div>
         <div class="invoice-sec-title">বইয়ের তালিকা</div>
         <div style="margin-bottom:12px;">${renderBookItemsTable(o)}</div>
+        ${o.customerNote&&String(o.customerNote).trim()?`<div class="invoice-info-box" style="margin-bottom:12px;background:#fdf8e8;border:1px solid #f3e6b8;border-left:3px solid #cf6f33;">💬 <strong>কাস্টমারের নোট:</strong> ${escapeHTML(o.customerNote)}</div>`:''}
         ${o.offers&&o.offers.length?`<div class="invoice-info-box" style="margin-bottom:12px;">🎁 ${o.offers.map(f=>escapeHTML(f.label)).join(', ')}</div>`:''}
         <div class="invoice-total-box">
             <span>মোট পরিমাণ</span>

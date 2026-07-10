@@ -628,7 +628,7 @@ function renderBook(){
   const b = currentBook;
   const pct = discPct(b);
   document.title = b.name + ' — NafahLife';
-  document.getElementById('navTitle').innerText = b.name;
+  document.getElementById('navTitle').innerText = 'বই বিস্তারিত';
   document.getElementById('crumbCat').innerText = b.cat || 'বই';
   document.getElementById('crumbCat').setAttribute('onclick', `navigateTo('index.html')`);
   document.getElementById('crumbName').innerText = b.name;

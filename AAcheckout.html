@@ -219,6 +219,11 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
           <span class="ch-title bng">ডেলিভারি তথ্য</span>
         </div>
         <div class="card-body">
+          <button type="button" id="useSavedInfoBtn" onclick="applySavedInfo()" style="display:none;width:100%;margin-bottom:14px;padding:11px 14px;background:linear-gradient(135deg,rgba(47,117,49,0.10),rgba(207,111,51,0.08));border:1.5px dashed #2f7531;border-radius:10px;cursor:pointer;text-align:left;font-family:'Hind Siliguri',Arial,sans-serif;display:flex;align-items:center;gap:10px;">
+            <span style="font-size:20px;">👤</span>
+            <span style="flex:1;min-width:0;"><span style="display:block;font-size:11px;color:var(--text-muted);">আগের তথ্য দিয়ে দ্রুত পূরণ করুন</span><span id="savedInfoLabel" style="display:block;font-size:13.5px;font-weight:700;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"></span></span>
+            <span style="font-size:12px;font-weight:800;color:#2f7531;flex-shrink:0;">বসান →</span>
+          </button>
           <div class="two-col">
             <div class="field">
               <label class="bng">নাম <span class="req">*</span></label>
@@ -260,6 +265,15 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             <label class="bng">সম্পূর্ণ ঠিকানা <span class="req">*</span></label>
             <textarea id="custAddress" class="bng" placeholder="বাড়ি নং, রোড, এলাকা..."></textarea>
           </div>
+          <div class="field">
+            <label class="bng">বিশেষ নির্দেশনা (ঐচ্ছিক)</label>
+            <textarea id="custNote" class="bng" placeholder="যেমন: বিকেলের পর ফোন দিবেন / নির্দিষ্ট রঙ ইত্যাদি..." style="min-height:56px;"></textarea>
+          </div>
+          <label class="bng" style="display:flex;align-items:center;gap:8px;font-size:13px;cursor:pointer;margin-top:2px;">
+            <input type="checkbox" id="saveInfo" checked style="width:16px;height:16px;accent-color:#2f7531;flex-shrink:0;">
+            পরের বার দ্রুত অর্ডারের জন্য আমার তথ্য এই ডিভাইসে সেভ থাকুক
+          </label>
+          <div id="prefillNotice" style="display:none;margin-top:8px;font-size:12px;color:#2f7531;font-weight:600;">✓ আগের অর্ডারের তথ্য বসানো হয়েছে — চাইলে বদলাতে পারবেন</div>
         </div>
       </div>
       <div class="card">
@@ -613,6 +627,13 @@ async function confirmOrder(){
   const grand = _t.grand;
   const effDeliv = _t.deliv;
   const fullAddr = `${thana}, ${district}, ${division} — ${address}`;
+  const custNote = (document.getElementById('custNote')?.value || '').trim().slice(0,500);
+  /* ক্রেতার তথ্য এই ডিভাইসে সেভ (শুধু localStorage — Firebase-এ নয়) */
+  try{
+    if(document.getElementById('saveInfo')?.checked){
+      localStorage.setItem('alaziz_custinfo', JSON.stringify({name, phone, division, district, thana, address}));
+    } else { localStorage.removeItem('alaziz_custinfo'); }
+  }catch(e){}
   const orderId = 'AA-' + Date.now().toString(36).toUpperCase() + Math.random().toString(36).slice(2,6).toUpperCase();
   const orderData = {
     orderId, name, phone,
@@ -625,6 +646,7 @@ async function confirmOrder(){
     discount: discountAmt,
     discountPct: discPct,
     coupon: coupon,
+    customerNote: custNote,
     status: 'pending',
     createdAt: Date.now(),
     userId: firebase.auth().currentUser?.uid || 'guest'
@@ -776,6 +798,7 @@ function buildInvoiceHTML(o){
       </thead>
       <tbody>${rows}</tbody>
     </table>
+    ${o.customerNote?`<div style="margin:14px 28px 0;padding:10px 14px;background:#fdf8e8;border:1px solid #f3e6b8;border-left:3px solid #cf6f33;border-radius:8px;font-size:12.5px;color:#5a4a1a;"><b>💬 কাস্টমারের নোট:</b> ${String(o.customerNote).replace(/</g,'&lt;')}</div>`:''}
     <div style="margin:16px 28px 0;display:flex;justify-content:flex-end;">
       <div style="width:220px;">
         <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;color:#6b7280;border-bottom:1px solid #e3ede9;">
@@ -819,7 +842,39 @@ async function downloadInvoice(){
   }catch(e){ showToast('❌ PDF তৈরি হয়নি','#DC2626'); console.error(e); }
   document.body.removeChild(wrap);
 }
-window.onload = renderSummary;
+/* ═══ ক্রেতার সেভ করা তথ্য (rokomari স্টাইল) — ফর্ম খালি থাকে, বাটনে ক্লিকে বসে ═══ */
+function prefillSavedInfo(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('alaziz_custinfo') || 'null');
+    if(!saved || !saved.phone) return;
+    const btn = document.getElementById('useSavedInfoBtn');
+    if(!btn) return;
+    document.getElementById('savedInfoLabel').innerText = (saved.name ? saved.name + ' · ' : '') + saved.phone;
+    btn.style.display = 'flex';
+    const chk = document.getElementById('saveInfo'); if(chk) chk.checked = true;
+  }catch(e){}
+}
+function applySavedInfo(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('alaziz_custinfo') || 'null');
+    if(!saved || !saved.phone) return;
+    document.getElementById('custName').value = saved.name || '';
+    document.getElementById('custPhone').value = saved.phone || '';
+    document.getElementById('custAddress').value = saved.address || '';
+    if(saved.division){
+      document.getElementById('division').value = saved.division;
+      updateDistricts();
+      if(saved.district){
+        document.getElementById('district').value = saved.district;
+        updateThanas();
+        if(saved.thana) document.getElementById('thana').value = saved.thana;
+      }
+    }
+    document.getElementById('useSavedInfoBtn').style.display = 'none';
+    const n = document.getElementById('prefillNotice'); if(n) n.style.display = 'block';
+  }catch(e){}
+}
+window.onload = function(){ renderSummary(); prefillSavedInfo(); };
 </script>
 <script src="AAcommon.js"></script>
 </body>
