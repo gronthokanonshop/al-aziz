@@ -308,7 +308,6 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
         <button class="cover-wl-btn" id="coverWlBtn" onclick="toggleDetailWL()"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg></button>
         <div class="cover-frame">
           <img id="bookImg" src="" alt="" onerror="this.onerror=null;this.src='book-placeholder.svg'">
-          <div class="cover-cap" id="coverCap"></div>
         </div>
         </div>
         <div class="stock-strip">
@@ -634,7 +633,6 @@ function renderBook(){
   document.getElementById('crumbName').innerText = b.name;
   document.getElementById('subjectPill').innerText = b.subject || b.cat || 'বই';
   document.getElementById('bookTitle').innerText = b.name;
-  var _cc=document.getElementById('coverCap'); if(_cc)_cc.textContent=b.name;
   document.getElementById('bookAuthor').innerText = b.author || 'অজানা';
   document.getElementById('bookImg').src = getImg(b);
   document.getElementById('bookImg').alt = b.name;
