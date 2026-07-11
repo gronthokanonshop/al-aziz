@@ -1042,8 +1042,13 @@
                         <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
                         <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="fa_pub" placeholder="প্রকাশনীর নাম"></div>
                         <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
-                        <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="fa_cover" placeholder="Paperback"></div>
-                        <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="fa_cat" placeholder="ইসলামি বই"></div>
+                        <div class="form-group"><label class="be-label">বাঁধাই (কভার)</label>
+                            <select class="form-input" id="fa_cover"><option value="Paperback">পেপারব্যাক</option><option value="Hardcover">হার্ডকভার</option></select>
+                        </div>
+                        <div class="form-group editor-full"><label class="be-label">ক্যাটাগরি (একাধিক দেওয়া যায়)</label>
+                            <input class="form-input" id="fa_cat" placeholder="একাধিক হলে কমা দিয়ে লিখুন" style="margin-bottom:6px;">
+                            <select class="form-input" onchange="nfAddCat('fa_cat',this)" style="font-size:12px;"><option value="">➕ ক্যাটাগরি যোগ করুন...</option></select>
+                        </div>
                         <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label><div style="display:flex;gap:8px;align-items:center;"><input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;"><label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="faUploadImg(this)"></label></div></div>
                         <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
@@ -1706,8 +1711,17 @@ function beInit(){
     if(!localBooks.length&&typeof books!=='undefined'&&books.length){
         localBooks=JSON.parse(JSON.stringify(books));
     }
+    /* স্টক ইন/আউট এডিটরে দেখাতে — লোড করে রেন্ডার */
+    loadStockData(()=>{ beUpdateStats(); beRenderList(); nfFillAddCatSelect(); });
     beUpdateStats();
     beRenderList();
+    nfFillAddCatSelect();
+}
+function nfFillAddCatSelect(){
+    const sel=document.querySelector('#beAddForm select[onchange="nfAddCat(\'fa_cat\',this)"]');
+    if(!sel)return;
+    const opts=nfKnownCats().map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+    sel.innerHTML='<option value="">➕ ক্যাটাগরি যোগ করুন...</option>'+opts+'<option value="__new__">✚ নতুন ক্যাটাগরি লিখুন...</option>';
 }
 
 function beUpdateStats(){
@@ -1772,8 +1786,17 @@ function beSaveBook(idx){
     fields.forEach(f=>{
         const el=document.getElementById(`be_${f}_${idx}`);
         if(!el)return;
-        localBooks[idx][f]=(f==='price'||f==='original_price')?(Number(el.value)||0):el.value;
+        let val=(f==='price'||f==='original_price')?(Number(el.value)||0):el.value;
+        if(f==='cat') val=String(val).split(',').map(s=>s.trim()).filter(Boolean).join(', ')||'ইসলামি বই';
+        localBooks[idx][f]=val;
     });
+    /* স্টক ইন/আউট — এডিটর থেকেই */
+    const stEl=document.getElementById(`be_stock_${idx}`);
+    if(stEl){
+        const inStock=stEl.checked;
+        stockData[idx]=inStock;
+        db.ref('stock/'+idx).set(inStock).catch(()=>{});
+    }
     beUpdateStats();
     beRenderList();
     beOpenIdx=idx;
@@ -1799,6 +1822,48 @@ function beUpdateImgPreview(idx){
     prev.innerHTML=v.startsWith('http')
         ?`<img src="${escapeHTML(v)}" onerror="this.style.display='none'">`
         :`<span class="be-empty-img">ছবি নেই</span>`;
+}
+
+/* ── ক্যাটাগরি ও কভার হেল্পার (ড্রপডাউন + একাধিক + নতুন যোগ) ── */
+const NF_BASE_CATS=['প্যাকেজসমূহ','Best Selling','Trending','নতুন প্রকাশিত','Pre Order','ইসলামি বই','Academic','দরসি কিতাব','সুন্নাহ আইটেম','Stationery'];
+function nfKnownCats(){
+    const set={};
+    NF_BASE_CATS.forEach(c=>set[c]=1);
+    (localBooks||[]).forEach(b=>String(b.cat||'').split(',').forEach(c=>{c=c.trim();if(c)set[c]=1;}));
+    return Object.keys(set);
+}
+function nfCatField(id,csv){
+    const cur=String(csv||'').split(',').map(s=>s.trim()).filter(Boolean).join(', ');
+    const opts=nfKnownCats().map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+    return `<input class="form-input" id="${id}" value="${escapeHTML(cur)}" placeholder="একাধিক হলে কমা দিয়ে লিখুন" style="margin-bottom:6px;">
+        <select class="form-input" onchange="nfAddCat('${id}',this)" style="font-size:12px;">
+            <option value="">➕ ক্যাটাগরি যোগ করুন...</option>${opts}
+            <option value="__new__">✚ নতুন ক্যাটাগরি লিখুন...</option>
+        </select>`;
+}
+function nfAddCat(inputId,sel){
+    const v=sel.value; sel.value='';
+    if(!v)return;
+    let add=v;
+    if(v==='__new__'){ add=(prompt('নতুন ক্যাটাগরির নাম লিখুন:')||'').trim(); if(!add)return; }
+    const inp=document.getElementById(inputId);
+    const list=inp.value.split(',').map(s=>s.trim()).filter(Boolean);
+    if(!list.includes(add)) list.push(add);
+    inp.value=list.join(', ');
+}
+function nfCoverField(id,val){
+    const v=val||'';
+    const known=['Paperback','Hardcover'];
+    let opts=known.map(c=>`<option value="${c}" ${v===c?'selected':''}>${c==='Paperback'?'পেপারব্যাক':'হার্ডকভার'}</option>`).join('');
+    if(v && !known.includes(v)) opts+=`<option value="${escapeHTML(v)}" selected>${escapeHTML(v)}</option>`;
+    return `<select class="form-input" id="${id}" onchange="nfCoverChange('${id}',this)">
+        ${opts}<option value="__new__">✚ অন্যান্য...</option></select>`;
+}
+function nfCoverChange(id,sel){
+    if(sel.value!=='__new__')return;
+    const nv=(prompt('বাঁধাইয়ের ধরন লিখুন:')||'').trim();
+    if(nv){ const o=document.createElement('option'); o.value=nv; o.textContent=nv; o.selected=true; sel.insertBefore(o,sel.lastElementChild); }
+    else { sel.value=sel.options[0].value; }
 }
 
 function beRenderList(){
@@ -1844,9 +1909,15 @@ function beRenderList(){
                     <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
                     <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="be_pub_${i}" value="${escapeHTML(b.pub||'')}"></div>
                     <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="be_pages_${i}" value="${escapeHTML(b.pages||'')}"></div>
-                    <div class="form-group"><label class="be-label">কভার</label><input class="form-input" id="be_cover_${i}" value="${escapeHTML(b.cover||'')}"></div>
-                    <div class="form-group"><label class="be-label">বিভাগ</label><input class="form-input" id="be_cat_${i}" value="${escapeHTML(b.cat||'')}"></div>
+                    <div class="form-group"><label class="be-label">বাঁধাই (কভার)</label>${nfCoverField(`be_cover_${i}`,b.cover)}</div>
+                    <div class="form-group editor-full"><label class="be-label">ক্যাটাগরি (একাধিক দেওয়া যায়)</label>${nfCatField(`be_cat_${i}`,b.cat)}</div>
                     <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="be_subject_${i}" value="${escapeHTML(b.subject||'')}"></div>
+                    <div class="form-group"><label class="be-label">স্টক</label>
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;font-size:13px;">
+                            <input type="checkbox" id="be_stock_${i}" ${stockData[i]!==false?'checked':''} style="width:18px;height:18px;accent-color:#2f7531;">
+                            <span>স্টকে আছে (টিক তুলে দিলে "স্টক শেষ" দেখাবে)</span>
+                        </label>
+                    </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
                         <div style="display:flex;gap:8px;align-items:center;">

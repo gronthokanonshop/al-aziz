@@ -272,14 +272,17 @@ window.addEventListener('scroll',()=>{
     if(btn)btn.classList.toggle('show',window.scrollY>300);
 },{passive:true});
 function toBn(n){return String(n).replace(/[0-9]/g,d=>'০১২৩৪৫৬৭৮৯'[d]);}
+/* একটি বই একাধিক ক্যাটাগরিতে থাকতে পারে (cat কমা দিয়ে আলাদা) */
+function catListNF(b){return String(b.cat||'').split(',').map(function(s){return s.trim();}).filter(Boolean);}
+function catHasNF(b,key){return catListNF(b).indexOf(key)>-1;}
 function buildCats(){
-    const counts={}; books.forEach(b=>{counts[b.cat]=(counts[b.cat]||0)+1;});
+    const counts={}; books.forEach(b=>{catListNF(b).forEach(function(c){counts[c]=(counts[c]||0)+1;});});
     const cats=Object.keys(counts).sort((a,b)=>a.localeCompare(b,'bn'));
     const el=document.getElementById('catList'); if(!el)return;
     el.innerHTML=cats.map(c=>`<button class="cat-item ${c===currentCat?'active':''}" data-cat="${escapeHTML(c)}" onclick="selectCat(this.dataset.cat)">${escapeHTML(c)} <span class="cat-count">(${toBn(counts[c])})</span></button>`).join('');
 }
 function selectCat(c){
-    currentCat=c; filtered=books.filter(b=>b.cat===c); currentPage=1; currentSort='default';
+    currentCat=c; filtered=books.filter(b=>catHasNF(b,c)); currentPage=1; currentSort='default';
     document.querySelectorAll('.sort-chip').forEach(x=>x.classList.remove('active'));
     document.getElementById('filterSearch').value=''; document.getElementById('searchClear').classList.remove('show');
     const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>';
@@ -309,7 +312,7 @@ function goPage(n){
 const params=new URLSearchParams(window.location.search);
 const type=params.get('type'),value=decodeURIComponent(params.get('value')||'');
 const iconMap={cat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>',author:'',pub:''};
-if(type==='cat')filtered=books.filter(b=>b.cat===value);
+if(type==='cat')filtered=books.filter(b=>catHasNF(b,value));
 else if(type==='author')filtered=books.filter(b=>b.author===value);
 else if(type==='pub')filtered=books.filter(b=>b.pub===value);
 document.getElementById('titleText').innerHTML=(iconMap[type]||'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>')+' '+value;
@@ -319,7 +322,7 @@ setTimeout(()=>{document.getElementById('skelGrid').style.display='none';documen
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
 if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{
     if(!ok) return;
-    if(currentCat) filtered=books.filter(b=>b.cat===currentCat);
+    if(currentCat) filtered=books.filter(b=>catHasNF(b,currentCat));
     else if(type==='author') filtered=books.filter(b=>b.author===value);
     else if(type==='pub') filtered=books.filter(b=>b.pub===value);
     buildCats(); renderBooks(getList());

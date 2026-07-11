@@ -867,6 +867,8 @@ let discountPercent = 0;
 let wishlist = JSON.parse(localStorage.getItem('alaziz_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent')) || [];
 function getImg(b){ const u = b.img || b.image || ''; return (u.indexOf('http')===0 || u.indexOf('data:')===0) ? u : 'book-placeholder.svg'; }
+/* একটি বই একাধিক ক্যাটাগরিতে থাকতে পারে (cat কমা দিয়ে আলাদা) */
+function catHasNF(b,key){ return String(b.cat||'').split(',').map(function(s){return s.trim();}).indexOf(key)>-1; }
 function discPct(b){ if(!b.original_price||b.original_price<=b.price) return 0; return Math.round((b.original_price-b.price)/b.original_price*100); }
 function isWL(name){ return wishlist.includes(name); }
 function updateWLCount(){
@@ -1046,7 +1048,7 @@ function renderSections(list){
   const w=document.getElementById('sectionsWrapper');
   w.style.display='block'; w.innerHTML='';
   categoryConfig.forEach(cat=>{
-    const catBooks=list.filter(b=>b.cat===cat.key);
+    const catBooks=list.filter(b=>catHasNF(b,cat.key));
     if(!catBooks.length) return;
     w.innerHTML+=`<div class="cat-section fade-in" id="section-${cat.key}">
       <div class="cat-section-title">${cat.label}
