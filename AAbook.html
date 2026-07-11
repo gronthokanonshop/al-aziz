@@ -455,6 +455,50 @@ let currentIdx = -1;
 let cart = JSON.parse(localStorage.getItem('alaziz_cart') || '[]');
 let wishlist = JSON.parse(localStorage.getItem('alaziz_wishlist') || '[]');
 let discountPercent = 0;
+let stockData = {};
+function nfDb(){ try{ return (typeof db!=='undefined') ? db : firebase.database(); }catch(e){ return null; } }
+function isInStock(idx){ return stockData[idx]!==false; }
+function loadStockLive(cb){
+  const d = nfDb();
+  if(!d){ if(cb) cb(); return; }
+  try{
+    d.ref('stock').on('value', snap=>{
+      stockData = snap.val() || {};
+      if(cb) cb();
+    });
+  }catch(e){ if(cb) cb(); }
+}
+function updateStockUI(){
+  if(!currentBook) return;
+  const inStock = isInStock(currentIdx);
+  const strip = document.querySelector('.stock-strip');
+  if(strip){
+    const dot = strip.querySelector('.stock-dot');
+    const txt = strip.querySelector('span:last-child');
+    if(inStock){
+      strip.style.background='rgba(22,163,27,0.08)';
+      strip.style.borderColor='rgba(22,163,27,0.22)';
+      if(dot) dot.style.background='#16a31b';
+      if(txt){ txt.textContent='স্টকে আছে — আজই অর্ডার করুন'; txt.style.color='#158019'; }
+    }else{
+      strip.style.background='rgba(220,38,38,0.08)';
+      strip.style.borderColor='rgba(220,38,38,0.22)';
+      if(dot) dot.style.background='#dc2626';
+      if(txt){ txt.textContent='স্টক শেষ — শীঘ্রই আসছে'; txt.style.color='#dc2626'; }
+    }
+  }
+  document.querySelectorAll('.btn-buy-solid, .btn-cart-outline').forEach(btn=>{
+    btn.disabled = !inStock;
+    btn.style.opacity = inStock ? '' : '0.5';
+    btn.style.cursor = inStock ? '' : 'not-allowed';
+    btn.style.pointerEvents = inStock ? '' : 'none';
+  });
+  const waBtn = document.querySelector('[onclick="orderViaWA()"]');
+  if(waBtn){
+    waBtn.style.opacity = inStock ? '' : '0.5';
+    waBtn.style.pointerEvents = inStock ? '' : 'none';
+  }
+}
 function getImg(b){ const u = b.img || b.image || ''; return (u.indexOf('http')===0 || u.indexOf('data:')===0) ? u : 'book-placeholder.svg'; }
 function discPct(b){ if(!b.original_price || b.original_price<=b.price) return 0; return Math.round((b.original_price-b.price)/b.original_price*100); }
 function isWL(name){ return wishlist.includes(name); }
@@ -482,6 +526,7 @@ document.addEventListener('input', (e)=>{
 function getQty(){ return parseInt(document.getElementById('qtyInput').value) || 1; }
 function addCurrentToCart(redirect){
   if(!currentBook) return;
+  if(!isInStock(currentIdx)){ showToastMsg('দুঃখিত, বইটি এখন স্টকে নেই'); return; }
   const qty = getQty();
   for(let i=0;i<qty;i++){
     cart.push({ name: currentBook.name.trim(), price: Number(currentBook.price), img: getImg(currentBook) });
@@ -496,6 +541,7 @@ function goCheckout(){ window.location.href = 'AAcheckout.html'; }
 /* ═══ WhatsApp-এ সরাসরি অর্ডার — বইয়ের নাম/দাম/পরিমাণ/লিংক অটো বসে ═══ */
 function orderViaWA(){
   if(!currentBook) return;
+  if(!isInStock(currentIdx)){ showToastMsg('দুঃখিত, বইটি এখন স্টকে নেই'); return; }
   const qty = parseInt(document.getElementById('qtyInput')?.value) || 1;
   const msg = `📚 অর্ডার করতে চাই:\n\nবই: ${currentBook.name}\nলেখক: ${currentBook.author||'—'}\nদাম: ৳${currentBook.price}\nপরিমাণ: ${qty}টি\n\n🔗 ${window.location.href}`;
   window.open('https://wa.me/8801577272305?text='+encodeURIComponent(msg),'_blank');
@@ -689,7 +735,7 @@ function renderBook(){
       "image":getImg(b),
       "description":(b.desc&&b.desc!=='শীঘ্রই আপডেট করা হবে')?b.desc:(b.name+' — '+(b.author||'')+' | NafahLife'),
       "brand":{"@type":"Brand","name":b.pub||'NafahLife'},
-      "offers":{"@type":"Offer","priceCurrency":"BDT","price":String(b.price),"availability":"https://schema.org/InStock"}
+      "offers":{"@type":"Offer","priceCurrency":"BDT","price":String(b.price),"availability":isInStock(currentIdx)?"https://schema.org/InStock":"https://schema.org/OutOfStock"}
     });
     document.head.appendChild(ld);
     document.title=b.name+' — NafahLife';
@@ -703,6 +749,7 @@ function renderBook(){
     const og=[['og:type','product'],['og:title',b.name+' — NafahLife'],['og:description',md.content],['og:image',getImg(b)],['og:url',canonHref]];
     og.forEach(([p,c])=>{ let m=document.querySelector('meta[property="'+p+'"]')||(function(){const x=document.createElement('meta');x.setAttribute('property',p);document.head.appendChild(x);return x;})(); m.content=c; });
   }catch(e){}
+  updateStockUI();
 }
 document.addEventListener('DOMContentLoaded', ()=>{
   renderBook();
@@ -710,6 +757,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   updateWLCount();
   var _vid=(new URLSearchParams(location.search).get('id'))||'0';
   incrementView('b'+_vid);
+  /* স্টক ডেটা রিয়েলটাইম শুনে UI আপডেট করা — admin panel থেকে টগল করলে সাথে সাথে দেখাবে */
+  loadStockLive(updateStockUI);
   /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে রিফ্রেশ */
   if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{ if(ok) renderBook(); });
 });

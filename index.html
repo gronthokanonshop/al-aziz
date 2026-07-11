@@ -866,6 +866,19 @@ let cart = JSON.parse(localStorage.getItem('alaziz_cart')) || [];
 let discountPercent = 0;
 let wishlist = JSON.parse(localStorage.getItem('alaziz_wishlist')) || [];
 let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent')) || [];
+let stockData = {};
+function nfDb(){ try{ return (typeof db!=='undefined') ? db : firebase.database(); }catch(e){ return null; } }
+function isInStock(idx){ return stockData[idx]!==false; }
+function loadStockLive(cb){
+  const d = nfDb();
+  if(!d){ if(cb) cb(); return; }
+  try{
+    d.ref('stock').on('value', snap=>{
+      stockData = snap.val() || {};
+      if(cb) cb();
+    });
+  }catch(e){ if(cb) cb(); }
+}
 function getImg(b){ const u = b.img || b.image || ''; return (u.indexOf('http')===0 || u.indexOf('data:')===0) ? u : 'book-placeholder.svg'; }
 /* একটি বই একাধিক ক্যাটাগরিতে থাকতে পারে (cat কমা দিয়ে আলাদা) */
 function catHasNF(b,key){ return String(b.cat||'').split(',').map(function(s){return s.trim();}).indexOf(key)>-1; }
@@ -1018,10 +1031,11 @@ function showWishlist(){
 function closeWishlist(){ document.getElementById('wishlistBox').style.display='none'; }
 function makeCard(b){
   const pct=discPct(b), idx=books.indexOf(b), wl=isWL(b.name);
-  return `<div class="book-card" onclick="goToBook(${idx})">
+  const inStock=isInStock(idx);
+  return `<div class="book-card${inStock?'':' oos'}" onclick="goToBook(${idx})">
     <div class="book-cover">
-      <img src="${getImg(b)}" alt="${b.name}" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'">
-      ${pct>0?`<div class="disc-badge"><span style="display:block;font-size:11px;font-weight:900;line-height:1;">${pct}%</span></div>`:''}
+      <img src="${getImg(b)}" alt="${b.name}" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'" style="${inStock?'':'filter:grayscale(0.6);opacity:.75;'}">
+      ${!inStock?`<div class="disc-badge" style="background:#dc2626;">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge"><span style="display:block;font-size:11px;font-weight:900;line-height:1;">${pct}%</span></div>`:'')}
       <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>':'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>'}</button>
     </div>
     <div class="book-card-info">
@@ -1029,7 +1043,9 @@ function makeCard(b){
       <div class="bc-name">${b.name}</div>
       <div class="bc-author">${b.author||''}</div>
       <div class="price-row"><span class="price-sell">৳${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳${b.original_price}</span>`:''}</div>
-      <button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>
+      ${inStock
+        ?`<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>`
+        :`<button class="bc-btn" disabled style="opacity:.5;cursor:not-allowed;background:#9ca3af;">স্টক শেষ</button>`}
     </div>
   </div>`;
 }
@@ -1288,6 +1304,8 @@ window.addEventListener('scroll',()=>{
   if(btn) btn.classList.toggle('show',window.scrollY>300);
 });
 window.onload=()=>{
+  /* স্টক ডেটা রিয়েলটাইম শুনে কার্ড রি-রেন্ডার করা — admin panel থেকে টগল করলে সাথে সাথে দেখাবে */
+  loadStockLive(()=>{ if(typeof books!=='undefined') renderSections(books); });
   setTimeout(()=>{
     document.getElementById('skeletonWrapper').style.display='none';
     document.getElementById('sectionsWrapper').style.display='block';
