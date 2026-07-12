@@ -341,6 +341,77 @@ if ('serviceWorker' in navigator) {
     });
 }
 
+/* ═══════════════════════════════════════
+   ভাসমান যোগাযোগ বাটন (৩-ডট) — কল / Messenger / WhatsApp
+   AAcommon.js সব পেজে লোড হয় বলে সব পেজে দেখাবে
+═══════════════════════════════════════ */
+(function () {
+    if (document.getElementById('aaFab')) return;
+    var PHONE = '+8801577272305';
+    var WA = 'https://wa.me/8801577272305';
+    var MSG = 'https://www.facebook.com/share/1DAXTV8v3a/'; /* Messenger/FB পেজ — m.me ইউজারনেম দিলে সরাসরি চ্যাট খুলবে */
+
+    var css = document.createElement('style');
+    css.textContent = `
+    #aaFab{position:fixed;left:16px;bottom:20px;z-index:9990;font-family:'Hind Siliguri',Arial,sans-serif;}
+    #aaFab.lifted{bottom:76px;}
+    #aaFab .aa-fab-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}
+    #aaFab.open .aa-fab-actions{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
+    #aaFab .aa-fab-item{display:flex;align-items:center;gap:9px;text-decoration:none;}
+    #aaFab .aa-fab-lbl{background:#1a2e1b;color:#fff;font-size:12px;font-weight:700;padding:5px 11px;border-radius:20px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.22);}
+    #aaFab .aa-fab-ic{width:46px;height:46px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,.28);flex-shrink:0;}
+    #aaFab .aa-fab-ic svg{width:23px;height:23px;}
+    #aaFab .call .aa-fab-ic{background:#16a34a;}
+    #aaFab .msg .aa-fab-ic{background:#0084ff;}
+    #aaFab .wa .aa-fab-ic{background:#25D366;}
+    #aaFab .aa-fab-main{width:56px;height:56px;border-radius:50%;border:none;cursor:pointer;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;box-shadow:0 5px 18px rgba(47,117,49,.45);display:flex;align-items:center;justify-content:center;transition:.25s;padding:0;}
+    #aaFab.open .aa-fab-main{transform:scale(.94);}
+    #aaFab .aa-fab-main svg{width:26px;height:26px;}
+    #aaFab .aa-fab-main .ic-close{display:none;}
+    #aaFab.open .aa-fab-main .ic-chat{display:none;}
+    #aaFab.open .aa-fab-main .ic-close{display:block;}`;
+    document.head.appendChild(css);
+
+    var wrap = document.createElement('div');
+    wrap.id = 'aaFab';
+    wrap.innerHTML = `
+        <div class="aa-fab-actions">
+            <a class="aa-fab-item call" href="tel:${PHONE}">
+                <span class="aa-fab-lbl">কল করুন</span>
+                <span class="aa-fab-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+            </a>
+            <a class="aa-fab-item msg" href="${MSG}" target="_blank" rel="noopener">
+                <span class="aa-fab-lbl">Messenger</span>
+                <span class="aa-fab-ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M12 2C6.36 2 2 6.13 2 11.7c0 2.91 1.19 5.44 3.14 7.17.16.14.26.35.27.57l.05 1.78c.03.57.62.94 1.14.71l1.98-.87c.17-.08.36-.09.54-.04 1.03.28 2.13.44 3.28.44 5.64 0 10-4.13 10-9.7C22 6.13 17.64 2 12 2zm6.01 7.46l-2.93 4.66c-.47.74-1.47.93-2.18.4l-2.33-1.75a.6.6 0 0 0-.72 0l-3.16 2.4c-.42.32-.97-.18-.68-.62l2.93-4.66c.47-.74 1.47-.93 2.18-.4l2.33 1.75a.6.6 0 0 0 .72 0l3.16-2.4c.42-.32.97.18.69.62z"/></svg></span>
+            </a>
+            <a class="aa-fab-item wa" href="${WA}" target="_blank" rel="noopener">
+                <span class="aa-fab-lbl">WhatsApp</span>
+                <span class="aa-fab-ic"><svg viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.15-1.77-.87-2.04-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.17-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51l-.57-.01c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.48 0 1.46 1.06 2.87 1.21 3.07.15.2 2.09 3.2 5.07 4.48.71.31 1.26.49 1.69.63.71.22 1.36.19 1.87.12.57-.09 1.77-.72 2.02-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35zM12 2a10 10 0 0 0-8.6 15.06L2 22l5.05-1.32A10 10 0 1 0 12 2z"/></svg></span>
+            </a>
+        </div>
+        <button class="aa-fab-main" aria-label="যোগাযোগ" onclick="aaToggleFab()">
+            <svg class="ic-chat" viewBox="0 0 24 24" fill="#fff"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><circle cx="8" cy="10" r="1.4" fill="#2f7531"/><circle cx="12" cy="10" r="1.4" fill="#2f7531"/><circle cx="16" cy="10" r="1.4" fill="#2f7531"/></svg>
+            <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+        </button>`;
+
+    function add() {
+        document.body.appendChild(wrap);
+        /* কোনো পেজে নিচে bottom-nav থাকলে বাটন একটু উপরে তুলি */
+        if (document.querySelector('.bottom-nav')) wrap.classList.add('lifted');
+    }
+    if (document.body) add();
+    else document.addEventListener('DOMContentLoaded', add);
+
+    window.aaToggleFab = function () {
+        document.getElementById('aaFab').classList.toggle('open');
+    };
+    /* বাইরে ক্লিক করলে বন্ধ */
+    document.addEventListener('click', function (e) {
+        var f = document.getElementById('aaFab');
+        if (f && f.classList.contains('open') && !f.contains(e.target)) f.classList.remove('open');
+    });
+})();
+
 /* ═══ Facebook Pixel — অ্যাডমিন থেকে সেট করা ID থাকলে সব পেজে চালু ═══ */
 (function () {
     var DBURL = 'https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/siteConfig/metaPixelId.json';

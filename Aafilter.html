@@ -196,6 +196,16 @@ function updateCounts(){const c=cart.length;document.getElementById('cartCount')
 updateCounts();
 function discPct(b){return b.original_price>b.price?Math.round((b.original_price-b.price)/b.original_price*100):0;}
 function getImg(b){const u=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';return (u.indexOf('http')===0||u.indexOf('data:')===0)?u:'book-placeholder.svg';}
+/* ═══ স্টক (Firebase থেকে) — স্টক শেষ বই ধূসর + "স্টক শেষ" ব্যাজ ═══ */
+window.stockData = window.stockData || {};
+function isInStock(idx){ return stockData[idx]!==false; }
+(function(){
+    var SURL='https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/stock.json';
+    fetch(SURL).then(function(r){return r.ok?r.json():null;}).then(function(d){
+        stockData=d||{};
+        if(typeof renderBooks==='function' && typeof getList==='function') renderBooks(getList());
+    }).catch(function(){});
+})();
 function isWL(name){return wishlist.includes(name);}
 function escapeHTML(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function toggleWL(e,name){
@@ -205,17 +215,19 @@ function toggleWL(e,name){
     renderBooks(getList());
 }
 function makeCard(b,delay){
-    const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name);
-    return `<div class="book-card" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
-        ${pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:''}
+    const pct=discPct(b),idx=books.indexOf(b),wl=isWL(b.name),inStock=isInStock(idx);
+    return `<div class="book-card${inStock?'':' oos'}" onclick="goToBook(${idx})" style="animation-delay:${delay*0.04}s">
+        ${!inStock?`<div class="disc-badge" style="background:#dc2626;">স্টক শেষ</div>`:(pct>0?`<div class="disc-badge">${pct}% ছাড়</div>`:'')}
         <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>':'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>'}</button>
-        <img src="${getImg(b)}" alt="বই" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'">
+        <img src="${getImg(b)}" alt="বই" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'" ${inStock?'':'style="filter:grayscale(0.6);opacity:.75;"'}>
         <div class="bc-info">
             <div class="bc-pub">${b.pub}</div>
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">${b.author}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
-            <button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">কার্টে যোগ করুন</button>
+            ${inStock
+                ?`<button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">কার্টে যোগ করুন</button>`
+                :`<button class="bc-btn" disabled onclick="event.stopPropagation();" style="background:#9ca3af;cursor:not-allowed;opacity:.75;">স্টক শেষ</button>`}
         </div></div>`;
 }
 function renderBooks(list){

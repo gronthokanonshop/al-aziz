@@ -345,6 +345,10 @@
         .be-status{font-size:10px;font-weight:600;margin-top:4px;}
         .be-status.ok{color:var(--primary);}
         .be-status.miss{color:var(--danger);}
+        .be-list-item.stockout{border-left:3px solid #dc2626;background:rgba(220,38,38,0.04);}
+        .be-list-item.stockout .be-thumb{position:relative;opacity:.7;}
+        .be-out-flag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(220,38,38,0.55);color:#fff;font-size:9px;font-weight:800;border-radius:inherit;}
+        .be-out-badge{display:inline-block;font-size:9.5px;font-weight:800;color:#dc2626;background:#fee2e2;border:1px solid #fecaca;padding:1px 7px;border-radius:20px;vertical-align:middle;margin-left:4px;}
         .be-arrow{color:var(--text-muted);font-size:11px;transition:transform .2s;flex-shrink:0;}
         .be-arrow.open{transform:rotate(180deg);}
 
@@ -1037,10 +1041,10 @@
                     <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">নতুন বই যোগ করুন</div>
                     <div class="editor-grid">
                         <div class="editor-full form-group"><label class="be-label">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
-                        <div class="form-group"><label class="be-label">লেখক</label><input class="form-input" id="fa_author" placeholder="লেখকের নাম"></div>
+                        <div class="form-group"><label class="be-label">লেখক</label><select class="form-input" id="fa_author" onchange="nfPickChange('fa_author',this)"></select></div>
                         <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
                         <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
-                        <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="fa_pub" placeholder="প্রকাশনীর নাম"></div>
+                        <div class="form-group"><label class="be-label">প্রকাশনী</label><select class="form-input" id="fa_pub" onchange="nfPickChange('fa_pub',this)"></select></div>
                         <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
                         <div class="form-group"><label class="be-label">বাঁধাই (কভার)</label>
                             <select class="form-input" id="fa_cover"><option value="Paperback">পেপারব্যাক</option><option value="Hardcover">হার্ডকভার</option></select>
@@ -1049,7 +1053,7 @@
                             <input class="form-input" id="fa_cat" placeholder="একাধিক হলে কমা দিয়ে লিখুন" style="margin-bottom:6px;">
                             <select class="form-input" onchange="nfAddCat('fa_cat',this)" style="font-size:12px;"><option value="">➕ ক্যাটাগরি যোগ করুন...</option></select>
                         </div>
-                        <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="fa_subject" placeholder="ইসলামি বই"></div>
+                        <div class="form-group"><label class="be-label">বিষয়</label><select class="form-input" id="fa_subject" onchange="nfPickChange('fa_subject',this)"></select></div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label><div style="display:flex;gap:8px;align-items:center;"><input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;"><label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="faUploadImg(this)"></label></div></div>
                         <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
                     </div>
@@ -1719,9 +1723,51 @@ function beInit(){
 }
 function nfFillAddCatSelect(){
     const sel=document.querySelector('#beAddForm select[onchange="nfAddCat(\'fa_cat\',this)"]');
-    if(!sel)return;
-    const opts=nfKnownCats().map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
-    sel.innerHTML='<option value="">➕ ক্যাটাগরি যোগ করুন...</option>'+opts+'<option value="__new__">✚ নতুন ক্যাটাগরি লিখুন...</option>';
+    if(sel){
+        const opts=nfKnownCats().map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+        sel.innerHTML='<option value="">➕ ক্যাটাগরি যোগ করুন...</option>'+opts+'<option value="__new__">✚ নতুন ক্যাটাগরি লিখুন...</option>';
+    }
+    nfFillAddSelects();
+}
+/* লেখক/প্রকাশনী/বিষয় — আগের সব মানের আসল ড্রপডাউন (select), নতুনও যোগ করা যায় */
+function nfUniqVals(key){
+    const s={};
+    (localBooks||[]).forEach(b=>{const v=String(b[key]||'').trim(); if(v)s[v]=1;});
+    return Object.keys(s).sort((a,b)=>a.localeCompare(b,'bn'));
+}
+/* এডিটর রো-এর জন্য: বর্তমান মান সিলেক্টেড, সব পুরনো মান অপশন, + নতুন লেখার অপশন */
+function nfPickField(id,val,key,promptText){
+    const v=String(val||'');
+    const vals=nfUniqVals(key);
+    if(v && vals.indexOf(v)<0) vals.unshift(v);
+    let opts='<option value="">— নির্বাচন করুন —</option>';
+    opts+=vals.map(c=>`<option value="${escapeHTML(c)}" ${v===c?'selected':''}>${escapeHTML(c)}</option>`).join('');
+    opts+='<option value="__new__">✚ নতুন লিখুন...</option>';
+    return `<select class="form-input" id="${id}" data-prompt="${escapeHTML(promptText)}" onchange="nfPickChange('${id}',this)">${opts}</select>`;
+}
+/* যেকোনো pick-select এ "নতুন লিখুন" বাছলে prompt করে অপশন যোগ করে */
+function nfPickChange(id,sel){
+    if(sel.value!=='__new__')return;
+    const pt=sel.getAttribute('data-prompt')||'নতুন মান লিখুন:';
+    const nv=(prompt(pt)||'').trim();
+    if(nv){ const o=document.createElement('option'); o.value=nv; o.textContent=nv; o.selected=true; sel.insertBefore(o,sel.lastElementChild); }
+    else { sel.value=''; }
+}
+/* নতুন-বই ফর্মের author/pub/subject select গুলো ভরায় (localBooks লোড হওয়ার পর) */
+function nfFillAddSelects(){
+    [['fa_author','author','নতুন লেখকের নাম লিখুন:'],
+     ['fa_pub','pub','নতুন প্রকাশনীর নাম লিখুন:'],
+     ['fa_subject','subject','নতুন বিষয় লিখুন:']].forEach(function(row){
+        const sel=document.getElementById(row[0]); if(!sel)return;
+        const keep=sel.value;
+        const vals=nfUniqVals(row[1]);
+        let opts='<option value="">— নির্বাচন করুন —</option>';
+        opts+=vals.map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
+        opts+='<option value="__new__">✚ নতুন লিখুন...</option>';
+        sel.setAttribute('data-prompt',row[2]);
+        sel.innerHTML=opts;
+        if(keep && vals.indexOf(keep)>=0) sel.value=keep;
+    });
 }
 
 function beUpdateStats(){
@@ -1891,11 +1937,12 @@ function beRenderList(){
         const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
 
-        return `<div class="be-list-item ${hasImg?'hasimg':'missing'}">
+        const outStock=stockData[i]===false;
+        return `<div class="be-list-item ${hasImg?'hasimg':'missing'} ${outStock?'stockout':''}">
             <div class="be-head" onclick="beToggleBook(${i})">
-                <div class="be-thumb">${coverHtml}</div>
+                <div class="be-thumb">${coverHtml}${outStock?'<span class="be-out-flag">স্টক শেষ</span>':''}</div>
                 <div class="be-details">
-                    <div class="be-title">${escapeHTML(b.name)}</div>
+                    <div class="be-title">${escapeHTML(b.name)} ${outStock?'<span class="be-out-badge">🔴 স্টক শেষ</span>':''}</div>
                     <div class="be-meta">${escapeHTML(b.author||'')} · ${escapeHTML(b.pub||'')} · ৳${b.price}</div>
                     <div class="be-status ${hasImg?'ok':'miss'}">${hasImg?'ছবি আছে':'ছবি নেই'}</div>
                 </div>
@@ -1904,14 +1951,14 @@ function beRenderList(){
             <div class="be-body ${isOpen?'open':''}">
                 <div class="editor-grid">
                     <div class="form-group"><label class="be-label">বইয়ের নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
-                    <div class="form-group"><label class="be-label">লেখক</label><input class="form-input" id="be_author_${i}" value="${escapeHTML(b.author||'')}"></div>
+                    <div class="form-group"><label class="be-label">লেখক</label>${nfPickField(`be_author_${i}`,b.author,'author','নতুন লেখকের নাম লিখুন:')}</div>
                     <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="be_price_${i}" type="number" value="${b.price}"></div>
                     <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
-                    <div class="form-group"><label class="be-label">প্রকাশনী</label><input class="form-input" id="be_pub_${i}" value="${escapeHTML(b.pub||'')}"></div>
+                    <div class="form-group"><label class="be-label">প্রকাশনী</label>${nfPickField(`be_pub_${i}`,b.pub,'pub','নতুন প্রকাশনীর নাম লিখুন:')}</div>
                     <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="be_pages_${i}" value="${escapeHTML(b.pages||'')}"></div>
                     <div class="form-group"><label class="be-label">বাঁধাই (কভার)</label>${nfCoverField(`be_cover_${i}`,b.cover)}</div>
                     <div class="form-group editor-full"><label class="be-label">ক্যাটাগরি (একাধিক দেওয়া যায়)</label>${nfCatField(`be_cat_${i}`,b.cat)}</div>
-                    <div class="form-group"><label class="be-label">বিষয়</label><input class="form-input" id="be_subject_${i}" value="${escapeHTML(b.subject||'')}"></div>
+                    <div class="form-group"><label class="be-label">বিষয়</label>${nfPickField(`be_subject_${i}`,b.subject,'subject','নতুন বিষয় লিখুন:')}</div>
                     <div class="form-group"><label class="be-label">স্টক</label>
                         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;font-size:13px;">
                             <input type="checkbox" id="be_stock_${i}" ${stockData[i]!==false?'checked':''} style="width:18px;height:18px;accent-color:#2f7531;">
@@ -2851,13 +2898,7 @@ let REDX_API_TOKEN       = '';
 async function createCourierOrder(provider){
     const o = allOrders.find(x => x.orderId === modalOrderId);
     if(!o){ showToast('অর্ডার পাওয়া যায়নি','#dc2626'); return; }
-    // Check API keys
-    if(provider==='steadfast' && (!STEADFAST_API_KEY || !STEADFAST_API_SECRET)){
-        showToast('Steadfast API Key সেট করুন (Tools → Courier API Settings)','#dc2626'); return;
-    }
-    if(provider==='redx' && !REDX_API_TOKEN){
-        showToast('Redx API Token সেট করুন (Tools → Courier API Settings)','#dc2626'); return;
-    }
+    // নোট: API Key/Secret এখন Cloudflare Worker-এর Secret হিসেবে রাখা হয়, তাই এখানে client-side চেকের দরকার নেই।
 
     const resultEl = document.getElementById('courierResult');
     resultEl.style.display = 'block';
@@ -2868,16 +2909,14 @@ async function createCourierOrder(provider){
     const isCOD = !o.payment.toLowerCase().includes('bkash') && !o.payment.toLowerCase().includes('nagad');
 
     try{
-        // CORS proxy ব্যবহার করে courier API call
-        const PROXY = 'https://lucky-feather-fa9e.gronthokanon4309.workers.dev/?url=';
+        // আপনার নিজের Cloudflare Worker (courier-proxy-worker.js) ডিপ্লয় করার পর এই URL টা বদলে দিন
+        const COURIER_PROXY = 'https://nafahlife-courier.gronthokanon4309.workers.dev';
 
         if(provider === 'steadfast'){
-            const sfUrl = PROXY + encodeURIComponent('https://portal.packzy.com/api/v1/create_order');
+            const sfUrl = COURIER_PROXY + '/steadfast/create_order';
             const res = await fetch(sfUrl, {
                 method: 'POST',
                 headers: {
-                    'Api-Key': STEADFAST_API_KEY,
-                    'Secret-Key': STEADFAST_API_SECRET,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
@@ -2899,11 +2938,10 @@ async function createCourierOrder(provider){
             }
 
         } else if(provider === 'redx'){
-            const rdxUrl = PROXY + encodeURIComponent('https://openapi.redx.com.bd/v1.0.0-beta/parcel');
+            const rdxUrl = COURIER_PROXY + '/redx/parcel';
             const res = await fetch(rdxUrl, {
                 method: 'POST',
                 headers: {
-                    'Authorization': REDX_API_TOKEN,
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
