@@ -718,7 +718,8 @@ function renderBook(){
   if(b.cat) specRows.push(['ক্যাটাগরি', b.cat]);
   if(b.subject) specRows.push(['বিষয়', b.subject]);
   document.getElementById('specsTable').innerHTML = specRows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
-  const related = books.filter((bk,i)=> i!==currentIdx && bk.cat===b.cat).slice(0,8);
+  const _mycats = String(b.cat||'').split(',').map(s=>s.trim()).filter(Boolean);
+  const related = books.filter((bk,i)=> i!==currentIdx && String(bk.cat||'').split(',').map(s=>s.trim()).some(c=>_mycats.indexOf(c)>-1)).slice(0,8);
   const relList = related.length ? related : books.filter((bk,i)=>i!==currentIdx).slice(0,8);
   document.getElementById('relatedRow').innerHTML = relList.map(makeRelCard).join('');
   let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent') || '[]');
