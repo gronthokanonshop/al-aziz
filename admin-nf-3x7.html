@@ -1167,8 +1167,12 @@
                     <div id="bannerList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
                     <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
                         <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন ব্যানার যোগ করুন</div>
+                        <div style="display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.6;color:#14532d;background:#e8f3ea;border:1px solid #b8dfc0;border-radius:8px;padding:9px 11px;margin-bottom:10px;">
+                            <span style="font-size:15px;line-height:1;">🖼️</span>
+                            <div><b>সেরা ছবির সাইজ: ১২০০ × ৪০০ পিক্সেল</b> (অনুপাত ৩ ঃ ১, চওড়া-পাতলা)।<br>ফরম্যাট: JPG বা PNG · ফাইল সাইজ ২০০ KB এর কম রাখলে দ্রুত লোড হবে।<br>ছবি এই মাপে না হলেও চলবে — মাঝখান থেকে কেটে (crop) বসবে, তাই মূল লেখা/ছবি মাঝখানে রাখুন।</div>
+                        </div>
                         <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-                            <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL — ঐচ্ছিক" style="flex:1;margin-bottom:0;">
+                            <input class="form-input" id="bnImg" placeholder="ছবির লিংক / URL (১২০০×৪০০px) — ঐচ্ছিক" style="flex:1;margin-bottom:0;">
                             <label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="bnUploadImg(this)"></label>
                         </div>
                         <input class="form-input" id="bnTitle" placeholder="বড় লেখা (যেমন: ঈদ অফার — ৩০% ছাড়)" style="margin-bottom:8px;">
@@ -1823,8 +1827,28 @@ function beAddBook(){
 }
 
 function beToggleBook(idx){
-    beOpenIdx=beOpenIdx===idx?null:idx;
-    beRenderList();
+    /* আগের খোলা বইটি বন্ধ করি (এর ভারী এডিটর DOM থেকে সরিয়ে দিই) */
+    if(beOpenIdx!=null){
+        const pb=document.getElementById('beBody_'+beOpenIdx);
+        if(pb){
+            pb.classList.remove('open');
+            pb.innerHTML='';
+            const pa=pb.previousElementSibling&&pb.previousElementSibling.querySelector('.be-arrow');
+            if(pa)pa.classList.remove('open');
+        }
+    }
+    /* একই বইয়ে ক্লিক = বন্ধ */
+    if(beOpenIdx===idx){ beOpenIdx=null; return; }
+    /* নতুন বই খুলি — শুধু এই বইয়ের এডিটর বানাই */
+    beOpenIdx=idx;
+    const body=document.getElementById('beBody_'+idx);
+    if(body){
+        body.innerHTML=beBookBodyHTML(idx);
+        body.classList.add('open');
+        const arrow=body.previousElementSibling&&body.previousElementSibling.querySelector('.be-arrow');
+        if(arrow)arrow.classList.add('open');
+        body.parentElement.scrollIntoView({behavior:'smooth',block:'nearest'});
+    }
 }
 
 function beSaveBook(idx){
@@ -1934,7 +1958,7 @@ function beRenderList(){
         const i=b._i;
         const hasImg=isRealUrl(b.img);
         const isOpen=beOpenIdx===i;
-        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
+        const coverHtml=hasImg?`<img src="${escapeHTML(b.img)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">`:`<svg class="icon" viewBox="0 0 24 24" style="stroke:var(--text-muted)"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
 
         const outStock=stockData[i]===false;
@@ -1948,7 +1972,17 @@ function beRenderList(){
                 </div>
                 <div class="be-arrow ${isOpen?'open':''}">▼</div>
             </div>
-            <div class="be-body ${isOpen?'open':''}">
+            <div class="be-body ${isOpen?'open':''}" id="beBody_${i}">${isOpen?beBookBodyHTML(i):''}</div>
+        </div>`;
+    }).join('');
+}
+
+/* খোলা বইয়ের এডিটর বডি — শুধু যখন খোলা হয় তখনই বানানো হয় (ফোন হ্যাং এড়াতে) */
+function beBookBodyHTML(i){
+    const b=localBooks[i]; if(!b)return '';
+    const hasImg=isRealUrl(b.img);
+    const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
+    return `
                 <div class="editor-grid">
                     <div class="form-group"><label class="be-label">বইয়ের নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
                     <div class="form-group"><label class="be-label">লেখক</label>${nfPickField(`be_author_${i}`,b.author,'author','নতুন লেখকের নাম লিখুন:')}</div>
@@ -1989,9 +2023,7 @@ function beRenderList(){
                         মুছুন
                     </button>
                 </div>
-            </div>
-        </div>`;
-    }).join('');
+            `;
 }
 
 /* ── FIREBASE SYNC ── */
