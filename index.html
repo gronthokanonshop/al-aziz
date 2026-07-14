@@ -242,6 +242,17 @@ body::after{content:'';position:fixed;bottom:100px;left:-100px;width:300px;heigh
 .banner-dot{width:7px;height:7px;border-radius:50%;background:var(--border-color);cursor:pointer;border:none;padding:0;transition:.3s;}
 .banner-dot.active{background:#4f8d51;width:22px;border-radius:4px;}
 .promo-strip{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 14px;}
+/* Rokomari-স্টাইল ক্যাটাগরি চিপ (ছবিওয়ালা কার্ড, horizontal scroll) */
+.cat-strip-wrap{position:relative;margin:12px 0 4px;}
+.cat-strip{display:flex;gap:12px;overflow-x:auto;padding:4px 14px 8px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.cat-strip::-webkit-scrollbar{display:none;}
+.cat-card{flex:0 0 auto;width:78px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.cat-card-img{width:78px;height:78px;border-radius:18px;overflow:hidden;background:linear-gradient(135deg,#eef7ef,#dcefdd);display:flex;align-items:center;justify-content:center;border:1px solid var(--border-color,#dce8df);}
+.cat-card-img img{width:100%;height:100%;object-fit:cover;}
+.cat-card-label{font-size:11.5px;font-weight:600;color:var(--text2,#2a2a2a);text-align:center;line-height:1.25;max-width:78px;}
+.cat-strip-arrow{position:absolute;right:6px;top:50%;transform:translateY(-70%);width:34px;height:34px;border-radius:50%;border:none;background:var(--card-solid,#fff);box-shadow:0 2px 10px rgba(0,0,0,.18);color:var(--primary,#4f8d51);cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2;}
+.cat-strip-arrow svg{width:18px;height:18px;}
+@media(min-width:820px){.cat-strip-arrow{display:flex;}}
 .promo-card{border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:.2s;}
 .promo-card:hover{transform:translateY(-2px);}
 .promo-card.p1{background:linear-gradient(135deg,#224f23,#2f7531);}
@@ -265,6 +276,17 @@ body::after{content:'';position:fixed;bottom:100px;left:-100px;width:300px;heigh
 .book-row{display:flex;flex-direction:row;flex-wrap:nowrap;overflow-x:auto;gap:10px;padding-bottom:6px;-webkit-overflow-scrolling:touch;scrollbar-width:none;white-space:nowrap;}
 .book-row::-webkit-scrollbar{display:none;}
 .recently{margin:0 14px 16px;}
+/* ═══ ডেস্কটপে সব কন্টেন্ট মাঝখানে (গ্রন্থকাননের মতো) — মোবাইল আগের মতোই ═══ */
+@media(min-width:1140px){
+  .sections,.recently,.rvs-section,.hblog-section{max-width:1100px;margin-left:auto;margin-right:auto;}
+  .promo-strip,.info-grid{max-width:1100px;margin-left:auto;margin-right:auto;}
+  .cat-strip-wrap{max-width:1100px;margin-left:auto;margin-right:auto;}
+  .cat-nav-inner{max-width:1100px;margin:0 auto;}
+  .footer-grid,.footer-logo-row,.footer-bottom{max-width:1100px;margin-left:auto;margin-right:auto;}
+}
+@media(min-width:700px){
+  .banner-wrap{max-width:820px;margin-left:auto;margin-right:auto;}
+}
 .recently-title{font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px;}
 .book-card{background:rgba(255,255,255,0.90);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:12px;overflow:hidden;border:1px solid rgba(79,141,81,0.10);box-shadow:0 2px 12px rgba(79,141,81,0.07);cursor:pointer;transition:.2s;display:flex;flex-direction:column;flex-shrink:0;width:148px;position:relative;white-space:normal;}
 .book-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(79,141,81,0.16);border-color:rgba(79,141,81,0.22);z-index:1;}
@@ -667,6 +689,120 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
     <div><div class="promo-label">নতুন প্রকাশিত</div><div class="promo-sub">সদ্য আসা বই</div></div>
   </div>
 </div>
+<div class="cat-strip-wrap">
+  <div class="cat-strip" id="catStrip"></div>
+  <button class="cat-strip-arrow" id="catStripArrow" onclick="catStripScroll()" aria-label="আরও ক্যাটাগরি">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+</div>
+
+<!-- ═══════ প্রকাশনী চিপ সেকশন (Firebase siteConfig/homePubs) ═══════ -->
+<style>
+.pub-strip-section, .author-strip-section { padding: 6px 0 12px; }
+@media(min-width:1140px){ .pub-strip-section, .author-strip-section { max-width:1100px; margin:0 auto; } }
+.pub-strip-title, .author-strip-title { font-size:13px; font-weight:700; color:var(--text2); letter-spacing:.5px; margin:0 0 10px 16px; display:flex; align-items:center; gap:6px; }
+.pub-strip-wrap, .author-strip-wrap { position:relative; }
+.pub-strip, .author-strip { display:flex; gap:10px; overflow-x:auto; scroll-snap-type:x proximity; -webkit-overflow-scrolling:touch; padding:4px 14px 8px; scrollbar-width:none; }
+.pub-strip::-webkit-scrollbar, .author-strip::-webkit-scrollbar { display:none; }
+.pub-card, .author-card { flex:0 0 auto; width:92px; scroll-snap-align:start; cursor:pointer; display:flex; flex-direction:column; align-items:center; -webkit-tap-highlight-color:transparent; transition:transform .18s ease; }
+.pub-card:active, .author-card:active { transform:scale(.95); }
+.pub-card-img, .author-card-img { width:92px; height:92px; border-radius:16px; background:#ffffff; box-shadow:0 2px 8px rgba(0,0,0,.08); border:1px solid rgba(0,0,0,.06); overflow:hidden; display:flex; align-items:center; justify-content:center; position:relative; padding:10px; box-sizing:border-box; }
+.author-card-img { border-radius:50%; }
+.pub-card-img img, .author-card-img img { width:100%; height:100%; object-fit:contain; display:block; }
+.author-card-img img { object-fit:cover; }
+.pub-card:hover .pub-card-img, .author-card:hover .author-card-img { box-shadow:0 6px 16px rgba(0,0,0,.14); }
+.pub-card-label, .author-card-label { margin-top:7px; font-size:11.5px; font-weight:700; color:var(--text); text-align:center; line-height:1.25; font-family:'Hind Siliguri',Arial,sans-serif; max-width:92px; word-break:break-word; }
+.pub-strip-next, .author-strip-next { position:absolute; top:46px; right:6px; transform:translateY(-50%); width:38px; height:38px; border-radius:50%; background:#fff; color:#111; border:1px solid var(--border); box-shadow:0 3px 12px rgba(0,0,0,.18); font-size:22px; line-height:1; cursor:pointer; display:none; align-items:center; justify-content:center; padding:0; z-index:4; }
+@media (min-width:768px) { .pub-strip-next, .author-strip-next { display:flex; } }
+[data-theme="dark"] .pub-card-img, [data-theme="dark"] .author-card-img { background:linear-gradient(135deg,#132d20,#0f2a1e); border-color:rgba(255,255,255,.06); box-shadow:0 2px 10px rgba(0,0,0,.35); }
+[data-theme="dark"] .pub-strip-next, [data-theme="dark"] .author-strip-next { background:#1f2937; color:#e5e7eb; border-color:rgba(255,255,255,.12); }
+</style>
+<div class="pub-strip-section" id="pubStripSection" style="display:none;">
+    <div class="pub-strip-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        প্রকাশনী
+    </div>
+    <div class="pub-strip-wrap">
+        <div class="pub-strip" id="pubStrip"></div>
+        <button class="pub-strip-next" id="pubStripNext" onclick="pubStripScroll()" aria-label="আরো প্রকাশনী">›</button>
+    </div>
+</div>
+
+<!-- ═══════ প্রিয় লেখক চিপ সেকশন (Firebase siteConfig/homeAuthors) ═══════ -->
+<div class="author-strip-section" id="authorStripSection" style="display:none;">
+    <div class="author-strip-title">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        প্রিয় লেখক
+    </div>
+    <div class="author-strip-wrap">
+        <div class="author-strip" id="authorStrip"></div>
+        <button class="author-strip-next" id="authorStripNext" onclick="authorStripScroll()" aria-label="আরো লেখক">›</button>
+    </div>
+</div>
+<script>
+window.NF_HOME_PUBS = [];
+window.NF_HOME_AUTHORS = [];
+function renderHomePubChips(){
+    var section=document.getElementById('pubStripSection');
+    var strip=document.getElementById('pubStrip');
+    if(!strip||!section) return;
+    var list=(window.NF_HOME_PUBS||[]).filter(function(p){return p&&p.name;});
+    if(!list.length){ section.style.display='none'; strip.innerHTML=''; return; }
+    section.style.display='';
+    strip.innerHTML=list.map(function(p){
+        var val=(p.name||'').toString();
+        var img=(p.img||'').toString().trim();
+        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+        return '<div class="pub-card" onclick="window.location.href=\'Aafilter.html?type=pub&value='+encodeURIComponent(val)+'\'">'
+            +'<div class="pub-card-img">'+imgTag+'</div>'
+            +'<div class="pub-card-label">'+val.replace(/</g,'&lt;')+'</div>'
+            +'</div>';
+    }).join('');
+}
+function renderHomeAuthorChips(){
+    var section=document.getElementById('authorStripSection');
+    var strip=document.getElementById('authorStrip');
+    if(!strip||!section) return;
+    var list=(window.NF_HOME_AUTHORS||[]).filter(function(a){return a&&a.name;});
+    if(!list.length){ section.style.display='none'; strip.innerHTML=''; return; }
+    section.style.display='';
+    strip.innerHTML=list.map(function(a){
+        var val=(a.name||'').toString();
+        var img=(a.img||'').toString().trim();
+        var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+        return '<div class="author-card" onclick="window.location.href=\'Aafilter.html?type=author&value='+encodeURIComponent(val)+'\'">'
+            +'<div class="author-card-img">'+imgTag+'</div>'
+            +'<div class="author-card-label">'+val.replace(/</g,'&lt;')+'</div>'
+            +'</div>';
+    }).join('');
+}
+function pubStripScroll(){
+    var s=document.getElementById('pubStrip'); if(!s) return;
+    var max=s.scrollWidth-s.clientWidth;
+    if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
+    else s.scrollBy({left:Math.min(260,max-s.scrollLeft),behavior:'smooth'});
+}
+function authorStripScroll(){
+    var s=document.getElementById('authorStrip'); if(!s) return;
+    var max=s.scrollWidth-s.clientWidth;
+    if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
+    else s.scrollBy({left:Math.min(260,max-s.scrollLeft),behavior:'smooth'});
+}
+function loadHomePubs(){
+    if(typeof db==='undefined'||!db) return;
+    db.ref('siteConfig/homePubs').once('value').then(function(snap){
+        var v=snap.val();
+        if(Array.isArray(v)&&v.length){ window.NF_HOME_PUBS=v.filter(function(p){return p&&p.name;}); renderHomePubChips(); }
+    }).catch(function(){});
+}
+function loadHomeAuthors(){
+    if(typeof db==='undefined'||!db) return;
+    db.ref('siteConfig/homeAuthors').once('value').then(function(snap){
+        var v=snap.val();
+        if(Array.isArray(v)&&v.length){ window.NF_HOME_AUTHORS=v.filter(function(a){return a&&a.name;}); renderHomeAuthorChips(); }
+    }).catch(function(){});
+}
+</script>
 <div class="info-grid">
   <div class="info-card">
     <div class="info-icon"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><path d="M16 8h4l3 3v5h-7z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div>
@@ -798,6 +934,12 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
     <span class="bnav-label" style="color:var(--text2);margin-top:2px;font-size:10px;">একাউন্ট</span>
   </div>
 </div>
+<!-- উইশলিস্টে যোগ/বাদ — সুন্দর নিচ-থেকে-ওঠা modal (গ্রন্থকাননের মতো) -->
+<div id="wlOverlay" onclick="closeWLModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:9998;"></div>
+<div id="wlModal" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--card-solid,#fff);border-radius:24px 24px 0 0;z-index:9999;padding:0 0 40px;transform:translateY(100%);transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);max-width:480px;margin:0 auto;">
+    <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 20px;"></div>
+    <div id="wlModalInner" style="padding:0 20px;"></div>
+</div>
 <div class="cat-drawer-overlay" id="catDrawerOverlay" onclick="closeDrawer()"></div>
 <div class="cat-drawer" id="catDrawer">
   <div class="drawer-handle"></div>
@@ -908,18 +1050,18 @@ function copyCoupon(code){
 function applyCoupon(){
   const code = document.getElementById('couponCode')?.value?.trim()?.toUpperCase();
   if(!code){ showToast('কুপন কোড লিখুন','#6B7280'); return; }
-  if(code==='FIRSTORDER'){
-    discountPercent=5;
-    localStorage.setItem('alaziz_coupon','FIRSTORDER');
-    showToast('✅ ৫% বিশেষ ছাড় পাচ্ছেন!');
+  const info = (typeof nfApplyCouponCode==='function') ? nfApplyCouponCode(code) : null;
+  if(info){
+    discountPercent = info.type==='percent' ? info.value : 0;
+    showToast('✅ '+((typeof nfCouponLabel==='function')?nfCouponLabel(info):'ছাড়')+' পাচ্ছেন!');
   } else {
     showToast('❌ কুপন কোড সঠিক নয়','#DC2626'); return;
   }
   updateCartUI(); renderCouponSection();
 }
 function removeCoupon(){
-  localStorage.removeItem('alaziz_coupon');
-  localStorage.removeItem('alaziz_discount');
+  if(typeof nfRemoveCouponAll==='function') nfRemoveCouponAll();
+  else { localStorage.removeItem('alaziz_coupon'); localStorage.removeItem('alaziz_discount'); }
   discountPercent=0;
   showToast('🗑️ কুপন বাতিল হয়েছে','#6b7280');
   updateCartUI(); renderCouponSection();
@@ -955,9 +1097,16 @@ function clearSearch(){
   document.getElementById('searchClearBtn').classList.remove('show');
   document.getElementById('searchBody').innerHTML=`<div class="search-hint"><div class="search-hint-icon"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h6v16h-6z"/><path d="M16 5l4 .8-2.5 15.4-4-.8"/></svg></div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`;
 }
+let __nfSearchTimer=null;
 function handleSearch(){
+  /* টাইপ থামার ২০০ms পরে খোঁজা শুরু — প্রতি অক্ষরে না, তাই ফোন হ্যাং করে না */
+  const qi=document.getElementById('searchInput').value;
+  document.getElementById('searchClearBtn').classList.toggle('show',qi.trim().length>0);
+  clearTimeout(__nfSearchTimer);
+  __nfSearchTimer=setTimeout(doSearch,200);
+}
+function doSearch(){
   const q = document.getElementById('searchInput').value.normalize("NFC").trim().toLowerCase();
-  document.getElementById('searchClearBtn').classList.toggle('show',q.length>0);
   const body = document.getElementById('searchBody');
   if(!q){ body.innerHTML=`<div class="search-hint"><div class="search-hint-icon"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h6v16h-6z"/><path d="M16 5l4 .8-2.5 15.4-4-.8"/></svg></div><p>বইয়ের নাম বা লেখকের নাম লিখুন</p></div>`; return; }
   if(typeof books==='undefined'){ body.innerHTML=`<div class="search-no"><div class="search-no-icon"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 16c1-1 5-1 6 0"/></svg></div><p>বই ডেটা লোড হয়নি</p></div>`; return; }
@@ -969,14 +1118,14 @@ function handleSearch(){
   });
   const count = document.getElementById('searchCount')||createSearchCount();
   count.classList.toggle('show',results.length>0);
-  if(results.length>0) count.innerText=`${results.length}টি বই পাওয়া গেছে`;
+  if(results.length>0) count.innerText=results.length>40?`৪০টি দেখাচ্ছে (মোট ${results.length}টি) — আরও নির্দিষ্ট করে লিখুন`:`${results.length}টি পাওয়া গেছে`;
   if(!results.length){
     body.innerHTML=`<div class="search-no"><div class="search-no-icon"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 16c1-1 5-1 6 0"/></svg></div><p>"${q}" এর জন্য কোনো বই পাওয়া যায়নি</p></div>`;
     return;
   }
   body.innerHTML='';
   if(count&&!body.parentNode.contains(count)) body.before(count);
-  results.forEach(b=>{
+  results.slice(0,40).forEach(b=>{
     const idx=books.indexOf(b);
     const pct=discPct(b);
     const item=document.createElement('div');
@@ -1039,9 +1188,9 @@ function makeCard(b){
       <button class="wl-btn ${wl?'active':''}" onclick="toggleWL(event,'${b.name.replace(/'/g,"\\'")}')">${wl?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>':'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>'}</button>
     </div>
     <div class="book-card-info">
-      <div class="bc-pub">${b.pub||''}</div>
+      <div class="bc-pub">${bookType(b)==='প্রোডাক্ট'?(b.brand||''):(b.pub||'')}</div>
       <div class="bc-name">${b.name}</div>
-      <div class="bc-author">${b.author||''}</div>
+      <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?'':(b.author||'')}</div>
       <div class="price-row"><span class="price-sell">৳${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳${b.original_price}</span>`:''}</div>
       ${inStock
         ?`<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>`
@@ -1060,20 +1209,63 @@ function renderRecent(){
   sec.style.display='block';
   row.innerHTML=recentlyViewed.map(idx=>{ const b=books[idx]; return b?makeCard(b):''; }).join('');
 }
+/* ═══ Rokomari-স্টাইল হোম ক্যাটাগরি চিপ (ছবি siteConfig/homeCats থেকে) ═══ */
+function nfHomeCatsDefault(){
+  return (window.NF_CAT_TREE||[]).filter(c=>!(window.NF_TAG_NAMES&&NF_TAG_NAMES.has(c.name))).map(c=>({name:c.name}));
+}
+function renderHomeCatChips(){
+  var strip=document.getElementById('catStrip'); if(!strip) return;
+  if(!window.NF_HOME_CATS||!window.NF_HOME_CATS.length) window.NF_HOME_CATS=nfHomeCatsDefault();
+  var list=(window.NF_HOME_CATS||[]).filter(c=>c&&c.name&&!(window.NF_TAG_NAMES&&NF_TAG_NAMES.has(c.name)));
+  strip.innerHTML=list.map(function(c){
+    var val=(c.name||'').toString();
+    var img=(c.img||'').toString().trim();
+    var imgTag=img?'<img src="'+img.replace(/"/g,'&quot;')+'" alt="" loading="lazy" onerror="this.remove()">':'';
+    return '<div class="cat-card" onclick="navigateToFilter(\'cat\',\''+val.replace(/'/g,"\\'")+'\')">'
+      +'<div class="cat-card-img">'+imgTag+'</div>'
+      +'<div class="cat-card-label">'+val.replace(/</g,'&lt;')+'</div></div>';
+  }).join('');
+}
+function catStripScroll(){
+  var s=document.getElementById('catStrip'); if(!s) return;
+  var max=s.scrollWidth-s.clientWidth;
+  if(s.scrollLeft>=max-5) s.scrollTo({left:0,behavior:'smooth'});
+  else s.scrollBy({left:Math.round(s.clientWidth*0.8),behavior:'smooth'});
+}
+function loadHomeCats(){
+  if(typeof db==='undefined'||!db) return;
+  db.ref('siteConfig/homeCats').once('value').then(function(snap){
+    var v=snap.val();
+    if(Array.isArray(v)&&v.length){ window.NF_HOME_CATS=v.filter(c=>c&&c.name); renderHomeCatChips(); }
+  }).catch(function(){});
+}
+/* বইয়ের ট্যাগ-সেকশন (গ্রন্থকাননের মতো) */
+const NF_TAG_SECTIONS=['Best Selling','New Arrived','Trending','Pre Order','Best Writer'];
+function nfSectionHtml(title, id, target, items){
+  return `<div class="cat-section fade-in" id="section-${id}">
+      <div class="cat-section-title">${title}
+        <a href="#" onclick="navigateToFilter('${target.type}','${String(target.value).replace(/'/g,"\\'")}');return false;">সবগুলো দেখুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <div class="book-row">${items.map(makeCard).join('')}</div>
+    </div>`;
+}
 function renderSections(list){
   const w=document.getElementById('sectionsWrapper');
-  w.style.display='block'; w.innerHTML='';
-  categoryConfig.forEach(cat=>{
-    const catBooks=list.filter(b=>catHasNF(b,cat.key));
-    if(!catBooks.length) return;
-    w.innerHTML+=`<div class="cat-section fade-in" id="section-${cat.key}">
-      <div class="cat-section-title">${cat.label}
-        <a href="#" onclick="navigateToFilter('cat','${cat.key}');return false;">সবগুলো দেখুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-      </div>
-      <div class="book-row">${catBooks.map(makeCard).join('')}</div>
-    </div>`;
+  w.style.display='block';
+  let html='';
+  /* ১. বই — ট্যাগ অনুযায়ী সেকশন */
+  NF_TAG_SECTIONS.forEach(tag=>{
+    const bks=list.filter(b=>bookType(b)!=='প্রোডাক্ট' && bookTags(b).includes(tag));
+    if(bks.length) html+=nfSectionHtml(tag, 'tag-'+tag, {type:'tag',value:tag}, bks);
   });
-  if(!w.innerHTML) w.innerHTML='<div style="text-align:center;padding:60px;color:var(--text2);">কোনো বই পাওয়া যায়নি</div>';
+  /* ২. প্রোডাক্ট — ধরন (বিভাগ) অনুযায়ী সেকশন */
+  const products=list.filter(b=>bookType(b)==='প্রোডাক্ট');
+  const prodCats=[...new Set(products.map(p=>bookMainCat(p)).filter(c=>c && !NF_TAG_NAMES.has(c)))];
+  prodCats.forEach(cat=>{
+    const items=products.filter(p=>bookMainCat(p)===cat);
+    if(items.length) html+=nfSectionHtml(cat, 'cat-'+cat, {type:'cat',value:cat}, items);
+  });
+  w.innerHTML=html||'<div style="text-align:center;padding:60px;color:var(--text2);">কোনো আইটেম পাওয়া যায়নি</div>';
 }
 function renderCategoryNav(){
   const nav=document.getElementById('catNavInner');
@@ -1126,7 +1318,7 @@ function addToCart(name,price,img){
 function saveCart(){ localStorage.setItem('alaziz_cart',JSON.stringify(cart)); }
 function showCart(){
   const saved=localStorage.getItem('alaziz_coupon');
-  discountPercent=(saved==='FIRSTORDER')?5:0;
+  discountPercent=saved?(parseInt(localStorage.getItem('alaziz_discount'))||0):0;
   updateCartUI(); renderCouponSection();
   const box=document.getElementById('cartBox');
   box.classList.add('open');
@@ -1171,7 +1363,7 @@ function updateCartUI(){
   const nb=document.getElementById('bnavBadge'); if(nb){ nb.innerText=count; nb.classList.toggle('show',count>0); }
   const gb=document.getElementById('aaGiftBar');
   if(gb && typeof aaGiftBarHTML==='function') gb.innerHTML=aaGiftBarHTML(subtotal);
-  const disc=Math.round(subtotal*discountPercent/100);
+  const disc=(typeof nfCouponDiscAmt==='function')?nfCouponDiscAmt(subtotal):Math.round(subtotal*discountPercent/100);
   if(document.getElementById('subtotal')) document.getElementById('subtotal').innerText=subtotal;
   if(document.getElementById('discountAmt')) document.getElementById('discountAmt').innerText=disc;
   if(document.getElementById('total')) document.getElementById('total').innerText=subtotal-disc;
@@ -1184,8 +1376,8 @@ function renderCouponSection(){
   if(!sec) return;
   const applied=localStorage.getItem('alaziz_coupon');
   if(applied){
-    const labelMap={'FIRSTORDER':'🎉 FIRSTORDER — ৫% ডিসকাউন্ট'};
-    const label=labelMap[applied]||('✅ '+applied);
+    const cLbl=(typeof nfCouponLabel==='function')?nfCouponLabel({type:localStorage.getItem('alaziz_ctype')||'percent',value:parseInt(localStorage.getItem('alaziz_cvalue')||localStorage.getItem('alaziz_discount')||'0')}):'';
+    const label='🎉 '+applied+(cLbl?' — '+cLbl:'');
     sec.innerHTML=`<div class="coupon-applied">
       <span class="coupon-applied-label">${label}</span>
       <button class="coupon-remove-btn" onclick="removeCoupon()"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></svg> বাতিল</button>
@@ -1320,6 +1512,10 @@ window.onload=()=>{
     }
   },800);
   renderCategoryNav();
+  renderHomeCatChips();
+  loadHomeCats();
+  loadHomePubs();
+  loadHomeAuthors();
   updateCartUI();
   renderCouponSection();
   updateWLCount();

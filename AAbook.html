@@ -59,7 +59,7 @@ body{font-family:'Hind Siliguri','Inter',Arial,sans-serif;background:var(--bg);c
 .nav-icon-btn:hover{background:rgba(255,255,255,0.20);}
 .nav-badge{position:absolute;top:-5px;right:-5px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;width:17px;height:17px;border-radius:50%;display:none;align-items:center;justify-content:center;border:2px solid #152716;}
 .nav-badge.show{display:flex;}
-.crumb{padding:12px 16px 0;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.crumb{padding:12px 16px 0;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;max-width:980px;margin:0 auto;}
 .crumb a{color:#204521;text-decoration:none;font-weight:600;}
 .crumb span.sep{color:var(--text3);font-size:10px;}
 .crumb span.cur{color:var(--text);}
@@ -656,9 +656,18 @@ function makeRelCard(b){
     </div>
   </div>`;
 }
+/* বিভাগ→উপ-বিভাগ + ট্যাগ + টাইপ (গ্রন্থকাননের মতো; পুরনো কমা-cat gracefully) */
+var NF_TAGNAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+var NF_OLDTAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+var NF_TAXOSET=new Set(['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','আত্মউন্নয়ন বই','English বই','প্যাকেজসমূহ','Sunnah Item','Stationery','খাবার']);
+function nfCatList(b){ if(b&&Array.isArray(b.cats)&&b.cats.length)return b.cats.slice(); return String((b&&b.cat)||'').split(',').map(function(s){return s.trim();}).filter(Boolean); }
+function bookTypeF(b){ return (b&&b.type)||'বই'; }
+function bookMainCatF(b){ var a=nfCatList(b).filter(function(c){return !NF_TAGNAMES.has(c);}); return a[0]||nfCatList(b)[0]||''; }
+function bookSubcatF(b){ return (b&&b.subcat)||''; }
+function bookTagsF(b){ if(b&&Array.isArray(b.tags))return b.tags; var out=[]; nfCatList(b).forEach(function(c){var t=NF_OLDTAGMAP[c]; if(t&&out.indexOf(t)<0)out.push(t);}); return out; }
 function renderBook(){
   if(typeof books === 'undefined' || !books.length){
-    document.getElementById('bookTitle').innerText = 'বই খুঁজে পাওয়া যায়নি';
+    document.getElementById('bookTitle').innerText = 'বই লোড হচ্ছে...';
     return;
   }
   const params = new URLSearchParams(window.location.search);
@@ -666,20 +675,30 @@ function renderBook(){
   currentIdx = idParam !== null ? parseInt(idParam) : 0;
   currentBook = books[currentIdx];
   if(!currentBook){
-    document.getElementById('bookTitle').innerText = 'বই খুঁজে পাওয়া যায়নি';
-    document.getElementById('detailWrap').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:14px;">📚</div><p style="font-size:15px;">দুঃখিত, এই বইটি খুঁজে পাওয়া যায়নি।</p><a href="index.html" style="display:inline-block;margin-top:16px;color:#204521;font-weight:700;text-decoration:none;">হোম পেজে ফিরে যান →</a></div>';
+    /* নতুন আইটেম হতে পারে — Firebase লাইভ ডেটার অপেক্ষা করি, সাথে সাথে "পাওয়া যায়নি" নয় */
+    if(window.AA_BOOKS_LIVE && !window.__nfWaitedLive){
+      window.__nfWaitedLive = true;
+      document.getElementById('bookTitle').innerText = 'বই লোড হচ্ছে...';
+      window.AA_BOOKS_LIVE.then(function(){ renderBook(); });
+      return;
+    }
+    document.getElementById('bookTitle').innerText = 'খুঁজে পাওয়া যায়নি';
+    document.getElementById('detailWrap').innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--text2);"><div style="font-size:48px;margin-bottom:14px;">📚</div><p style="font-size:15px;">দুঃখিত, এই আইটেমটি খুঁজে পাওয়া যায়নি।</p><a href="index.html" style="display:inline-block;margin-top:16px;color:#204521;font-weight:700;text-decoration:none;">হোম পেজে ফিরে যান →</a></div>';
     return;
   }
   const b = currentBook;
+  const isBook = bookTypeF(b)!=='প্রোডাক্ট';
   const pct = discPct(b);
   document.title = b.name + ' — NafahLife';
   document.getElementById('navTitle').innerText = 'বই বিস্তারিত';
-  document.getElementById('crumbCat').innerText = b.cat || 'বই';
-  document.getElementById('crumbCat').setAttribute('onclick', `navigateTo('index.html')`);
+  const _mc = bookMainCatF(b), _mcIsTaxo = _mc && NF_TAXOSET.has(_mc);
+  const crumbCatEl = document.getElementById('crumbCat');
+  crumbCatEl.innerText = _mcIsTaxo ? _mc : (isBook?'বই':'প্রোডাক্ট');
+  crumbCatEl.setAttribute('onclick', _mcIsTaxo ? `navigateTo('Aafilter.html?type=cat&value=${encodeURIComponent(_mc)}')` : `navigateTo('index.html')`);
   document.getElementById('crumbName').innerText = b.name;
-  document.getElementById('subjectPill').innerText = b.subject || b.cat || 'বই';
+  document.getElementById('subjectPill').innerText = isBook ? (b.subject || _mc || 'বই') : (b.brand || _mc || 'প্রোডাক্ট');
   document.getElementById('bookTitle').innerText = b.name;
-  document.getElementById('bookAuthor').innerText = b.author || 'অজানা';
+  document.getElementById('bookAuthor').innerText = isBook ? (b.author || 'অজানা') : (b.brand || '');
   document.getElementById('bookImg').src = getImg(b);
   document.getElementById('bookImg').alt = b.name;
   document.getElementById('bookDesc').innerHTML = '<p>' + (b.desc || 'শীঘ্রই আপডেট করা হবে') + '</p>';
@@ -699,10 +718,15 @@ function renderBook(){
   document.getElementById('coverWlBtn').innerText = wlActive ? '❤️' : '🤍';
   document.getElementById('coverWlBtn').classList.toggle('active', wlActive);
   const chips = [];
-  if(b.pub) chips.push({icon:'building', label:b.pub});
-  if(b.pages) chips.push({icon:'pages', label:b.pages});
-  if(b.cover) chips.push({icon:'book', label:b.cover});
-  chips.push({icon:'lang', label:'বাংলা ভাষা'});
+  if(isBook){
+    if(b.pub) chips.push({icon:'building', label:b.pub});
+    if(b.pages) chips.push({icon:'pages', label:b.pages});
+    if(b.cover) chips.push({icon:'book', label:b.cover});
+    chips.push({icon:'lang', label:'বাংলা ভাষা'});
+  } else {
+    if(b.brand) chips.push({icon:'building', label:b.brand});
+    if(Array.isArray(b.attributes)) b.attributes.forEach(function(a){ var l=a.label||a.name; if(l&&a.value) chips.push({icon:'book', label:l+': '+a.value}); });
+  }
   const iconPaths = {
     building: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/>',
     pages: '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M8 4v5"/>',
@@ -711,15 +735,19 @@ function renderBook(){
   };
   document.getElementById('metaChipRow').innerHTML = chips.map(c=>`<div class="meta-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconPaths[c.icon]}</svg>${c.label}</div>`).join('');
   const specRows = [];
-  if(b.author) specRows.push(['লেখক', b.author]);
-  if(b.pub) specRows.push(['প্রকাশনী', b.pub]);
-  if(b.pages) specRows.push(['পৃষ্ঠা সংখ্যা', b.pages]);
-  if(b.cover) specRows.push(['বাঁধাই', b.cover]);
-  if(b.cat) specRows.push(['ক্যাটাগরি', b.cat]);
-  if(b.subject) specRows.push(['বিষয়', b.subject]);
-  document.getElementById('specsTable').innerHTML = specRows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('');
-  const _mycats = String(b.cat||'').split(',').map(s=>s.trim()).filter(Boolean);
-  const related = books.filter((bk,i)=> i!==currentIdx && String(bk.cat||'').split(',').map(s=>s.trim()).some(c=>_mycats.indexOf(c)>-1)).slice(0,8);
+  if(isBook){
+    if(b.author) specRows.push(['লেখক', b.author]);
+    if(b.pub) specRows.push(['প্রকাশনী', b.pub]);
+    if(b.pages) specRows.push(['পৃষ্ঠা সংখ্যা', b.pages]);
+    if(b.cover) specRows.push(['বাঁধাই', b.cover]);
+    if(b.subject) specRows.push(['বিষয়', b.subject]);
+  } else {
+    if(b.brand) specRows.push(['ব্র্যান্ড', b.brand]);
+    if(Array.isArray(b.attributes)) b.attributes.forEach(function(a){ var l=a.label||a.name; if(l&&a.value) specRows.push([l, a.value]); });
+  }
+  document.getElementById('specsTable').innerHTML = specRows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('') || '<tr><td>তথ্য</td><td>শীঘ্রই যোগ হবে</td></tr>';
+  const _mycats = nfCatList(b).filter(function(c){return !NF_TAGNAMES.has(c);});
+  const related = books.filter((bk,i)=> i!==currentIdx && nfCatList(bk).some(function(c){return _mycats.indexOf(c)>-1;})).slice(0,8);
   const relList = related.length ? related : books.filter((bk,i)=>i!==currentIdx).slice(0,8);
   document.getElementById('relatedRow').innerHTML = relList.map(makeRelCard).join('');
   let recentlyViewed = JSON.parse(localStorage.getItem('alaziz_recent') || '[]');

@@ -30,6 +30,42 @@ function showToast(msg, color) {
     setTimeout(() => t.remove(), 2200);
 }
 
+/* ═══════════════════════════════════════
+   ক্যাটাগরি (বিভাগ→উপ-বিভাগ) + ট্যাগ + প্রোডাক্ট — সব কাস্টমার পেজে shared
+   (গ্রন্থকাননের মতো; পুরনো cat/cats field gracefully handle)
+═══════════════════════════════════════ */
+window.NF_CAT_TREE = [
+    { name: 'ইসলামি বই', subs: ['আকিদা', 'ফিকহ', 'হাদিস', 'তাফসির', 'সিরাত'] },
+    { name: 'একাডেমিক বই', subs: ['ক্লাস ১-৫', 'ক্লাস ৬-১০', 'HSC'] },
+    { name: 'মাদ্রাসার বই', subs: ['নাহু-সরফ', 'কিতাব'] },
+    { name: 'Pre Order', subs: [] },
+    { name: 'আত্মউন্নয়ন বই', subs: ['মোটিভেশন', 'লিডারশিপ'] },
+    { name: 'English বই', subs: [] },
+    { name: 'প্যাকেজসমূহ', subs: [] },
+    { name: 'Sunnah Item', subs: ['আতর', 'মিসওয়াক', 'পাঞ্জাবি', 'টুপি', 'হিজাব'] },
+    { name: 'Stationery', subs: [] },
+    { name: 'খাবার', subs: ['মধু', 'খেজুর', 'কালোজিরা'] }
+];
+window.NF_TAGS = ['Best Selling', 'New Arrived', 'Trending', 'Pre Order', 'Best Writer'];
+window.NF_OLD_TAGMAP = { 'Best Selling': 'Best Selling', 'Trending': 'Trending', 'নতুন প্রকাশিত': 'New Arrived', 'New Arrived': 'New Arrived', 'Pre Order': 'Pre Order', 'Best Writer': 'Best Writer' };
+window.NF_TAG_NAMES = new Set(['Best Selling', 'Trending', 'New Arrived', 'নতুন প্রকাশিত', 'Pre Order', 'Best Writer']);
+/* পুরনো cat কমা দিয়ে লেখা হতে পারে ("ইসলামি বই, Best Selling") — split করি */
+window.nfSplitCat = function (b) {
+    if (b && Array.isArray(b.cats) && b.cats.length) return b.cats.slice();
+    return String((b && b.cat) || '').split(',').map(function (s) { return s.trim(); }).filter(Boolean);
+};
+window.bookCats = function (b) { return nfSplitCat(b).filter(function (c) { return !NF_TAG_NAMES.has(c); }); };
+window.bookMainCat = function (b) { var a = bookCats(b); return a[0] || nfSplitCat(b)[0] || ''; };
+window.bookSubcat = function (b) { return (b && b.subcat) || ''; };
+window.bookType = function (b) { return (b && b.type) || 'বই'; };
+window.bookTags = function (b) {
+    if (b && Array.isArray(b.tags)) return b.tags;
+    var out = []; nfSplitCat(b).forEach(function (c) { var t = NF_OLD_TAGMAP[c]; if (t && out.indexOf(t) < 0) out.push(t); });
+    return out;
+};
+window.bookHasTag = function (b, tag) { return bookTags(b).indexOf(tag) > -1; };
+window.bookHasCat = function (b, cat) { return bookCats(b).indexOf(cat) > -1; };
+
 /* ═══ PAGE NAVIGATION (smooth fade) ═══ */
 function navigateTo(url) {
     document.body.style.animation = 'pageOut 0.25s ease forwards';
@@ -93,6 +129,71 @@ function closeSidebars() {
 
 /* ═══ হাদিয়া অফারের টার্গেট (৳) — এখানে বদলালেই সব জায়গায় বদলাবে ═══ */
 window.AA_GIFT_THRESHOLD = 1000;
+
+/* ═══ কুপন — বিল্ট-ইন FIRSTORDER + অ্যাডমিন-তৈরি কুপন (Firebase 'coupons') ═══
+   টাইপ: 'percent' = % ছাড় | 'taka' = নির্দিষ্ট ৳ ছাড় | 'delivery' = ফ্রি ডেলিভারি */
+window.NF_COUPONS = window.NF_COUPONS || { FIRSTORDER: { type: 'percent', value: 5 } };
+window.nfCouponInfo = function (code) {
+    var c = window.NF_COUPONS && window.NF_COUPONS[String(code || '').toUpperCase()];
+    if (!c) return undefined;
+    if (typeof c === 'number') return { type: 'percent', value: c }; /* legacy */
+    return c;
+};
+window.nfCouponLabel = function (info) {
+    if (!info) return '';
+    if (info.type === 'delivery') return 'ফ্রি ডেলিভারি';
+    if (info.type === 'taka') return '৳' + info.value + ' ছাড়';
+    return info.value + '% ডিসকাউন্ট';
+};
+/* কার্টে কুপনের ছাড়ের হিসাব (delivery টাইপে পণ্যের দামে ছাড় নেই — ডেলিভারি ফ্রি হয় চেকআউটে) */
+window.nfCouponDiscAmt = function (sub) {
+    var code = localStorage.getItem('alaziz_coupon');
+    if (!code) return 0;
+    var t = localStorage.getItem('alaziz_ctype') || 'percent';
+    var v = parseInt(localStorage.getItem('alaziz_cvalue') || localStorage.getItem('alaziz_discount') || '0');
+    if (t === 'taka') return Math.min(v, sub);
+    if (t === 'percent') return Math.round(sub * v / 100);
+    return 0;
+};
+/* কুপন apply — সব পেজ এক নিয়মে; চেকআউটের পুরনো key-গুলোও (discount/discflat/freedeliv) সেট হয় */
+window.nfApplyCouponCode = function (code) {
+    code = String(code || '').trim().toUpperCase();
+    var info = nfCouponInfo(code);
+    if (!info) return null;
+    localStorage.setItem('alaziz_coupon', code);
+    localStorage.setItem('alaziz_ctype', info.type);
+    localStorage.setItem('alaziz_cvalue', String(info.value));
+    localStorage.setItem('alaziz_discount', String(info.type === 'percent' ? info.value : 0));
+    localStorage.setItem('alaziz_discflat', String(info.type === 'taka' ? info.value : 0));
+    localStorage.setItem('alaziz_freedeliv', info.type === 'delivery' ? '1' : '');
+    return info;
+};
+window.nfRemoveCouponAll = function () {
+    ['alaziz_coupon', 'alaziz_ctype', 'alaziz_cvalue', 'alaziz_discount', 'alaziz_discflat', 'alaziz_freedeliv'].forEach(function (k) { localStorage.removeItem(k); });
+};
+/* Firebase থেকে অ্যাডমিন-তৈরি কুপন লোড (REST — লগইন লাগে না) */
+(function () {
+    try {
+        fetch('https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/coupons.json')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (v) {
+                if (!v || typeof v !== 'object') return;
+                Object.keys(v).forEach(function (k) {
+                    var c = v[k];
+                    if (!c || c.active === false) return;
+                    var code = String(k).toUpperCase();
+                    if (typeof c.discount === 'number' && c.discount > 0 && c.discount <= 100) {
+                        window.NF_COUPONS[code] = { type: 'percent', value: c.discount }; /* পুরনো ফরম্যাট */
+                    } else if (c.type === 'delivery') {
+                        window.NF_COUPONS[code] = { type: 'delivery', value: 0 };
+                    } else if ((c.type === 'taka' || c.type === 'percent') && typeof c.value === 'number' && c.value > 0) {
+                        if (c.type === 'percent' && c.value > 100) return;
+                        window.NF_COUPONS[code] = { type: c.type, value: c.value };
+                    }
+                });
+            }).catch(function () {});
+    } catch (e) {}
+})();
 
 /* কার্ট সাবটোটাল থেকে গিফট-প্রগ্রেস বারের HTML বানায় (index + shared drawer দুটোই ব্যবহার করে) */
 window.aaGiftBarHTML = function (subtotal) {
@@ -250,10 +351,10 @@ window.aaGiftBarHTML = function (subtotal) {
 
         /* কুপন UI */
         const applied = localStorage.getItem('alaziz_coupon');
-        const discPct = applied === 'FIRSTORDER' ? 5 : 0;
         const cb = document.getElementById('aaCouponBox');
         if (applied) {
-            cb.innerHTML = `<div class="aa-coupon-on"><span>🎉 ${esc(applied)} — ${discPct}% ডিসকাউন্ট</span><button onclick="aaRemoveCoupon()">✕ বাতিল</button></div>`;
+            const cLbl = nfCouponLabel({ type: localStorage.getItem('alaziz_ctype') || 'percent', value: parseInt(localStorage.getItem('alaziz_cvalue') || localStorage.getItem('alaziz_discount') || '0') });
+            cb.innerHTML = `<div class="aa-coupon-on"><span>🎉 ${esc(applied)} — ${esc(cLbl)}</span><button onclick="aaRemoveCoupon()">✕ বাতিল</button></div>`;
         } else {
             cb.innerHTML = `<div class="aa-coupon"><input id="aaCouponInput" placeholder="কুপন কোড লিখুন" onkeydown="if(event.key==='Enter')aaApplyCoupon()"><button onclick="aaApplyCoupon()">Apply</button></div>`;
         }
@@ -262,7 +363,7 @@ window.aaGiftBarHTML = function (subtotal) {
         const grouped = {};
         cart.forEach(i => { grouped[i.name] = grouped[i.name] || { p: Number(i.price) || 0, q: 0 }; grouped[i.name].q++; });
         const sub = Object.values(grouped).reduce((s, x) => s + x.p * x.q, 0);
-        const disc = applied ? Math.round(sub * discPct / 100) : 0;
+        const disc = nfCouponDiscAmt(sub);
         document.getElementById('aaGiftBarDrawer').innerHTML = aaGiftBarHTML(sub);
         document.getElementById('aaCdSub').innerText = sub;
         document.getElementById('aaCdDisc').innerText = disc;
@@ -286,21 +387,19 @@ window.aaGiftBarHTML = function (subtotal) {
         aaRenderCart();
     };
 
-    /* ── কুপন ── */
+    /* ── কুপন (অ্যাডমিন-তৈরি সব কুপনসহ — percent/taka/ফ্রি ডেলিভারি) ── */
     window.aaApplyCoupon = function () {
         const code = (document.getElementById('aaCouponInput')?.value || '').trim().toUpperCase();
-        if (code === 'FIRSTORDER') {
-            localStorage.setItem('alaziz_coupon', code);
-            localStorage.setItem('alaziz_discount', '5');
-            showToast('🎉 ৫% ডিসকাউন্ট যুক্ত হয়েছে!', '#2f7531');
+        const info = nfApplyCouponCode(code);
+        if (info) {
+            showToast('🎉 ' + nfCouponLabel(info) + ' যুক্ত হয়েছে!', '#2f7531');
         } else {
             showToast('❌ ভুল কুপন কোড!', '#dc2626');
         }
         aaRenderCart();
     };
     window.aaRemoveCoupon = function () {
-        localStorage.removeItem('alaziz_coupon');
-        localStorage.removeItem('alaziz_discount');
+        nfRemoveCouponAll();
         showToast('🗑️ কুপন বাতিল হয়েছে', '#6b7280');
         aaRenderCart();
     };

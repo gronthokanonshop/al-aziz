@@ -349,6 +349,16 @@
         .be-list-item.stockout .be-thumb{position:relative;opacity:.7;}
         .be-out-flag{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(220,38,38,0.55);color:#fff;font-size:9px;font-weight:800;border-radius:inherit;}
         .be-out-badge{display:inline-block;font-size:9.5px;font-weight:800;color:#dc2626;background:#fee2e2;border:1px solid #fecaca;padding:1px 7px;border-radius:20px;vertical-align:middle;margin-left:4px;}
+        .nf-tag-checks{display:flex;flex-wrap:wrap;gap:7px;}
+        .nf-tag-check{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1.5px solid var(--border);border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;user-select:none;background:var(--bg);transition:var(--trans);}
+        .nf-tag-check input{margin:0;cursor:pointer;width:15px;height:15px;accent-color:var(--primary);}
+        .nf-tag-check.on{background:var(--primary-light);border-color:var(--primary);color:var(--primary);}
+        .be-cat-empty{font-size:11.5px;color:var(--text-muted);font-style:italic;}
+        .be-stock-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:2px 0 12px;padding:10px 12px;background:var(--bg);border:1px solid var(--border);border-radius:10px;}
+        .be-stock-row .lbl{font-size:12.5px;font-weight:700;color:var(--text-main);}
+        .stock-in-btn{background:var(--primary-light);color:var(--primary);border:1px solid rgba(47,117,49,0.35);font-weight:700;}
+        .stock-out-btn{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(239,68,68,0.35);font-weight:700;}
+        .be-stock-hint{font-size:11px;color:var(--text-muted);}
         .be-arrow{color:var(--text-muted);font-size:11px;transition:transform .2s;flex-shrink:0;}
         .be-arrow.open{transform:rotate(180deg);}
 
@@ -1040,22 +1050,52 @@
                 <div id="beAddForm" style="display:none;margin-bottom:16px;background:var(--surface);border-radius:14px;border:1px solid var(--primary);padding:16px;">
                     <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:12px;">নতুন বই যোগ করুন</div>
                     <div class="editor-grid">
-                        <div class="editor-full form-group"><label class="be-label">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="বইয়ের নাম"></div>
-                        <div class="form-group"><label class="be-label">লেখক</label><select class="form-input" id="fa_author" onchange="nfPickChange('fa_author',this)"></select></div>
+                        <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ *</label>
+                            <select class="form-input" id="fa_type" onchange="faOnTypeChange()">
+                                <option value="বই">📚 বই</option>
+                                <option value="প্রোডাক্ট">🛍️ সাধারণ প্রোডাক্ট (Stationery/খাবার/Sunnah Item ইত্যাদি)</option>
+                            </select>
+                        </div>
+                        <div class="editor-full form-group"><label class="be-label" id="fa_nameLabel">বইয়ের নাম *</label><input class="form-input" id="fa_name" placeholder="নাম"></div>
+                        <div id="faBookFields" class="editor-grid editor-full" style="padding:0;">
+                        <div class="form-group"><label class="be-label">লেখক</label>
+                            <select class="form-input" id="fa_author" onchange="if(this.value)document.getElementById('fa_authornew').value='';"></select>
+                            <input class="form-input" id="fa_authornew" placeholder="বা নতুন লেখক" style="margin-top:5px;">
+                        </div>
+                        <div class="form-group"><label class="be-label">প্রকাশনী</label>
+                            <select class="form-input" id="fa_pub" onchange="if(this.value)document.getElementById('fa_pubnew').value='';"></select>
+                            <input class="form-input" id="fa_pubnew" placeholder="বা নতুন প্রকাশনী" style="margin-top:5px;">
+                        </div>
+                        <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
+                        <div class="form-group"><label class="be-label">কভার</label><select class="form-input" id="fa_cover"></select></div>
+                        <div class="form-group"><label class="be-label">বিষয়</label>
+                            <select class="form-input" id="fa_subject" onchange="if(this.value)document.getElementById('fa_subjectnew').value='';"></select>
+                            <input class="form-input" id="fa_subjectnew" placeholder="বা নতুন বিষয়" style="margin-top:5px;">
+                        </div>
+                        </div>
+                        <div id="faProductFields" class="editor-grid editor-full" style="padding:0;display:none;">
+                        <div class="form-group"><label class="be-label">ব্র্যান্ড</label><input class="form-input" id="fa_brand" placeholder="যেমন: Muslim Corner"></div>
+                        <div class="form-group editor-full">
+                            <label class="be-label">অতিরিক্ত বৈশিষ্ট্য (Size, Color, মেয়াদ ইত্যাদি — যা প্রয়োজন যোগ করুন)</label>
+                            <div id="beAttrRows_add"></div>
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="beAttrAdd('add')" style="margin-top:4px;">＋ বৈশিষ্ট্য যোগ করুন</button>
+                        </div>
+                        </div>
                         <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="fa_price" type="number" placeholder="250"></div>
                         <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="fa_oprice" type="number" placeholder="350"></div>
-                        <div class="form-group"><label class="be-label">প্রকাশনী</label><select class="form-input" id="fa_pub" onchange="nfPickChange('fa_pub',this)"></select></div>
-                        <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="fa_pages" placeholder="200 পৃষ্ঠা"></div>
-                        <div class="form-group"><label class="be-label">বাঁধাই (কভার)</label>
-                            <select class="form-input" id="fa_cover"><option value="Paperback">পেপারব্যাক</option><option value="Hardcover">হার্ডকভার</option></select>
+                        <div class="form-group"><label class="be-label">বিভাগ (Category) *</label>
+                            <select class="form-input" id="nf_cat_add" onchange="nfOnCatChange('add')"></select>
+                            <input class="form-input" id="nf_catnew_add" placeholder="বা নতুন বিভাগ লিখুন" style="margin-top:5px;">
                         </div>
-                        <div class="form-group editor-full"><label class="be-label">ক্যাটাগরি (একাধিক দেওয়া যায়)</label>
-                            <input class="form-input" id="fa_cat" placeholder="একাধিক হলে কমা দিয়ে লিখুন" style="margin-bottom:6px;">
-                            <select class="form-input" onchange="nfAddCat('fa_cat',this)" style="font-size:12px;"><option value="">➕ ক্যাটাগরি যোগ করুন...</option></select>
+                        <div class="form-group"><label class="be-label">উপ-বিভাগ (Sub-category)</label>
+                            <select class="form-input" id="nf_subcat_add"></select>
+                            <input class="form-input" id="nf_subcatnew_add" placeholder="বা নতুন উপ-বিভাগ লিখুন" style="margin-top:5px;">
                         </div>
-                        <div class="form-group"><label class="be-label">বিষয়</label><select class="form-input" id="fa_subject" onchange="nfPickChange('fa_subject',this)"></select></div>
+                        <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
+                            <div id="nf_tagbox_add"></div>
+                        </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label><div style="display:flex;gap:8px;align-items:center;"><input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;"><label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="faUploadImg(this)"></label></div></div>
-                        <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বইয়ের বিবরণ..."></textarea></div>
+                        <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বিবরণ..."></textarea></div>
                     </div>
                     <div class="flex gap-2">
                         <button class="btn btn-primary" onclick="beAddBook()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> যোগ করুন ও Firebase-এ সেভ</button>
@@ -1225,6 +1265,63 @@
                     <input class="form-input" id="imgbbKeyInput" placeholder="imgbb API Key" style="margin-bottom:10px;">
                     <button class="btn btn-primary w-full" onclick="saveImgbbKey()">imgbb key সেভ করুন</button>
                     <div id="imgbbKeyStatus" style="margin-top:10px;font-size:12px;display:none;padding:8px 11px;background:rgba(47,117,49,0.07);border:1px solid rgba(47,117,49,0.25);border-radius:8px;"></div>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="3" width="7" height="7" rx="1.5"></rect><rect x="14" y="14" width="7" height="7" rx="1.5"></rect><rect x="3" y="14" width="7" height="7" rx="1.5"></rect></svg> হোমপেজ ক্যাটাগরি চিপ (ছবি)</h3>
+                    <p style="margin-bottom:12px;">হোমপেজের উপরে যে গোল-চৌকো ক্যাটাগরি কার্ডগুলো দেখায় (Rokomari স্টাইল) — এখানে প্রতিটির ছবি সেট করুন ও ক্রম বদলান। ছবি না দিলে হালকা সবুজ box দেখাবে।</p>
+                    <div id="homeCatList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px;"></div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;border-top:1px dashed var(--border);padding-top:12px;">
+                        <input class="form-input" id="hcName" placeholder="নতুন ক্যাটাগরির নাম" style="flex:1;min-width:120px;">
+                        <input class="form-input" id="hcImg" placeholder="ছবির লিংক (ঐচ্ছিক)" style="flex:1;min-width:120px;">
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hcAddFile').click()">📤 ছবি</button>
+                        <input type="file" id="hcAddFile" accept="image/*" style="display:none;" onchange="hcUploadAddImg(this)">
+                        <button class="btn btn-primary btn-sm" type="button" onclick="addHomeCat()">＋ যোগ</button>
+                        <span id="hcImgPrev"></span>
+                    </div>
+                    <button class="btn btn-primary w-full" style="margin-top:12px;" onclick="saveHomeCats()">💾 হোমপেজ ক্যাটাগরি সেভ করুন (লাইভ)</button>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> হোমপেজ প্রকাশনী চিপ</h3>
+                    <p style="margin-bottom:12px;">হোমপেজে ক্যাটাগরি চিপের নিচে প্রকাশনীর লোগো/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
+                    <div id="homePubList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+                    <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন প্রকাশনী চিপ</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                            <input class="form-input" id="hpName" list="pubNameDatalist" placeholder="প্রকাশনীর নাম (ড্রপডাউন থেকে বাছুন বা টাইপ করুন)" style="flex:3;min-width:150px;">
+                            <datalist id="pubNameDatalist"></datalist>
+                            <button class="btn btn-ghost" type="button" onclick="addHomePub()" style="flex-shrink:0;">＋ যোগ</button>
+                        </div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="hpImg" placeholder="লোগোর লিংক (URL) — ঐচ্ছিক" style="flex:1;min-width:150px;">
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('hpImgFile').click()" style="flex-shrink:0;white-space:nowrap;">📤 ছবি আপলোড</button>
+                            <input type="file" id="hpImgFile" accept="image/*" style="display:none;" onchange="hpUploadAddImg(this)">
+                        </div>
+                        <div class="be-img-preview" id="hpImgPrev" style="margin-top:8px;"></div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveHomePubs()">💾 প্রকাশনী চিপ সেভ করুন (হোমপেজে লাইভ)</button>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> হোমপেজ প্রিয় লেখক চিপ</h3>
+                    <p style="margin-bottom:12px;">হোমপেজে লেখকের ছবি/নাম চিপ দেখানোর জন্য এখান থেকে নিয়ন্ত্রণ করুন। নাম বাছার সময় বইয়ের ডেটা থেকে অটোকমপ্লিট সাজেশন আসবে (টাইপো এড়াতে)। সেভ করলেই হোমপেজে লাইভ। কিছু না থাকলে সেকশনটা হোমপেজে দেখাবে না।</p>
+                    <div id="homeAuthorList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:14px;"></div>
+                    <div style="border:1.5px dashed var(--border);border-radius:10px;padding:14px;margin-bottom:12px;background:rgba(0,0,0,0.02);">
+                        <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:10px;letter-spacing:.5px;">➕ নতুন লেখক চিপ</div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">
+                            <input class="form-input" id="haName" list="authorNameDatalist" placeholder="লেখকের নাম (ড্রপডাউন থেকে বাছুন বা টাইপ করুন)" style="flex:3;min-width:150px;">
+                            <datalist id="authorNameDatalist"></datalist>
+                            <button class="btn btn-ghost" type="button" onclick="addHomeAuthor()" style="flex-shrink:0;">＋ যোগ</button>
+                        </div>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="haImg" placeholder="লেখকের ছবির লিংক (URL) — ঐচ্ছিক" style="flex:1;min-width:150px;">
+                            <button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById('haImgFile').click()" style="flex-shrink:0;white-space:nowrap;">📤 ছবি আপলোড</button>
+                            <input type="file" id="haImgFile" accept="image/*" style="display:none;" onchange="haUploadAddImg(this)">
+                        </div>
+                        <div class="be-img-preview" id="haImgPrev" style="margin-top:8px;"></div>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveHomeAuthors()">💾 লেখক চিপ সেভ করুন (হোমপেজে লাইভ)</button>
                 </div>
 
                 <div class="tool-card">
@@ -1459,7 +1556,7 @@ function switchTab(tab, btnEl){
     });
     if(tab==='books') renderBookManage();
     if(tab==='reviews') loadReviewsAdmin();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); }
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -1720,58 +1817,162 @@ function beInit(){
         localBooks=JSON.parse(JSON.stringify(books));
     }
     /* স্টক ইন/আউট এডিটরে দেখাতে — লোড করে রেন্ডার */
-    loadStockData(()=>{ beUpdateStats(); beRenderList(); nfFillAddCatSelect(); });
+    loadStockData(()=>{ beUpdateStats(); beRenderList(); });
     beUpdateStats();
     beRenderList();
-    nfFillAddCatSelect();
 }
-function nfFillAddCatSelect(){
-    const sel=document.querySelector('#beAddForm select[onchange="nfAddCat(\'fa_cat\',this)"]');
-    if(sel){
-        const opts=nfKnownCats().map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
-        sel.innerHTML='<option value="">➕ ক্যাটাগরি যোগ করুন...</option>'+opts+'<option value="__new__">✚ নতুন ক্যাটাগরি লিখুন...</option>';
-    }
-    nfFillAddSelects();
+/* ═══════════════════════════════════════════════
+   ক্যাটাগরি (বিভাগ→উপ-বিভাগ) + ট্যাগ + প্রোডাক্ট সিস্টেম
+   (গ্রন্থকাননের মতো — পুরনো cat/cats field gracefully handle করা)
+═══════════════════════════════════════════════ */
+const NF_CAT_TREE=[
+    {name:'ইসলামি বই', subs:['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']},
+    {name:'একাডেমিক বই', subs:['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']},
+    {name:'মাদ্রাসার বই', subs:['নাহু-সরফ','কিতাব']},
+    {name:'Pre Order', subs:[]},
+    {name:'আত্মউন্নয়ন বই', subs:['মোটিভেশন','লিডারশিপ']},
+    {name:'English বই', subs:[]},
+    {name:'প্যাকেজসমূহ', subs:[]},
+    {name:'Sunnah Item', subs:['আতর','মিসওয়াক','পাঞ্জাবি','টুপি','হিজাব']},
+    {name:'Stationery', subs:[]},
+    {name:'খাবার', subs:['মধু','খেজুর','কালোজিরা']}
+];
+const NF_TAGS=[
+    {name:'Best Selling'},{name:'New Arrived'},{name:'Trending'},{name:'Pre Order'},{name:'Best Writer'}
+];
+/* পুরনো cat/cats-এ ট্যাগ-জাতীয় মান → নতুন ট্যাগে ম্যাপ */
+const NF_OLD_TAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+/* ট্যাগ-নাম কখনো ক্যাটাগরি হিসেবে দেখাবে না */
+const NF_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+
+function nfFindCat(name){ return NF_CAT_TREE.find(c=>c.name===name); }
+/* NafahLife পুরনো cat কমা দিয়ে লেখা হতে পারে ("ইসলামি বই, Best Selling") — তাই split করি */
+function nfSplitCat(b){
+    if(b&&Array.isArray(b.cats)&&b.cats.length)return b.cats.slice();
+    return String((b&&b.cat)||'').split(',').map(s=>s.trim()).filter(Boolean);
 }
-/* লেখক/প্রকাশনী/বিষয় — আগের সব মানের আসল ড্রপডাউন (select), নতুনও যোগ করা যায় */
-function nfUniqVals(key){
-    const s={};
-    (localBooks||[]).forEach(b=>{const v=String(b[key]||'').trim(); if(v)s[v]=1;});
-    return Object.keys(s).sort((a,b)=>a.localeCompare(b,'bn'));
+function bookMainCat(b){ const arr=nfSplitCat(b); const nonTag=arr.filter(c=>!NF_TAG_NAMES.has(c)); return nonTag[0]||arr[0]||''; }
+function bookSubcat(b){ return (b&&b.subcat)||''; }
+function bookTags(b){
+    if(b&&Array.isArray(b.tags))return b.tags;
+    const out=[]; nfSplitCat(b).forEach(c=>{ const t=NF_OLD_TAGMAP[c]; if(t&&!out.includes(t))out.push(t); });
+    return out;
 }
-/* এডিটর রো-এর জন্য: বর্তমান মান সিলেক্টেড, সব পুরনো মান অপশন, + নতুন লেখার অপশন */
-function nfPickField(id,val,key,promptText){
-    const v=String(val||'');
-    const vals=nfUniqVals(key);
-    if(v && vals.indexOf(v)<0) vals.unshift(v);
-    let opts='<option value="">— নির্বাচন করুন —</option>';
-    opts+=vals.map(c=>`<option value="${escapeHTML(c)}" ${v===c?'selected':''}>${escapeHTML(c)}</option>`).join('');
-    opts+='<option value="__new__">✚ নতুন লিখুন...</option>';
-    return `<select class="form-input" id="${id}" data-prompt="${escapeHTML(promptText)}" onchange="nfPickChange('${id}',this)">${opts}</select>`;
+/* বিভাগ তালিকা = taxonomy + প্রোডাক্টে ব্যবহৃত (নতুনও যোগ হয়) — ট্যাগ-নাম বাদ */
+function nfAllMainCats(){
+    const s=new Set(NF_CAT_TREE.map(c=>c.name));
+    (localBooks||[]).forEach(b=>{ nfSplitCat(b).forEach(c=>{ if(c&&!NF_TAG_NAMES.has(c))s.add(c); }); });
+    return [...s];
 }
-/* যেকোনো pick-select এ "নতুন লিখুন" বাছলে prompt করে অপশন যোগ করে */
-function nfPickChange(id,sel){
-    if(sel.value!=='__new__')return;
-    const pt=sel.getAttribute('data-prompt')||'নতুন মান লিখুন:';
-    const nv=(prompt(pt)||'').trim();
-    if(nv){ const o=document.createElement('option'); o.value=nv; o.textContent=nv; o.selected=true; sel.insertBefore(o,sel.lastElementChild); }
-    else { sel.value=''; }
+function nfAllSubcats(catName){
+    const cat=nfFindCat(catName); const s=new Set(cat?cat.subs:[]);
+    (localBooks||[]).forEach(b=>{ if(b&&b.cat===catName&&b.subcat)s.add(b.subcat); });
+    return [...s];
 }
-/* নতুন-বই ফর্মের author/pub/subject select গুলো ভরায় (localBooks লোড হওয়ার পর) */
-function nfFillAddSelects(){
-    [['fa_author','author','নতুন লেখকের নাম লিখুন:'],
-     ['fa_pub','pub','নতুন প্রকাশনীর নাম লিখুন:'],
-     ['fa_subject','subject','নতুন বিষয় লিখুন:']].forEach(function(row){
-        const sel=document.getElementById(row[0]); if(!sel)return;
-        const keep=sel.value;
-        const vals=nfUniqVals(row[1]);
-        let opts='<option value="">— নির্বাচন করুন —</option>';
-        opts+=vals.map(c=>`<option value="${escapeHTML(c)}">${escapeHTML(c)}</option>`).join('');
-        opts+='<option value="__new__">✚ নতুন লিখুন...</option>';
-        sel.setAttribute('data-prompt',row[2]);
-        sel.innerHTML=opts;
-        if(keep && vals.indexOf(keep)>=0) sel.value=keep;
-    });
+function nfMainCatOptions(sel){
+    sel=sel||''; const cats=nfAllMainCats();
+    if(sel&&!cats.includes(sel))cats.push(sel);
+    let h='<option value="">— বিভাগ বাছুন —</option>';
+    h+=cats.map(c=>`<option value="${escapeHTML(c)}"${c===sel?' selected':''}>${escapeHTML(c)}</option>`).join('');
+    return h;
+}
+function nfSubcatOptions(catName, selSub){
+    selSub=selSub||''; const subs=nfAllSubcats(catName);
+    if(selSub&&!subs.includes(selSub))subs.unshift(selSub);
+    return '<option value="">— উপ-বিভাগ (ঐচ্ছিক) —</option>'+subs.map(s=>`<option value="${escapeHTML(s)}"${s===selSub?' selected':''}>${escapeHTML(s)}</option>`).join('');
+}
+function nfOnCatChange(prefix){
+    const catEl=document.getElementById('nf_cat_'+prefix); if(!catEl)return;
+    const subSel=document.getElementById('nf_subcat_'+prefix);
+    if(subSel)subSel.innerHTML=nfSubcatOptions(catEl.value,'');
+}
+function nfTagChecksHtml(prefix, tags){
+    tags=tags||[];
+    return '<div class="nf-tag-checks">'+NF_TAGS.map(t=>{
+        const on=tags.includes(t.name);
+        return `<label class="nf-tag-check${on?' on':''}"><input type="checkbox" class="nf_tag_${prefix}" value="${escapeHTML(t.name)}"${on?' checked':''} onchange="this.parentNode.classList.toggle('on',this.checked)"> ${escapeHTML(t.name)}</label>`;
+    }).join('')+'</div>';
+}
+function nfReadTags(prefix){
+    return [...document.querySelectorAll('.nf_tag_'+prefix)].filter(c=>c.checked).map(c=>c.value);
+}
+
+/* ─── বিষয় / কভার / লেখক / প্রকাশনী ড্রপডাউন হেল্পার ─── */
+const BE_COVER_OPTIONS=['Paperback','Hardcover','Hardback','Board Book','Spiral','ই-বুক'];
+function beCoverOptionsHtml(cur){
+    cur=cur||''; const opts=BE_COVER_OPTIONS.slice();
+    if(cur&&!opts.includes(cur))opts.unshift(cur);
+    return '<option value="">— বাছুন —</option>'+opts.map(o=>`<option value="${escapeHTML(o)}"${o===cur?' selected':''}>${escapeHTML(o)}</option>`).join('');
+}
+function beListFrom(field){
+    const s=new Set();
+    (localBooks||[]).forEach(b=>{if(b[field])s.add(b[field]);});
+    return [...s].sort((a,b)=>String(a).localeCompare(String(b),'bn'));
+}
+function beOptionsHtml(list,cur){
+    cur=cur||'';
+    if(cur&&!list.includes(cur))list=[cur].concat(list);
+    return '<option value="">— বাছুন —</option>'+list.map(o=>`<option value="${escapeHTML(o)}"${o===cur?' selected':''}>${escapeHTML(o)}</option>`).join('');
+}
+function beSubjectOptionsHtml(cur){ return beOptionsHtml(beListFrom('subject'),cur); }
+
+/* ─── কাস্টম বৈশিষ্ট্য (Size/Color/মেয়াদ) — শুধু সাধারণ প্রোডাক্টের জন্য ─── */
+let beAttrSel={};   // 'add' বা idx → [{label,value}, ...]
+function beAttrRowsMarkup(key){
+    const rows=beAttrSel[key]||[];
+    if(!rows.length)return '<span class="be-cat-empty">কোনো বৈশিষ্ট্য যোগ করা হয়নি — নিচ থেকে যোগ করুন</span>';
+    return rows.map((a,ai)=>`<div style="display:flex;gap:6px;margin-bottom:6px;">
+        <input class="form-input" placeholder="নাম (যেমন: Size)" value="${escapeHTML(a.label||'')}" oninput="beAttrUpdate('${key}',${ai},'label',this.value)" style="flex:1;">
+        <input class="form-input" placeholder="মান (যেমন: Large)" value="${escapeHTML(a.value||'')}" oninput="beAttrUpdate('${key}',${ai},'value',this.value)" style="flex:1;">
+        <button type="button" class="btn btn-ghost btn-sm" onclick="beAttrRemove('${key}',${ai})" style="flex-shrink:0;">×</button>
+    </div>`).join('');
+}
+function beRenderAttrRows(key){ const el=document.getElementById('beAttrRows_'+key); if(el)el.innerHTML=beAttrRowsMarkup(key); }
+function beAttrAdd(key){ beAttrSel[key]=beAttrSel[key]||[]; beAttrSel[key].push({label:'',value:''}); beRenderAttrRows(key); }
+function beAttrRemove(key,ai){ if(!beAttrSel[key])return; beAttrSel[key].splice(ai,1); beRenderAttrRows(key); }
+function beAttrUpdate(key,ai,field,val){ if(!beAttrSel[key]||!beAttrSel[key][ai])return; beAttrSel[key][ai][field]=val; }
+
+/* ─── প্রোডাক্ট টাইপ অনুযায়ী ফিল্ড টগল ─── */
+function faOnTypeChange(){
+    const t=document.getElementById('fa_type').value;
+    const isBook=t==='বই';
+    document.getElementById('faBookFields').style.display=isBook?'':'none';
+    document.getElementById('faProductFields').style.display=isBook?'none':'';
+    document.getElementById('fa_nameLabel').textContent=isBook?'বইয়ের নাম *':'প্রোডাক্টের নাম *';
+}
+function beOnTypeChange(idx){
+    const t=document.getElementById('be_type_'+idx).value;
+    const isBook=t==='বই';
+    document.getElementById('beBookFields_'+idx).style.display=isBook?'':'none';
+    document.getElementById('beProductFields_'+idx).style.display=isBook?'none':'';
+}
+
+/* ─── নতুন-আইটেম ফর্ম রিসেট/ভরাট ─── */
+function beFillAddForm(){
+    beAttrSel['add']=[];
+    const ty=document.getElementById('fa_type'); if(ty)ty.value='বই';
+    const mc=document.getElementById('nf_cat_add'); if(mc)mc.innerHTML=nfMainCatOptions('');
+    const sc=document.getElementById('nf_subcat_add'); if(sc)sc.innerHTML=nfSubcatOptions('','');
+    ['nf_catnew_add','nf_subcatnew_add','fa_authornew','fa_pubnew','fa_subjectnew'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+    const tb=document.getElementById('nf_tagbox_add'); if(tb)tb.innerHTML=nfTagChecksHtml('add',[]);
+    const cov=document.getElementById('fa_cover'); if(cov)cov.innerHTML=beCoverOptionsHtml('Paperback');
+    const subj=document.getElementById('fa_subject'); if(subj)subj.innerHTML=beSubjectOptionsHtml('');
+    const au=document.getElementById('fa_author'); if(au)au.innerHTML=beOptionsHtml(beListFrom('author'),'');
+    const pb=document.getElementById('fa_pub'); if(pb)pb.innerHTML=beOptionsHtml(beListFrom('pub'),'');
+    beRenderAttrRows('add');
+    faOnTypeChange();
+}
+
+/* ─── স্টক ইন/আউট বাটন (সাথে সাথে লাইভ) ─── */
+async function beToggleStock(idx){
+    const cur=stockData[idx]!==false; const next=!cur;
+    const btn=document.getElementById('beStockBtn_'+idx);
+    try{
+        await db.ref('stock/'+idx).set(next);
+        stockData[idx]=next;
+        if(btn){ btn.className='btn btn-sm '+(next?'stock-in-btn':'stock-out-btn'); btn.innerHTML=next?'✅ স্টকে আছে':'❌ স্টক শেষ'; }
+        showToast(next?'স্টকে ফেরানো হলো ✅':'স্টক শেষ চিহ্নিত হলো','#2f7531');
+    }catch(e){showToast('স্টক আপডেট ব্যর্থ','#dc2626');}
 }
 
 function beUpdateStats(){
@@ -1794,36 +1995,53 @@ function beToggleAddForm(){
     const form=document.getElementById('beAddForm');
     const btn=document.getElementById('beAddToggle');
     form.style.display=beAddFormOpen?'block':'none';
+    if(beAddFormOpen)beFillAddForm();
     btn.innerHTML=beAddFormOpen
         ?`<svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg> বন্ধ করুন`
         :`<svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> নতুন বই যোগ করুন`;
 }
 
 function beAddBook(){
-    const name=document.getElementById('fa_name').value.trim();
-    if(!name){showToast('বইয়ের নাম দিন','#dc2626');return;}
+    const g=id=>document.getElementById(id);
+    const name=g('fa_name').value.trim();
+    if(!name){showToast('নাম দিন','#dc2626');return;}
+    const type=g('fa_type').value||'বই';
+    const isBook=type==='বই';
+    const mainCat=(g('nf_catnew_add')?.value||'').trim()||g('nf_cat_add').value||(isBook?'ইসলামি বই':'Sunnah Item');
+    const subcat=(g('nf_subcatnew_add')?.value||'').trim()||g('nf_subcat_add').value||'';
+    const tags=nfReadTags('add');
     const newBook={
+        type,
         name,
-        author:document.getElementById('fa_author').value.trim(),
-        price:Number(document.getElementById('fa_price').value)||0,
-        original_price:Number(document.getElementById('fa_oprice').value)||0,
-        cat:document.getElementById('fa_cat').value||'ইসলামি বই',
-        subject:document.getElementById('fa_subject').value||'ইসলামি বই',
-        cover:document.getElementById('fa_cover').value||'Paperback',
-        pub:document.getElementById('fa_pub').value.trim(),
-        pages:document.getElementById('fa_pages').value||'পৃষ্ঠা',
-        img:document.getElementById('fa_img').value.trim(),
-        desc:document.getElementById('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
+        price:Number(g('fa_price').value)||0,
+        original_price:Number(g('fa_oprice').value)||0,
+        cat:mainCat,
+        subcat:subcat,
+        tags:tags,
+        img:g('fa_img').value.trim(),
+        desc:g('fa_desc').value||'শীঘ্রই আপডেট করা হবে',
     };
+    if(isBook){
+        const subjNew=(g('fa_subjectnew')?.value||'').trim();
+        const authNew=(g('fa_authornew')?.value||'').trim();
+        const pubNew=(g('fa_pubnew')?.value||'').trim();
+        newBook.author=authNew||g('fa_author').value||'';
+        newBook.subject=subjNew||g('fa_subject').value||'ইসলামি বই';
+        newBook.cover=g('fa_cover').value||'Paperback';
+        newBook.pub=pubNew||g('fa_pub').value||'';
+        newBook.pages=g('fa_pages').value||'পৃষ্ঠা';
+    } else {
+        newBook.brand=(g('fa_brand')?.value||'').trim();
+        newBook.attributes=(beAttrSel['add']||[]).filter(a=>a.label&&a.label.trim());
+    }
     localBooks.push(newBook);
-    ['fa_name','fa_author','fa_price','fa_oprice','fa_pub','fa_pages','fa_cover','fa_cat','fa_subject','fa_img','fa_desc'].forEach(id=>{
-        document.getElementById(id).value='';
-    });
+    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand'].forEach(id=>{const el=g(id);if(el)el.value='';});
+    beAttrSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
     beUpdateStats();
     beRenderList();
-    syncBookToFirebase(localBooks.length-1, newBook, 'নতুন বই যোগ ও Firebase-এ সেভ হয়েছে');
+    syncBookToFirebase(localBooks.length-1, newBook, 'নতুন আইটেম যোগ ও Firebase-এ সেভ হয়েছে');
 }
 
 function beToggleBook(idx){
@@ -1852,21 +2070,34 @@ function beToggleBook(idx){
 }
 
 function beSaveBook(idx){
-    const fields=['name','author','price','original_price','pub','pages','cover','cat','subject','img','desc'];
-    fields.forEach(f=>{
-        const el=document.getElementById(`be_${f}_${idx}`);
-        if(!el)return;
-        let val=(f==='price'||f==='original_price')?(Number(el.value)||0):el.value;
-        if(f==='cat') val=String(val).split(',').map(s=>s.trim()).filter(Boolean).join(', ')||'ইসলামি বই';
-        localBooks[idx][f]=val;
-    });
-    /* স্টক ইন/আউট — এডিটর থেকেই */
-    const stEl=document.getElementById(`be_stock_${idx}`);
-    if(stEl){
-        const inStock=stEl.checked;
-        stockData[idx]=inStock;
-        db.ref('stock/'+idx).set(inStock).catch(()=>{});
+    const g=id=>document.getElementById(id);
+    const b=localBooks[idx];
+    const type=g('be_type_'+idx)?.value||b.type||'বই';
+    b.type=type;
+    const isBook=type==='বই';
+    ['name','img','desc'].forEach(f=>{const el=g(`be_${f}_${idx}`);if(el)b[f]=el.value;});
+    b.price=Number(g('be_price_'+idx).value)||0;
+    b.original_price=Number(g('be_original_price_'+idx).value)||0;
+    if(isBook){
+        const el=g('be_pages_'+idx); if(el)b.pages=el.value;
+        const cov=g('be_cover_'+idx); if(cov)b.cover=cov.value;
+        const subjNew=(g('be_subjectnew_'+idx)?.value||'').trim();
+        b.subject=subjNew||g('be_subject_'+idx).value||'';
+        const authNew=(g('be_authornew_'+idx)?.value||'').trim();
+        b.author=authNew||g('be_author_'+idx).value||'';
+        const pubNew=(g('be_pubnew_'+idx)?.value||'').trim();
+        b.pub=pubNew||g('be_pub_'+idx).value||'';
+        delete b.brand; delete b.attributes;
+    } else {
+        const br=g('be_brand_'+idx); if(br)b.brand=br.value.trim();
+        b.attributes=(beAttrSel[idx]||[]).filter(a=>a.label&&a.label.trim());
+        delete b.author; delete b.subject; delete b.cover; delete b.pub; delete b.pages;
     }
+    /* বিভাগ + উপ-বিভাগ + ট্যাগ */
+    b.cat=(g('nf_catnew_'+idx)?.value||'').trim()||g('nf_cat_'+idx).value||'';
+    b.subcat=(g('nf_subcatnew_'+idx)?.value||'').trim()||g('nf_subcat_'+idx).value||'';
+    b.tags=nfReadTags(idx);
+    delete b.cats;
     beUpdateStats();
     beRenderList();
     beOpenIdx=idx;
@@ -1980,24 +2211,61 @@ function beRenderList(){
 /* খোলা বইয়ের এডিটর বডি — শুধু যখন খোলা হয় তখনই বানানো হয় (ফোন হ্যাং এড়াতে) */
 function beBookBodyHTML(i){
     const b=localBooks[i]; if(!b)return '';
+    beAttrSel[i]=Array.isArray(b.attributes)?b.attributes.map(a=>({...a})):[];
     const hasImg=isRealUrl(b.img);
     const imgPrevHtml=hasImg?`<img src="${escapeHTML(b.img)}" onerror="this.style.display='none'">`:`<span class="be-empty-img">ছবি নেই</span>`;
+    const type=b.type||'বই';
+    const isBook=type==='বই';
     return `
+                <div class="be-stock-row">
+                    <span class="lbl">📦 স্টক অবস্থা:</span>
+                    <button type="button" id="beStockBtn_${i}" class="btn btn-sm ${(stockData[i]!==false)?'stock-in-btn':'stock-out-btn'}" onclick="beToggleStock(${i})">${(stockData[i]!==false)?'✅ স্টকে আছে':'❌ স্টক শেষ'}</button>
+                    <span class="be-stock-hint">ক্লিক করে বদলান — সাথে সাথে সাইটে লাইভ</span>
+                </div>
                 <div class="editor-grid">
-                    <div class="form-group"><label class="be-label">বইয়ের নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
-                    <div class="form-group"><label class="be-label">লেখক</label>${nfPickField(`be_author_${i}`,b.author,'author','নতুন লেখকের নাম লিখুন:')}</div>
+                    <div class="form-group editor-full"><label class="be-label">প্রোডাক্ট টাইপ</label>
+                        <select class="form-input" id="be_type_${i}" onchange="beOnTypeChange(${i})">
+                            <option value="বই"${isBook?' selected':''}>📚 বই</option>
+                            <option value="প্রোডাক্ট"${!isBook?' selected':''}>🛍️ সাধারণ প্রোডাক্ট</option>
+                        </select>
+                    </div>
+                    <div class="form-group"><label class="be-label">নাম</label><input class="form-input" id="be_name_${i}" value="${escapeHTML(b.name)}"></div>
+                    <div id="beBookFields_${i}" class="editor-grid editor-full" style="padding:0;display:${isBook?'':'none'};">
+                    <div class="form-group"><label class="be-label">লেখক</label>
+                        <select class="form-input" id="be_author_${i}" onchange="if(this.value)document.getElementById('be_authornew_${i}').value='';">${beOptionsHtml(beListFrom('author'),b.author)}</select>
+                        <input class="form-input" id="be_authornew_${i}" placeholder="বা নতুন লেখক লিখুন" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group"><label class="be-label">প্রকাশনী</label>
+                        <select class="form-input" id="be_pub_${i}" onchange="if(this.value)document.getElementById('be_pubnew_${i}').value='';">${beOptionsHtml(beListFrom('pub'),b.pub)}</select>
+                        <input class="form-input" id="be_pubnew_${i}" placeholder="বা নতুন প্রকাশনী লিখুন" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="be_pages_${i}" value="${escapeHTML(b.pages||'')}"></div>
+                    <div class="form-group"><label class="be-label">কভার</label><select class="form-input" id="be_cover_${i}">${beCoverOptionsHtml(b.cover)}</select></div>
+                    <div class="form-group"><label class="be-label">বিষয়</label>
+                        <select class="form-input" id="be_subject_${i}" onchange="if(this.value)document.getElementById('be_subjectnew_${i}').value='';">${beSubjectOptionsHtml(b.subject)}</select>
+                        <input class="form-input" id="be_subjectnew_${i}" placeholder="বা নতুন বিষয় লিখুন" style="margin-top:5px;">
+                    </div>
+                    </div>
+                    <div id="beProductFields_${i}" class="editor-grid editor-full" style="padding:0;display:${isBook?'none':''};">
+                    <div class="form-group"><label class="be-label">ব্র্যান্ড</label><input class="form-input" id="be_brand_${i}" value="${escapeHTML(b.brand||'')}" placeholder="যেমন: Muslim Corner"></div>
+                    <div class="form-group editor-full">
+                        <label class="be-label">অতিরিক্ত বৈশিষ্ট্য (Size, Color, মেয়াদ ইত্যাদি)</label>
+                        <div id="beAttrRows_${i}">${beAttrRowsMarkup(i)}</div>
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="beAttrAdd(${i})" style="margin-top:4px;">＋ বৈশিষ্ট্য যোগ করুন</button>
+                    </div>
+                    </div>
                     <div class="form-group"><label class="be-label">মূল্য (৳)</label><input class="form-input" id="be_price_${i}" type="number" value="${b.price}"></div>
                     <div class="form-group"><label class="be-label">আসল মূল্য (৳)</label><input class="form-input" id="be_original_price_${i}" type="number" value="${b.original_price}"></div>
-                    <div class="form-group"><label class="be-label">প্রকাশনী</label>${nfPickField(`be_pub_${i}`,b.pub,'pub','নতুন প্রকাশনীর নাম লিখুন:')}</div>
-                    <div class="form-group"><label class="be-label">পৃষ্ঠা</label><input class="form-input" id="be_pages_${i}" value="${escapeHTML(b.pages||'')}"></div>
-                    <div class="form-group"><label class="be-label">বাঁধাই (কভার)</label>${nfCoverField(`be_cover_${i}`,b.cover)}</div>
-                    <div class="form-group editor-full"><label class="be-label">ক্যাটাগরি (একাধিক দেওয়া যায়)</label>${nfCatField(`be_cat_${i}`,b.cat)}</div>
-                    <div class="form-group"><label class="be-label">বিষয়</label>${nfPickField(`be_subject_${i}`,b.subject,'subject','নতুন বিষয় লিখুন:')}</div>
-                    <div class="form-group"><label class="be-label">স্টক</label>
-                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:9px 0;font-size:13px;">
-                            <input type="checkbox" id="be_stock_${i}" ${stockData[i]!==false?'checked':''} style="width:18px;height:18px;accent-color:#2f7531;">
-                            <span>স্টকে আছে (টিক তুলে দিলে "স্টক শেষ" দেখাবে)</span>
-                        </label>
+                    <div class="form-group"><label class="be-label">বিভাগ (Category) *</label>
+                        <select class="form-input" id="nf_cat_${i}" onchange="nfOnCatChange('${i}')">${nfMainCatOptions(bookMainCat(b))}</select>
+                        <input class="form-input" id="nf_catnew_${i}" placeholder="বা নতুন বিভাগ লিখুন" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group"><label class="be-label">উপ-বিভাগ (Sub-category)</label>
+                        <select class="form-input" id="nf_subcat_${i}">${nfSubcatOptions(bookMainCat(b), bookSubcat(b))}</select>
+                        <input class="form-input" id="nf_subcatnew_${i}" placeholder="বা নতুন উপ-বিভাগ লিখুন" style="margin-top:5px;">
+                    </div>
+                    <div class="form-group editor-full"><label class="be-label">ট্যাগ (একাধিক বাছাই করা যাবে)</label>
+                        ${nfTagChecksHtml(i, bookTags(b))}
                     </div>
                     <div class="form-group editor-full">
                         <label class="be-label">ছবির লিংক</label>
@@ -2045,6 +2313,180 @@ async function syncAllBooksToFirebase(silent=false){
         if(!silent)showToast('সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#2f7531');
     }catch(e){showToast('Firebase sync ব্যর্থ','#dc2626');}
     if(btn){btn.disabled=false;btn.innerHTML=`<svg class="icon icon-sm" viewBox="0 0 24 24" style="stroke:white"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> সব সেভ করুন`;}
+}
+
+/* ══════════════════════════════════════════════
+   হোমপেজ ক্যাটাগরি চিপ (Firebase siteConfig/homeCats)
+══════════════════════════════════════════════ */
+const HOME_CATS_DEFAULT=[
+    {name:'ইসলামি বই',img:''},{name:'একাডেমিক বই',img:''},{name:'মাদ্রাসার বই',img:''},
+    {name:'আত্মউন্নয়ন বই',img:''},{name:'English বই',img:''},{name:'প্যাকেজসমূহ',img:''},
+    {name:'Sunnah Item',img:''},{name:'Stationery',img:''},{name:'খাবার',img:''}
+];
+let homeCatsData=[];
+function loadHomeCatsAdmin(){
+    db.ref('siteConfig/homeCats').once('value').then(function(s){
+        const v=s.val();
+        homeCatsData=(Array.isArray(v)&&v.length)?v.filter(c=>c&&c.name):HOME_CATS_DEFAULT.slice();
+        renderHomeCatList();
+    }).catch(function(){ homeCatsData=HOME_CATS_DEFAULT.slice(); renderHomeCatList(); });
+}
+function renderHomeCatList(){
+    const box=document.getElementById('homeCatList'); if(!box) return;
+    if(!homeCatsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো ক্যাটাগরি নেই — নিচে যোগ করুন</div>'; return; }
+    box.innerHTML=homeCatsData.map(function(c,i){
+        const thumb=(c.img||'').trim()
+            ? '<div style="width:40px;height:40px;border-radius:9px;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(c.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
+            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);"></div>';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
+            +thumb
+            +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(c.name)+'</span>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeCat('+i+',1)" '+(i===homeCatsData.length-1?'disabled':'')+'>▼</button>'
+            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeCat('+i+')">✕</button>'
+            +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
+            +'<input class="form-input" placeholder="ছবির লিংক (URL)" value="'+escapeHTML(c.img||'')+'" oninput="setHomeCatImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hcRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<input type="file" id="hcRowFile_'+i+'" accept="image/*" style="display:none;" onchange="hcUploadRowImg('+i+',this)">'
+            +'</div>'
+            +'</div>';
+    }).join('');
+}
+function setHomeCatImg(i,val){ if(homeCatsData[i]) homeCatsData[i].img=(val||'').trim(); }
+function hcUploadRowImg(i,inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ if(homeCatsData[i]){homeCatsData[i].img=url; renderHomeCatList();} },400); }
+function hcUploadAddImg(inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ const el=document.getElementById('hcImg'); if(el)el.value=url; const p=document.getElementById('hcImgPrev'); if(p)p.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:44px;border-radius:8px;vertical-align:middle;">'; },400); }
+function addHomeCat(){
+    const name=(document.getElementById('hcName').value||'').trim();
+    const img=(document.getElementById('hcImg').value||'').trim();
+    if(!name){ showToast('ক্যাটাগরির নাম দিন','#dc2626'); return; }
+    if(homeCatsData.some(c=>c.name===name)){ showToast('এই ক্যাটাগরি আগেই আছে','#dc2626'); return; }
+    homeCatsData.push({name:name, img:img});
+    document.getElementById('hcName').value=''; document.getElementById('hcImg').value='';
+    const p=document.getElementById('hcImgPrev'); if(p)p.innerHTML='';
+    renderHomeCatList();
+}
+function removeHomeCat(i){ homeCatsData.splice(i,1); renderHomeCatList(); }
+function moveHomeCat(i,dir){ const j=i+dir; if(j<0||j>=homeCatsData.length)return; const t=homeCatsData[i]; homeCatsData[i]=homeCatsData[j]; homeCatsData[j]=t; renderHomeCatList(); }
+async function saveHomeCats(){
+    try{
+        await db.ref('siteConfig/homeCats').set(homeCatsData);
+        showToast('✅ হোমপেজ ক্যাটাগরি সেভ হয়েছে — লাইভ!','#2f7531');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════
+   হোমপেজ প্রকাশনী চিপ (Firebase siteConfig/homePubs)
+══════════════════════════════════════════════ */
+let homePubsData=[];
+function loadHomePubsAdmin(){
+    fillPubAuthorDatalists();
+    db.ref('siteConfig/homePubs').once('value').then(function(s){
+        const v=s.val();
+        homePubsData=(Array.isArray(v)&&v.length)?v.filter(p=>p&&p.name):[];
+        renderHomePubList();
+    }).catch(function(){ homePubsData=[]; renderHomePubList(); });
+}
+function fillPubAuthorDatalists(){
+    const pubDl=document.getElementById('pubNameDatalist');
+    if(pubDl) pubDl.innerHTML=beListFrom('pub').map(p=>'<option value="'+escapeHTML(p)+'">').join('');
+    const authDl=document.getElementById('authorNameDatalist');
+    if(authDl) authDl.innerHTML=beListFrom('author').map(a=>'<option value="'+escapeHTML(a)+'">').join('');
+}
+function renderHomePubList(){
+    const box=document.getElementById('homePubList'); if(!box) return;
+    if(!homePubsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো প্রকাশনী চিপ নেই — নিচে যোগ করুন</div>'; return; }
+    box.innerHTML=homePubsData.map(function(p,i){
+        const thumb=(p.img||'').trim()
+            ? '<div style="width:40px;height:40px;border-radius:9px;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(p.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
+            : '<div style="width:40px;height:40px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;">🏢</div>';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
+            +thumb
+            +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(p.name)+'</span>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomePub('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomePub('+i+',1)" '+(i===homePubsData.length-1?'disabled':'')+'>▼</button>'
+            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomePub('+i+')">✕</button>'
+            +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
+            +'<input class="form-input" placeholder="লোগোর লিংক (URL)" value="'+escapeHTML(p.img||'')+'" oninput="setHomePubImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'hpRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<input type="file" id="hpRowFile_'+i+'" accept="image/*" style="display:none;" onchange="hpUploadRowImg('+i+',this)">'
+            +'</div>'
+            +'</div>';
+    }).join('');
+}
+function setHomePubImg(i,val){ if(homePubsData[i]) homePubsData[i].img=(val||'').trim(); }
+function hpUploadRowImg(i,inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ if(homePubsData[i]){homePubsData[i].img=url; renderHomePubList();} },400); }
+function hpUploadAddImg(inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ const el=document.getElementById('hpImg'); if(el)el.value=url; const p=document.getElementById('hpImgPrev'); if(p)p.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:60px;border-radius:8px;">'; },400); }
+function addHomePub(){
+    const name=(document.getElementById('hpName').value||'').trim();
+    const img=(document.getElementById('hpImg').value||'').trim();
+    if(!name){ showToast('প্রকাশনীর নাম দিন','#dc2626'); return; }
+    if(homePubsData.some(p=>p.name===name)){ showToast('এই প্রকাশনী আগেই আছে','#dc2626'); return; }
+    homePubsData.push({name:name, img:img});
+    document.getElementById('hpName').value=''; document.getElementById('hpImg').value='';
+    const p=document.getElementById('hpImgPrev'); if(p)p.innerHTML='';
+    renderHomePubList();
+}
+function removeHomePub(i){ homePubsData.splice(i,1); renderHomePubList(); }
+function moveHomePub(i,dir){ const j=i+dir; if(j<0||j>=homePubsData.length)return; const t=homePubsData[i]; homePubsData[i]=homePubsData[j]; homePubsData[j]=t; renderHomePubList(); }
+async function saveHomePubs(){
+    try{
+        await db.ref('siteConfig/homePubs').set(homePubsData);
+        showToast('✅ হোমপেজ প্রকাশনী চিপ সেভ হয়েছে — লাইভ!','#2f7531');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
+}
+
+/* ══════════════════════════════════════════════
+   হোমপেজ প্রিয় লেখক চিপ (Firebase siteConfig/homeAuthors)
+══════════════════════════════════════════════ */
+let homeAuthorsData=[];
+function loadHomeAuthorsAdmin(){
+    db.ref('siteConfig/homeAuthors').once('value').then(function(s){
+        const v=s.val();
+        homeAuthorsData=(Array.isArray(v)&&v.length)?v.filter(a=>a&&a.name):[];
+        renderHomeAuthorList();
+    }).catch(function(){ homeAuthorsData=[]; renderHomeAuthorList(); });
+}
+function renderHomeAuthorList(){
+    const box=document.getElementById('homeAuthorList'); if(!box) return;
+    if(!homeAuthorsData.length){ box.innerHTML='<div class="text-sm text-muted">কোনো লেখক চিপ নেই — নিচে যোগ করুন</div>'; return; }
+    box.innerHTML=homeAuthorsData.map(function(a,i){
+        const thumb=(a.img||'').trim()
+            ? '<div style="width:40px;height:40px;border-radius:50%;overflow:hidden;flex-shrink:0;background:#ecfdf5;"><img src="'+escapeHTML(a.img)+'" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display=\'none\'"></div>'
+            : '<div style="width:40px;height:40px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#ecfdf5,#d1fae5);display:flex;align-items:center;justify-content:center;font-size:15px;">✍️</div>';
+        return '<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;flex-wrap:wrap;">'
+            +thumb
+            +'<span style="flex:1;font-weight:700;min-width:80px;word-break:break-word;">'+escapeHTML(a.name)+'</span>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeAuthor('+i+',-1)" '+(i===0?'disabled':'')+'>▲</button>'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="moveHomeAuthor('+i+',1)" '+(i===homeAuthorsData.length-1?'disabled':'')+'>▼</button>'
+            +'<button class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;flex-shrink:0;" type="button" onclick="removeHomeAuthor('+i+')">✕</button>'
+            +'<div style="display:flex;gap:6px;width:100%;margin-top:2px;">'
+            +'<input class="form-input" placeholder="লেখকের ছবির লিংক (URL)" value="'+escapeHTML(a.img||'')+'" oninput="setHomeAuthorImg('+i+',this.value)" style="flex:1;min-width:0;font-size:12px;">'
+            +'<button class="btn btn-ghost btn-sm" type="button" onclick="document.getElementById(\'haRowFile_'+i+'\').click()" style="flex-shrink:0;white-space:nowrap;">📤</button>'
+            +'<input type="file" id="haRowFile_'+i+'" accept="image/*" style="display:none;" onchange="haUploadRowImg('+i+',this)">'
+            +'</div>'
+            +'</div>';
+    }).join('');
+}
+function setHomeAuthorImg(i,val){ if(homeAuthorsData[i]) homeAuthorsData[i].img=(val||'').trim(); }
+function haUploadRowImg(i,inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ if(homeAuthorsData[i]){homeAuthorsData[i].img=url; renderHomeAuthorList();} },400); }
+function haUploadAddImg(inp){ const f=inp.files[0]; inp.value=''; if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;} uploadToImgbb(f,function(url){ const el=document.getElementById('haImg'); if(el)el.value=url; const p=document.getElementById('haImgPrev'); if(p)p.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:60px;border-radius:8px;">'; },400); }
+function addHomeAuthor(){
+    const name=(document.getElementById('haName').value||'').trim();
+    const img=(document.getElementById('haImg').value||'').trim();
+    if(!name){ showToast('লেখকের নাম দিন','#dc2626'); return; }
+    if(homeAuthorsData.some(a=>a.name===name)){ showToast('এই লেখক আগেই আছে','#dc2626'); return; }
+    homeAuthorsData.push({name:name, img:img});
+    document.getElementById('haName').value=''; document.getElementById('haImg').value='';
+    const p=document.getElementById('haImgPrev'); if(p)p.innerHTML='';
+    renderHomeAuthorList();
+}
+function removeHomeAuthor(i){ homeAuthorsData.splice(i,1); renderHomeAuthorList(); }
+function moveHomeAuthor(i,dir){ const j=i+dir; if(j<0||j>=homeAuthorsData.length)return; const t=homeAuthorsData[i]; homeAuthorsData[i]=homeAuthorsData[j]; homeAuthorsData[j]=t; renderHomeAuthorList(); }
+async function saveHomeAuthors(){
+    try{
+        await db.ref('siteConfig/homeAuthors').set(homeAuthorsData);
+        showToast('✅ হোমপেজ লেখক চিপ সেভ হয়েছে — লাইভ!','#2f7531');
+    }catch(e){ showToast('❌ সেভ ব্যর্থ','#dc2626'); }
 }
 
 /* ══════════════════════════════════════════════

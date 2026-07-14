@@ -103,6 +103,10 @@
 .cat-item:hover{background:rgba(121,176,123,0.14)}
 .cat-item.active{background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;font-weight:700}
 .cat-count{font-size:10px;opacity:.65;margin-right:3px}
+.subcat-wrap{display:flex;flex-wrap:wrap;gap:5px;padding:4px 6px 8px;justify-content:flex-end}
+.subcat-item{font-size:11px;font-weight:600;color:var(--text);background:rgba(121,176,123,0.12);border:1px solid var(--border);border-radius:20px;padding:4px 10px;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:.15s}
+.subcat-item:hover{background:rgba(121,176,123,0.24)}
+.subcat-item.active{background:#2f7531;color:#fff;border-color:#2f7531}
 .filter-main{flex:1;min-width:0}
 .filter-main .grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr))!important;padding:10px 0!important}
 .pagination{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:18px 0 90px}
@@ -284,22 +288,57 @@ window.addEventListener('scroll',()=>{
     if(btn)btn.classList.toggle('show',window.scrollY>300);
 },{passive:true});
 function toBn(n){return String(n).replace(/[0-9]/g,d=>'০১২৩৪৫৬৭৮৯'[d]);}
-/* একটি বই একাধিক ক্যাটাগরিতে থাকতে পারে (cat কমা দিয়ে আলাদা) */
-function catListNF(b){return String(b.cat||'').split(',').map(function(s){return s.trim();}).filter(Boolean);}
-function catHasNF(b,key){return catListNF(b).indexOf(key)>-1;}
+/* বিভাগ→উপ-বিভাগ + ট্যাগ (গ্রন্থকাননের মতো; পুরনো কমা-cat gracefully handle) */
+var NF_TAGNAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
+var NF_OLDTAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+var NF_TAXO=[['ইসলামি বই',['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']],['একাডেমিক বই',['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']],['মাদ্রাসার বই',['নাহু-সরফ','কিতাব']],['আত্মউন্নয়ন বই',['মোটিভেশন','লিডারশিপ']],['English বই',[]],['প্যাকেজসমূহ',[]],['Sunnah Item',['আতর','মিসওয়াক','পাঞ্জাবি','টুপি','হিজাব']],['Stationery',[]],['খাবার',['মধু','খেজুর','কালোজিরা']]];
+function catListNF(b){ if(b&&Array.isArray(b.cats)&&b.cats.length)return b.cats.slice(); return String((b&&b.cat)||'').split(',').map(function(s){return s.trim();}).filter(Boolean); }
+function bookCatsF(b){ return catListNF(b).filter(function(c){return !NF_TAGNAMES.has(c);}); }
+function bookSubcatF(b){ return (b&&b.subcat)||''; }
+function bookTagsF(b){ if(b&&Array.isArray(b.tags))return b.tags; var out=[]; catListNF(b).forEach(function(c){var t=NF_OLDTAGMAP[c]; if(t&&out.indexOf(t)<0)out.push(t);}); return out; }
+function catHasNF(b,key){ return bookCatsF(b).indexOf(key)>-1; }
+function nfFilterMatch(b,type,value){
+    if(type==='tag') return bookTagsF(b).indexOf(value)>-1;
+    if(type==='subcat') return bookSubcatF(b)===value;
+    if(type==='author') return b.author===value;
+    if(type==='pub') return b.pub===value;
+    return catHasNF(b,value);
+}
+function nfSubcatsOf(cat){ for(var i=0;i<NF_TAXO.length;i++){ if(NF_TAXO[i][0]===cat)return NF_TAXO[i][1].slice(); } return []; }
+var currentSub='';
+var NF_CAT_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>';
 function buildCats(){
-    const counts={}; books.forEach(b=>{catListNF(b).forEach(function(c){counts[c]=(counts[c]||0)+1;});});
-    const cats=Object.keys(counts).sort((a,b)=>a.localeCompare(b,'bn'));
+    /* গণনা শুধু বিভাগ (ট্যাগ-নাম বাদ) */
+    const counts={}; books.forEach(b=>{ bookCatsF(b).forEach(function(c){counts[c]=(counts[c]||0)+1;}); });
+    const taxo=NF_TAXO.map(function(x){return x[0];});
+    const extra=Object.keys(counts).filter(function(c){return taxo.indexOf(c)<0;}).sort((a,b)=>a.localeCompare(b,'bn'));
+    const cats=taxo.concat(extra).filter(function(c){return counts[c];});
     const el=document.getElementById('catList'); if(!el)return;
-    el.innerHTML=cats.map(c=>`<button class="cat-item ${c===currentCat?'active':''}" data-cat="${escapeHTML(c)}" onclick="selectCat(this.dataset.cat)">${escapeHTML(c)} <span class="cat-count">(${toBn(counts[c])})</span></button>`).join('');
+    el.innerHTML=cats.map(function(c){
+        const subs=nfSubcatsOf(c);
+        const isActive=(c===currentCat);
+        let h='<button class="cat-item '+(isActive&&!currentSub?'active':'')+'" data-cat="'+escapeHTML(c)+'" onclick="selectCat(this.dataset.cat)">'+escapeHTML(c)+' <span class="cat-count">('+toBn(counts[c])+')</span></button>';
+        if(isActive && subs.length){
+            h+='<div class="subcat-wrap">'+subs.map(function(s){
+                return '<button class="subcat-item '+(currentSub===s?'active':'')+'" data-sub="'+escapeHTML(s)+'" onclick="selectSubcat(this.dataset.sub)">'+escapeHTML(s)+'</button>';
+            }).join('')+'</div>';
+        }
+        return h;
+    }).join('');
 }
 function selectCat(c){
-    currentCat=c; filtered=books.filter(b=>catHasNF(b,c)); currentPage=1; currentSort='default';
+    currentCat=c; currentSub=''; filtered=books.filter(b=>catHasNF(b,c)); currentPage=1; currentSort='default';
     document.querySelectorAll('.sort-chip').forEach(x=>x.classList.remove('active'));
     document.getElementById('filterSearch').value=''; document.getElementById('searchClear').classList.remove('show');
-    const icon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>';
-    document.getElementById('titleText').innerHTML=icon+' '+escapeHTML(c);
+    document.getElementById('titleText').innerHTML=NF_CAT_ICON+' '+escapeHTML(c);
     document.getElementById('pageTitle').innerText=c;
+    buildCats(); renderBooks(getList()); window.scrollTo({top:0,behavior:'smooth'});
+}
+function selectSubcat(s){
+    currentSub=s; filtered=books.filter(b=>catHasNF(b,currentCat) && bookSubcatF(b)===s); currentPage=1; currentSort='default';
+    document.getElementById('filterSearch').value=''; document.getElementById('searchClear').classList.remove('show');
+    document.getElementById('titleText').innerHTML=NF_CAT_ICON+' '+escapeHTML(currentCat)+' › '+escapeHTML(s);
+    document.getElementById('pageTitle').innerText=s;
     buildCats(); renderBooks(getList()); window.scrollTo({top:0,behavior:'smooth'});
 }
 function pageRange(cur,total){
@@ -324,19 +363,21 @@ function goPage(n){
 const params=new URLSearchParams(window.location.search);
 const type=params.get('type'),value=decodeURIComponent(params.get('value')||'');
 const iconMap={cat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>',author:'',pub:''};
-if(type==='cat')filtered=books.filter(b=>catHasNF(b,value));
-else if(type==='author')filtered=books.filter(b=>b.author===value);
-else if(type==='pub')filtered=books.filter(b=>b.pub===value);
-document.getElementById('titleText').innerHTML=(iconMap[type]||'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>')+' '+value;
+if(type)filtered=books.filter(b=>nfFilterMatch(b,type,value));
+document.getElementById('titleText').innerHTML=(iconMap[type]||NF_CAT_ICON)+' '+value;
 document.getElementById('pageTitle').innerText=value;
-currentCat=(type==='cat')?value:null; buildCats();
+currentCat=(type==='cat')?value:null;
+currentSub=(type==='subcat')?value:'';
+if(type==='subcat'){ /* উপ-বিভাগ URL এলে তার মূল বিভাগও active করি */
+    for(var _t=0;_t<NF_TAXO.length;_t++){ if(NF_TAXO[_t][1].indexOf(value)>-1){ currentCat=NF_TAXO[_t][0]; break; } }
+}
+buildCats();
 setTimeout(()=>{document.getElementById('skelGrid').style.display='none';document.getElementById('bookGrid').style.display='block';renderBooks(getList());},600);
 /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট এলে তালিকা রিফ্রেশ */
 if(window.AA_BOOKS_LIVE) AA_BOOKS_LIVE.then(ok=>{
     if(!ok) return;
-    if(currentCat) filtered=books.filter(b=>catHasNF(b,currentCat));
-    else if(type==='author') filtered=books.filter(b=>b.author===value);
-    else if(type==='pub') filtered=books.filter(b=>b.pub===value);
+    if(currentSub) filtered=books.filter(b=>catHasNF(b,currentCat) && bookSubcatF(b)===currentSub);
+    else if(type) filtered=books.filter(b=>nfFilterMatch(b,type,value));
     buildCats(); renderBooks(getList());
 });
 </script>
