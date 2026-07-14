@@ -659,7 +659,7 @@ function makeRelCard(b){
 /* বিভাগ→উপ-বিভাগ + ট্যাগ + টাইপ (গ্রন্থকাননের মতো; পুরনো কমা-cat gracefully) */
 var NF_TAGNAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
 var NF_OLDTAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
-var NF_TAXOSET=new Set(['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','আত্মউন্নয়ন বই','English বই','প্যাকেজসমূহ','Sunnah Item','Stationery','খাবার']);
+var NF_TAXOSET=new Set(['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','Pre Order','আত্মউন্নয়ন বই','English বই','প্যাকেজসমূহ','Sunnah Item','Stationery','খাবার']);
 function nfCatList(b){ if(b&&Array.isArray(b.cats)&&b.cats.length)return b.cats.slice(); return String((b&&b.cat)||'').split(',').map(function(s){return s.trim();}).filter(Boolean); }
 function bookTypeF(b){ return (b&&b.type)||'বই'; }
 function bookMainCatF(b){ var a=nfCatList(b).filter(function(c){return !NF_TAGNAMES.has(c);}); return a[0]||nfCatList(b)[0]||''; }

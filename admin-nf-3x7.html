@@ -2126,7 +2126,7 @@ function beUpdateImgPreview(idx){
 }
 
 /* ── ক্যাটাগরি ও কভার হেল্পার (ড্রপডাউন + একাধিক + নতুন যোগ) ── */
-const NF_BASE_CATS=['প্যাকেজসমূহ','Best Selling','Trending','নতুন প্রকাশিত','Pre Order','ইসলামি বই','Academic','দরসি কিতাব','সুন্নাহ আইটেম','Stationery'];
+const NF_BASE_CATS=['প্যাকেজসমূহ','Best Selling','Trending','নতুন প্রকাশিত','Pre Order','ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','আত্মউন্নয়ন বই','English বই','Sunnah Item','Stationery','খাবার'];
 function nfKnownCats(){
     const set={};
     NF_BASE_CATS.forEach(c=>set[c]=1);
@@ -2319,7 +2319,7 @@ async function syncAllBooksToFirebase(silent=false){
    হোমপেজ ক্যাটাগরি চিপ (Firebase siteConfig/homeCats)
 ══════════════════════════════════════════════ */
 const HOME_CATS_DEFAULT=[
-    {name:'ইসলামি বই',img:''},{name:'একাডেমিক বই',img:''},{name:'মাদ্রাসার বই',img:''},
+    {name:'ইসলামি বই',img:''},{name:'একাডেমিক বই',img:''},{name:'মাদ্রাসার বই',img:''},{name:'Pre Order',img:''},
     {name:'আত্মউন্নয়ন বই',img:''},{name:'English বই',img:''},{name:'প্যাকেজসমূহ',img:''},
     {name:'Sunnah Item',img:''},{name:'Stationery',img:''},{name:'খাবার',img:''}
 ];
