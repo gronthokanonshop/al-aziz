@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>বই বিস্তারিত — NafahLife</title>
 <meta name="theme-color" content="#2a562b">
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="AAcommon.css">
 <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
@@ -40,7 +40,7 @@
   --input-bg:      rgba(14,28,18,0.85);
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'Hind Siliguri','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;padding-bottom:78px;}
+body{font-family:'Noto Serif Bengali','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;transition:background .3s,color .3s;-webkit-tap-highlight-color:transparent;-webkit-font-smoothing:antialiased;padding-bottom:78px;}
 .overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:2000;}
 .overlay.active{display:block;}
 .sidebar{position:fixed;top:0;left:-100%;width:min(280px,80vw);height:100vh;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;z-index:2100;transition:.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;scrollbar-width:none;}
@@ -133,7 +133,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
 .rel-title{font-size:11.5px;font-weight:700;color:var(--text);margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.35;height:30px;}
 .rel-price{font-size:12.5px;font-weight:800;color:var(--danger);}
 .mobile-buybar{display:none;}
-.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#152716;color:#a8cca9;padding:12px 24px;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #79b07b;border-radius:8px;font-family:'Hind Siliguri',Arial,sans-serif;}
+.toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#152716;color:#a8cca9;padding:12px 24px;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #79b07b;border-radius:8px;font-family:'Noto Serif Bengali',Arial,sans-serif;}
 .toast.show{display:block;animation:toastIn 0.3s ease;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
 #cartBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.52);z-index:3000;justify-content:flex-end;align-items:stretch;}
@@ -145,12 +145,12 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
 .coupon-wrap{display:flex;flex-direction:column;gap:7px;}
 .coupon-label{font-size:12px;font-weight:700;color:var(--text2);}
 .coupon-row{display:flex;gap:6px;align-items:stretch;}
-.coupon-input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;background:var(--input-bg);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;}
-.coupon-btn{background:linear-gradient(135deg,#cf6f33,#a85320);color:white;border:none;padding:0 16px;border-radius:9px;cursor:pointer;font-weight:800;font-size:13px;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 3px 10px rgba(121,176,123,0.35);white-space:nowrap;}
+.coupon-input{flex:1;padding:10px 12px;border:1.5px solid var(--border);border-radius:9px;background:var(--input-bg);color:var(--text);font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:13px;outline:none;}
+.coupon-btn{background:linear-gradient(135deg,#cf6f33,#a85320);color:white;border:none;padding:0 16px;border-radius:9px;cursor:pointer;font-weight:800;font-size:13px;font-family:'Noto Serif Bengali',Arial,sans-serif;box-shadow:0 3px 10px rgba(121,176,123,0.35);white-space:nowrap;}
 .coupon-hint{font-size:11px;color:var(--text3);padding:0 2px;}
 .coupon-applied{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(121,176,123,0.07);border:1.5px dashed rgba(121,176,123,0.35);border-radius:9px;}
 .coupon-applied-label{flex:1;font-size:13px;font-weight:700;color:#204521;}
-.coupon-remove-btn{background:#fee2e2;color:#204521;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
+.coupon-remove-btn{background:#fee2e2;color:#204521;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;}
 #wishlistBox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:3100;align-items:flex-end;justify-content:center;}
 #wishlistBox.open{display:flex;}
 #wishlistBox > div{background:var(--card-solid);width:100%;border-radius:24px 24px 0 0;max-height:75vh;overflow-y:auto;display:flex;flex-direction:column;}
@@ -207,11 +207,11 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
 .rv-empty{font-size:13px;color:#8d7a73;text-align:center;padding:14px;background:#fffdf8;border:1px dashed #e6d8c2;border-radius:12px;margin-bottom:16px}
 .rv-form{background:linear-gradient(135deg,#fbf6ec,#fff);border:1px solid #ecdfc9;border-radius:14px;padding:16px}
 .rv-form-title{font-family:'Tiro Bangla',serif;font-size:17px;color:#224f23;margin-bottom:12px}
-.rv-name,.rv-text{width:100%;border:1.5px solid #e6dac9;border-radius:10px;padding:10px 12px;font-family:'Hind Siliguri',sans-serif;font-size:13px;color:#142314;background:#fff;outline:none;margin-bottom:10px;box-sizing:border-box}
+.rv-name,.rv-text{width:100%;border:1.5px solid #e6dac9;border-radius:10px;padding:10px 12px;font-family:'Noto Serif Bengali',sans-serif;font-size:13px;color:#142314;background:#fff;outline:none;margin-bottom:10px;box-sizing:border-box}
 .rv-name:focus,.rv-text:focus{border-color:#2f7531}
 .rv-stars{font-size:28px;color:#dcc7a0;letter-spacing:4px;margin-bottom:10px;cursor:pointer;user-select:none}
 .rv-stars span.on{color:#e0a32f}
-.rv-submit{width:100%;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;border-radius:11px;padding:12px;font-family:'Hind Siliguri',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
+.rv-submit{width:100%;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;border-radius:11px;padding:12px;font-family:'Noto Serif Bengali',sans-serif;font-weight:700;font-size:14px;cursor:pointer}
 .dsec-title svg{color:#a87f2e}
 .cover-frame{position:relative}
 .cover-cap{position:absolute;left:0;right:0;bottom:0;padding:24px 10px 11px;background:linear-gradient(to top,rgba(58,12,21,.94),rgba(58,12,21,.5) 55%,transparent);color:#e7cf94;font-family:'Tiro Bangla',serif;font-size:15px;line-height:1.3;text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.6);pointer-events:none}
@@ -255,7 +255,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
         <hr style="margin:10px 0;border:none;border-top:1px solid var(--border);">
         <h4 style="display:flex;justify-content:space-between;color:#204521;font-size:18px;margin:0;">মোট: <span>৳<span id="total">0</span></span></h4>
       </div>
-      <button onclick="goCheckout()" style="width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;box-shadow:0 4px 16px rgba(121,176,123,0.40);">অর্ডার কনফার্ম করুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+      <button onclick="goCheckout()" style="width:100%;margin-top:14px;padding:14px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;box-shadow:0 4px 16px rgba(121,176,123,0.40);">অর্ডার কনফার্ম করুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
     </div>
   </div>
 </div>
@@ -293,10 +293,8 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
 </nav>
 <div class="crumb" id="crumbBox">
   <a href="index.html">হোম</a>
-  <span class="sep">/</span>
-  <a href="#" id="crumbCat">ক্যাটাগরি</a>
-  <span class="sep">/</span>
-  <span class="cur" id="crumbName">বই</span>
+  <span class="sep">›</span>
+  <span class="cur">বই</span>
 </div>
 <div class="detail-wrap" id="detailWrap">
   <div class="detail-grid">
@@ -348,7 +346,7 @@ h1.book-title{font-family:'Tiro Bangla',serif;font-size:27px;font-weight:400;lin
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </button>
         </div>
-        <button onclick="orderViaWA()" style="width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#128c7e,#25d366);color:#fff;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 12px rgba(37,211,102,0.3);">
+        <button onclick="orderViaWA()" style="width:100%;margin-top:10px;padding:12px;background:linear-gradient(135deg,#128c7e,#25d366);color:#fff;border:none;border-radius:10px;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 3px 12px rgba(37,211,102,0.3);">
           <svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;flex-shrink:0;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg>
           WhatsApp-এ অর্ডার করুন
         </button>
@@ -658,7 +656,7 @@ function makeRelCard(b){
 }
 /* বিভাগ→উপ-বিভাগ + ট্যাগ + টাইপ (গ্রন্থকাননের মতো; পুরনো কমা-cat gracefully) */
 var NF_TAGNAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
-var NF_OLDTAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+var NF_OLDTAGMAP={'Best Selling':'Best Selling','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Best Writer':'Best Writer'};
 var NF_TAXOSET=new Set(['ইসলামি বই','একাডেমিক বই','মাদ্রাসার বই','Pre Order','আত্মউন্নয়ন বই','English বই','প্যাকেজসমূহ','Sunnah Item','Stationery','খাবার']);
 function nfCatList(b){ if(b&&Array.isArray(b.cats)&&b.cats.length)return b.cats.slice(); return String((b&&b.cat)||'').split(',').map(function(s){return s.trim();}).filter(Boolean); }
 function bookTypeF(b){ return (b&&b.type)||'বই'; }
@@ -692,10 +690,16 @@ function renderBook(){
   document.title = b.name + ' — NafahLife';
   document.getElementById('navTitle').innerText = 'বই বিস্তারিত';
   const _mc = bookMainCatF(b), _mcIsTaxo = _mc && NF_TAXOSET.has(_mc);
-  const crumbCatEl = document.getElementById('crumbCat');
-  crumbCatEl.innerText = _mcIsTaxo ? _mc : (isBook?'বই':'প্রোডাক্ট');
-  crumbCatEl.setAttribute('onclick', _mcIsTaxo ? `navigateTo('Aafilter.html?type=cat&value=${encodeURIComponent(_mc)}')` : `navigateTo('index.html')`);
-  document.getElementById('crumbName').innerText = b.name;
+  /* breadcrumb: হোম › বিষয় › বিভাগ › বিষয়ের নাম (গ্রন্থকাননের মতো) */
+  (function(){
+    const escC = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    let ch = `<a href="index.html">হোম</a> <span class="sep">›</span> <a href="Aafilter.html">বিষয়</a>`;
+    if(_mc && _mcIsTaxo) ch += ` <span class="sep">›</span> <a href="Aafilter.html?type=cat&value=${encodeURIComponent(_mc)}">${escC(_mc)}</a>`;
+    const last = isBook ? (b.subject || '') : (b.brand || '');
+    if(last) ch += ` <span class="sep">›</span> <span class="cur">${escC(last)}</span>`;
+    const cb = document.getElementById('crumbBox');
+    if(cb) cb.innerHTML = ch;
+  })();
   document.getElementById('subjectPill').innerText = isBook ? (b.subject || _mc || 'বই') : (b.brand || _mc || 'প্রোডাক্ট');
   document.getElementById('bookTitle').innerText = b.name;
   document.getElementById('bookAuthor').innerText = isBook ? (b.author || 'অজানা') : (b.brand || '');

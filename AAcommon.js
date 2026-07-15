@@ -24,7 +24,7 @@ function toggleDark() {
 /* ═══ TOAST NOTIFICATION ═══ */
 function showToast(msg, color) {
     const t = document.createElement('div');
-    t.style.cssText = `position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color||'#1a2e1b'};color:#fff;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.25);font-family:'Hind Siliguri',Arial,sans-serif;border:1px solid rgba(255,255,255,0.15);`;
+    t.style.cssText = `position:fixed;bottom:82px;left:50%;transform:translateX(-50%);background:${color||'#1a2e1b'};color:#fff;padding:10px 22px;border-radius:4px;font-size:13px;font-weight:600;z-index:9999;box-shadow:0 4px 14px rgba(0,0,0,0.25);font-family:'Noto Serif Bengali',Arial,sans-serif;border:1px solid rgba(255,255,255,0.15);`;
     t.innerText = msg;
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2200);
@@ -38,7 +38,6 @@ window.NF_CAT_TREE = [
     { name: 'ইসলামি বই', subs: ['আকিদা', 'ফিকহ', 'হাদিস', 'তাফসির', 'সিরাত'] },
     { name: 'একাডেমিক বই', subs: ['ক্লাস ১-৫', 'ক্লাস ৬-১০', 'HSC'] },
     { name: 'মাদ্রাসার বই', subs: ['নাহু-সরফ', 'কিতাব'] },
-    { name: 'Pre Order', subs: [] },
     { name: 'আত্মউন্নয়ন বই', subs: ['মোটিভেশন', 'লিডারশিপ'] },
     { name: 'English বই', subs: [] },
     { name: 'প্যাকেজসমূহ', subs: [] },
@@ -46,8 +45,8 @@ window.NF_CAT_TREE = [
     { name: 'Stationery', subs: [] },
     { name: 'খাবার', subs: ['মধু', 'খেজুর', 'কালোজিরা'] }
 ];
-window.NF_TAGS = ['Best Selling', 'New Arrived', 'Trending', 'Pre Order', 'Best Writer'];
-window.NF_OLD_TAGMAP = { 'Best Selling': 'Best Selling', 'Trending': 'Trending', 'নতুন প্রকাশিত': 'New Arrived', 'New Arrived': 'New Arrived', 'Pre Order': 'Pre Order', 'Best Writer': 'Best Writer' };
+window.NF_TAGS = ['Best Selling', 'New Arrived', 'Best Writer'];
+window.NF_OLD_TAGMAP = { 'Best Selling': 'Best Selling', 'নতুন প্রকাশিত': 'New Arrived', 'New Arrived': 'New Arrived', 'Best Writer': 'Best Writer' };
 window.NF_TAG_NAMES = new Set(['Best Selling', 'Trending', 'New Arrived', 'নতুন প্রকাশিত', 'Pre Order', 'Best Writer']);
 /* পুরনো cat কমা দিয়ে লেখা হতে পারে ("ইসলামি বই, Best Selling") — split করি */
 window.nfSplitCat = function (b) {
@@ -244,7 +243,7 @@ window.aaGiftBarHTML = function (subtotal) {
     css.textContent = `
     #aaCartOverlay{position:fixed;inset:0;background:rgba(0,0,0,.48);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);z-index:99998;opacity:0;pointer-events:none;transition:opacity .3s;}
     #aaCartOverlay.open{opacity:1;pointer-events:auto;}
-    #aaCartDrawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:92vw;background:var(--card-solid,#fff);color:var(--text,#233023);z-index:99999;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.18);border-radius:20px 0 0 20px;overflow:hidden;font-family:'Hind Siliguri',Arial,sans-serif;}
+    #aaCartDrawer{position:fixed;top:0;right:0;height:100%;width:340px;max-width:92vw;background:var(--card-solid,#fff);color:var(--text,#233023);z-index:99999;transform:translateX(105%);transition:transform .35s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.18);border-radius:20px 0 0 20px;overflow:hidden;font-family:'Noto Serif Bengali',Arial,sans-serif;}
     #aaCartDrawer.open{transform:translateX(0);}
     .aa-cd-head{padding:15px 18px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:2px solid #79b07b;}
     .aa-cd-head h3{margin:0;font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px;}
@@ -262,7 +261,7 @@ window.aaGiftBarHTML = function (subtotal) {
     .aa-cd-empty{text-align:center;padding:60px 20px;color:var(--text2,#6b7280);}
     .aa-cd-empty svg{opacity:.4;margin-bottom:10px;}
     .aa-cd-empty p{font-size:14px;font-weight:600;margin:0 0 16px;}
-    .aa-cd-empty button{padding:9px 22px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
+    .aa-cd-empty button{padding:9px 22px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;border-radius:10px;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;}
     .aa-cd-foot{padding:14px 16px 16px;border-top:1px solid var(--border,#e5e7eb);background:var(--bg,#f9fafb);flex-shrink:0;}
     .aa-cd-row{display:flex;justify-content:space-between;font-size:13px;color:var(--text2,#6b7280);padding:2.5px 0;}
     .aa-cd-row.total{font-size:15.5px;font-weight:800;color:var(--text,#233023);padding-top:6px;}
@@ -270,14 +269,14 @@ window.aaGiftBarHTML = function (subtotal) {
     [data-theme="dark"] .aa-cd-row.total span:last-child{color:#79b07b;}
     .aa-cd-row.disc span:last-child{color:#dc2626;font-weight:700;}
     .aa-coupon{display:flex;gap:6px;margin-bottom:10px;}
-    .aa-coupon input{flex:1;padding:8px 10px;border:1.5px solid var(--border2,#d1d5db);border-radius:9px;background:var(--card-solid,#fff);color:var(--text,#233023);font-family:'Hind Siliguri',Arial,sans-serif;font-size:12.5px;outline:none;min-width:0;}
+    .aa-coupon input{flex:1;padding:8px 10px;border:1.5px solid var(--border2,#d1d5db);border-radius:9px;background:var(--card-solid,#fff);color:var(--text,#233023);font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:12.5px;outline:none;min-width:0;}
     .aa-coupon input:focus{border-color:#2f7531;}
-    .aa-coupon button{background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;padding:0 14px;border-radius:9px;cursor:pointer;font-weight:700;font-size:12.5px;font-family:'Hind Siliguri',Arial,sans-serif;}
+    .aa-coupon button{background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:none;padding:0 14px;border-radius:9px;cursor:pointer;font-weight:700;font-size:12.5px;font-family:'Noto Serif Bengali',Arial,sans-serif;}
     .aa-coupon-on{display:flex;align-items:center;gap:8px;padding:7px 11px;background:rgba(47,117,49,.08);border:1.5px dashed #2f7531;border-radius:9px;margin-bottom:10px;}
     .aa-coupon-on span{flex:1;font-size:12px;font-weight:700;color:#2f7531;}
     [data-theme="dark"] .aa-coupon-on span{color:#79b07b;}
-    .aa-coupon-on button{background:#fee2e2;color:#dc2626;border:none;border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;}
-    .aa-checkout-btn{width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border:none;border-radius:11px;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(47,117,49,.3);transition:.2s;letter-spacing:.3px;}
+    .aa-coupon-on button{background:#fee2e2;color:#dc2626;border:none;border-radius:7px;padding:4px 9px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;}
+    .aa-checkout-btn{width:100%;margin-top:10px;padding:13px;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border:none;border-radius:11px;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:14.5px;font-weight:800;cursor:pointer;box-shadow:0 3px 12px rgba(47,117,49,.3);transition:.2s;letter-spacing:.3px;}
     .aa-checkout-btn:hover{box-shadow:0 5px 16px rgba(47,117,49,.4);}
     .aa-checkout-btn:active{transform:scale(.98);}
     .aa-cd-note{text-align:center;font-size:10.5px;color:var(--text3,#9ca3af);margin-top:8px;}`;
@@ -452,7 +451,7 @@ if ('serviceWorker' in navigator) {
 
     var css = document.createElement('style');
     css.textContent = `
-    #aaFab{position:fixed;left:16px;bottom:20px;z-index:9990;font-family:'Hind Siliguri',Arial,sans-serif;}
+    #aaFab{position:fixed;left:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;}
     #aaFab.lifted{bottom:76px;}
     #aaFab .aa-fab-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}
     #aaFab.open .aa-fab-actions{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}

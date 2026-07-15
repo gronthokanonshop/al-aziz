@@ -7,12 +7,12 @@
     <title>বই খুঁজুন — NafahLife</title>
 <link rel="canonical" href="https://nafahlife.com/Aafilter.html">
     <meta name="theme-color" content="#2a562b">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="AAcommon.css">
     <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
         *{-webkit-tap-highlight-color:transparent;}
-        body{font-family:'Hind Siliguri',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+        body{font-family:'Noto Serif Bengali',Arial,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
         @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
         @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -34,14 +34,27 @@
         .search-box:focus-within{border-color:#204521;box-shadow:var(--shadow-sm);}
         .search-icon-box{width:26px;height:26px;background:var(--primary-light);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:var(--nav-text);}
         .search-vline{width:1px;height:16px;background:var(--search-input-border);flex-shrink:0;}
-        .search-input{flex:1;border:none;background:transparent;outline:none;font-size:13.5px;font-family:'Hind Siliguri',Arial,sans-serif;color:#204521;}
+        .search-input{flex:1;border:none;background:transparent;outline:none;font-size:13.5px;font-family:'Noto Serif Bengali',Arial,sans-serif;color:#204521;}
         .search-input::placeholder{color:var(--text2);}
         .search-clear{background:none;border:none;color:#204521;font-size:18px;cursor:pointer;display:none;line-height:1;padding:0;}
         .search-clear.show{display:block;}
+        /* ফিল্টার ট্যাব + চিপ (গ্রন্থকাননের মতো) */
+        .filter-tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none;max-width:1100px;margin:0 auto;}
+        .filter-tabs::-webkit-scrollbar{display:none;}
+        .ftab{padding:11px 18px;font-size:12.5px;font-weight:700;color:var(--text2);cursor:pointer;white-space:nowrap;border-bottom:2.5px solid transparent;transition:.2s;flex-shrink:0;}
+        .ftab:hover{color:#2f7531;}
+        .ftab.active{color:#2f7531;border-bottom-color:#2f7531;}
+        .sub-chips{display:none;padding:10px 14px;gap:8px;overflow-x:auto;scrollbar-width:none;background:var(--card);border-bottom:1.5px solid var(--border);flex-wrap:nowrap;max-width:1100px;margin:0 auto;}
+        .sub-chips::-webkit-scrollbar{display:none;}
+        .sub-chips.show{display:flex;}
+        .chip{padding:6px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1.5px solid var(--border);background:rgba(121,176,123,0.10);color:#224f23;white-space:nowrap;transition:.2s;flex-shrink:0;}
+        [data-theme="dark"] .chip{color:#a8cca9;}
+        .chip.active{background:#2f7531;border-color:#2f7531;color:#fff;}
+        .chip:hover:not(.active){border-color:#2f7531;color:#2f7531;}
         .filter-bar{display:flex;align-items:center;gap:8px;padding:10px 14px 6px;overflow-x:auto;scrollbar-width:none;max-width:1100px;margin:0 auto;}
         .filter-bar::-webkit-scrollbar{display:none;}
         .filter-label{font-size:12px;color:var(--text2);font-weight:600;white-space:nowrap;flex-shrink:0;}
-        .sort-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--card);color:var(--text2);border:1.5px solid var(--border);border-radius:999px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;font-family:'Hind Siliguri',Arial,sans-serif;transition:.2s;flex-shrink:0;}
+        .sort-chip{display:inline-flex;align-items:center;gap:5px;padding:6px 13px;background:var(--card);color:var(--text2);border:1.5px solid var(--border);border-radius:999px;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap;font-family:'Noto Serif Bengali',Arial,sans-serif;transition:.2s;flex-shrink:0;}
         .sort-chip:hover{border-color:#204521;color:#204521;}
         .sort-chip.active{background:var(--primary-dark);color:#fff;border-color:#fff;}
         .sort-chip svg{width:14px;height:14px;flex-shrink:0;}
@@ -49,7 +62,7 @@
         .section-title{font-size:15px;font-weight:700;color:var(--dark);padding-left:10px;border-left:3px solid var(--accent);display:flex;align-items:center;gap:6px;}
         .section-title svg{width:16px;height:16px;flex-shrink:0;}
         .result-count{font-size:12px;color:var(--text2);font-weight:600;background:var(--card);border:1px solid var(--border);padding:3px 10px;border-radius:999px;white-space:nowrap;}
-        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:10px 14px;max-width:1100px;margin:0 auto;}
+        .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:10px 14px;max-width:1100px;margin:0 auto;}
         @media(max-width:480px){.grid{grid-template-columns:repeat(2,1fr);gap:10px;padding:10px;}.book-card img{height:155px;}}
         .book-card{background:var(--card);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm);transition:.3s cubic-bezier(0.4,0,0.2,1);cursor:pointer;position:relative;border:1px solid var(--border);animation:cardIn 0.3s ease both;}
         .book-card:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:#204521;}
@@ -60,12 +73,12 @@
         .wl-btn.active{background:var(--red-bg);}
         .bc-info{padding:8px 9px 9px;}
         .bc-pub{font-size:10px;color:var(--text2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-        .bc-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.3;height:31px;overflow:hidden;}
+        .bc-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.45;height:36px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .bc-author{font-size:11px;color:var(--text2);margin-bottom:5px;}
         .price-row{display:flex;align-items:center;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
         .price-sell{color:var(--danger);font-weight:bold;font-size:13px;}
         .price-orig{color:var(--text2);font-size:11px;text-decoration:line-through;}
-        .bc-btn{display:block;padding:6px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border-radius:var(--radius-md);cursor:pointer;width:100%;border:none;font-weight:bold;font-size:11px;text-align:center;font-family:'Hind Siliguri',Arial,sans-serif;transition:.2s;box-shadow:var(--shadow-sm);}
+        .bc-btn{display:block;padding:6px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border-radius:var(--radius-md);cursor:pointer;width:100%;border:none;font-weight:bold;font-size:11px;text-align:center;font-family:'Noto Serif Bengali',Arial,sans-serif;transition:.2s;box-shadow:var(--shadow-sm);}
         .bc-btn:hover{background:var(--primary);transform:translateY(-1px);}
         .skel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:10px 14px;max-width:1100px;margin:0 auto;}
         @media(max-width:480px){.skel-grid{grid-template-columns:repeat(2,1fr);}}
@@ -80,10 +93,10 @@
         .empty-icon svg{width:56px;height:56px;}
         .empty-title{font-size:17px;font-weight:700;color:var(--dark);margin-bottom:6px;}
         .empty-sub{font-size:14px;color:var(--text2);margin-bottom:20px;}
-        .empty-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;font-family:'Hind Siliguri',Arial,sans-serif;border:1.5px solid var(--accent);transition:.2s;}
+        .empty-btn{display:inline-flex;align-items:center;gap:6px;padding:10px 24px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border-radius:999px;cursor:pointer;font-weight:700;font-size:14px;font-family:'Noto Serif Bengali',Arial,sans-serif;border:1.5px solid var(--accent);transition:.2s;}
         .empty-btn:hover{transform:translateY(-2px);}
         .empty-btn svg{width:16px;height:16px;}
-        .float-cart{position:fixed;bottom:24px;left:16px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;padding:11px 18px;border-radius:999px;cursor:pointer;font-weight:700;box-shadow:var(--shadow-lg);z-index:997;font-family:'Hind Siliguri',Arial,sans-serif;display:flex;align-items:center;gap:10px;font-size:14px;transition:.2s;border:1.5px solid var(--accent);}
+        .float-cart{position:fixed;bottom:24px;left:16px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;padding:11px 18px;border-radius:999px;cursor:pointer;font-weight:700;box-shadow:var(--shadow-lg);z-index:997;font-family:'Noto Serif Bengali',Arial,sans-serif;display:flex;align-items:center;gap:10px;font-size:14px;transition:.2s;border:1.5px solid var(--accent);}
         .float-cart:hover{transform:translateY(-2px);}
         .scroll-top{position:fixed;bottom:24px;right:16px;background:linear-gradient(135deg,#cf6f33,#a85320);color:#fff;border:1.5px solid var(--accent);width:42px;height:42px;border-radius:50%;font-size:18px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:998;transition:.2s;}
         .scroll-top.show{display:flex;}
@@ -99,18 +112,18 @@
 .filter-layout{display:flex;gap:12px;padding:0 12px;align-items:flex-start}
 .cat-sidebar{width:138px;flex-shrink:0;background:var(--card-solid);border:1px solid var(--border);border-radius:12px;padding:8px;position:sticky;top:116px;max-height:calc(100vh - 130px);overflow-y:auto;box-shadow:0 2px 10px rgba(0,0,0,.10)}
 .cat-sidebar-title{font-size:12px;font-weight:800;color:var(--text);padding:4px 8px 8px;border-bottom:1px solid var(--border);margin-bottom:4px}
-.cat-item{display:block;width:100%;text-align:right;padding:8px 10px;font-size:12px;font-weight:600;color:var(--text);background:none;border:none;border-radius:8px;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;margin-bottom:2px;line-height:1.45;transition:.15s}
+.cat-item{display:block;width:100%;text-align:right;padding:8px 10px;font-size:12px;font-weight:600;color:var(--text);background:none;border:none;border-radius:8px;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;margin-bottom:2px;line-height:1.45;transition:.15s}
 .cat-item:hover{background:rgba(121,176,123,0.14)}
 .cat-item.active{background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;font-weight:700}
 .cat-count{font-size:10px;opacity:.65;margin-right:3px}
 .subcat-wrap{display:flex;flex-wrap:wrap;gap:5px;padding:4px 6px 8px;justify-content:flex-end}
-.subcat-item{font-size:11px;font-weight:600;color:var(--text);background:rgba(121,176,123,0.12);border:1px solid var(--border);border-radius:20px;padding:4px 10px;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:.15s}
+.subcat-item{font-size:11px;font-weight:600;color:var(--text);background:rgba(121,176,123,0.12);border:1px solid var(--border);border-radius:20px;padding:4px 10px;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;transition:.15s}
 .subcat-item:hover{background:rgba(121,176,123,0.24)}
 .subcat-item.active{background:#2f7531;color:#fff;border-color:#2f7531}
 .filter-main{flex:1;min-width:0}
 .filter-main .grid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr))!important;padding:10px 0!important}
 .pagination{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:18px 0 90px}
-.page-btn{min-width:34px;height:34px;padding:0 9px;border:1.5px solid var(--border);background:var(--card-solid);color:var(--text);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Hind Siliguri',Arial,sans-serif;transition:.15s}
+.page-btn{min-width:34px;height:34px;padding:0 9px;border:1.5px solid var(--border);background:var(--card-solid);color:var(--text);border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;transition:.15s}
 .page-btn:hover:not(:disabled){border-color:#2f7531}
 .page-btn.active{background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;border-color:#2f7531}
 .page-btn:disabled{opacity:.4;cursor:default}
@@ -121,7 +134,7 @@
 .back-btn{color:#000!important;font-weight:800}
 .nav-btn,.dark-pill{color:#000!important}
 .sort-select-wrap{position:relative;display:inline-flex;align-items:center}
-.sort-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;background:var(--card-solid);color:var(--text);font-weight:700;font-size:13px;font-family:'Hind Siliguri',Arial,sans-serif;border:1.5px solid var(--border);border-radius:999px;padding:7px 34px 7px 14px;cursor:pointer;outline:none}
+.sort-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;background:var(--card-solid);color:var(--text);font-weight:700;font-size:13px;font-family:'Noto Serif Bengali',Arial,sans-serif;border:1.5px solid var(--border);border-radius:999px;padding:7px 34px 7px 14px;cursor:pointer;outline:none}
 .sort-select:focus{border-color:#2f7531}
 .sort-arrow{position:absolute;right:11px;width:16px;height:16px;pointer-events:none}
 </style>
@@ -151,6 +164,14 @@
         </div>
     </div>
 </nav>
+<!-- ফিল্টার ট্যাব (গ্রন্থকাননের মতো): সকল / ক্যাটাগরি / প্রকাশনী / লেখক -->
+<div class="filter-tabs" id="filterTabs">
+    <div class="ftab active" onclick="setFilterTab(this,'all')">সকল</div>
+    <div class="ftab" onclick="setFilterTab(this,'cat')">ক্যাটাগরি</div>
+    <div class="ftab" onclick="setFilterTab(this,'pub')">প্রকাশনী</div>
+    <div class="ftab" onclick="setFilterTab(this,'auth')">লেখক</div>
+</div>
+<div class="sub-chips" id="subChips"></div>
 <div class="filter-layout">
 <aside class="cat-sidebar"><div class="cat-sidebar-title">ক্যাটাগরি</div><div id="catList"></div></aside>
 <div class="filter-main">
@@ -225,9 +246,8 @@ function makeCard(b,delay){
         <button class="wl-btn ${wl?'active':''}" data-name="${escapeHTML(b.name)}" onclick="toggleWL(event,this.dataset.name)">${wl?'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="currentColor" stroke="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>':'<svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21S4 15.5 4 9.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.5 12 21 12 21z"/></svg>'}</button>
         <img src="${getImg(b)}" alt="বই" loading="lazy" onerror="this.onerror=null;this.src='book-placeholder.svg'" ${inStock?'':'style="filter:grayscale(0.6);opacity:.75;"'}>
         <div class="bc-info">
-            <div class="bc-pub">${b.pub}</div>
             <div class="bc-name">${b.name}</div>
-            <div class="bc-author">${b.author}</div>
+            <div class="bc-author">${b.author||b.brand||''}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
             ${inStock
                 ?`<button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">কার্টে যোগ করুন</button>`
@@ -248,9 +268,39 @@ function renderBooks(list){
     grid.innerHTML=`<div class="grid">${list.slice(start,start+PER_PAGE).map((b,i)=>makeCard(b,i)).join('')}</div>`;
     renderPagination(totalPages);
 }
+/* ফিল্টার ট্যাব (সকল/ক্যাটাগরি/প্রকাশনী/লেখক) — গ্রন্থকাননের মতো */
+let filterTab='all', filterPill='';
+function setFilterTab(el,tab){
+    document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+    el.classList.add('active');
+    filterTab=tab; filterPill=''; currentPage=1;
+    const sc=document.getElementById('subChips');
+    if(tab==='all'){ sc.classList.remove('show'); sc.innerHTML=''; }
+    else{
+        const sets={
+            cat:[...new Set(filtered.flatMap(bookCatsF).filter(Boolean))],
+            pub:[...new Set(filtered.map(b=>b.pub).filter(Boolean))],
+            auth:[...new Set(filtered.map(b=>b.author).filter(Boolean))]
+        };
+        sc.innerHTML=sets[tab].map(v=>`<div class="chip" data-v="${escapeHTML(v)}" onclick="setPill(this,this.dataset.v)">${escapeHTML(v)}</div>`).join('');
+        sc.classList.add('show');
+    }
+    renderBooks(getList());
+}
+function setPill(el,val){
+    document.querySelectorAll('.sub-chips .chip').forEach(c=>c.classList.remove('active'));
+    el.classList.add('active');
+    filterPill=val; currentPage=1;
+    renderBooks(getList());
+}
 function getList(){
     const q=document.getElementById('filterSearch').value.normalize("NFC").toLowerCase().trim();
     let list=q?filtered.filter(b=>b.name.normalize("NFC").toLowerCase().includes(q)||b.author.normalize("NFC").toLowerCase().includes(q)):[...filtered];
+    if(filterPill){
+        if(filterTab==='cat') list=list.filter(b=>bookCatsF(b).includes(filterPill));
+        else if(filterTab==='pub') list=list.filter(b=>b.pub===filterPill);
+        else if(filterTab==='auth') list=list.filter(b=>b.author===filterPill);
+    }
     if(currentSort==='price-low')list.sort((a,b)=>a.price-b.price);
     else if(currentSort==='price-high')list.sort((a,b)=>b.price-a.price);
     else if(currentSort==='discount')list.sort((a,b)=>discPct(b)-discPct(a));
@@ -290,7 +340,7 @@ window.addEventListener('scroll',()=>{
 function toBn(n){return String(n).replace(/[0-9]/g,d=>'০১২৩৪৫৬৭৮৯'[d]);}
 /* বিভাগ→উপ-বিভাগ + ট্যাগ (গ্রন্থকাননের মতো; পুরনো কমা-cat gracefully handle) */
 var NF_TAGNAMES=new Set(['Best Selling','Trending','New Arrived','নতুন প্রকাশিত','Pre Order','Best Writer']);
-var NF_OLDTAGMAP={'Best Selling':'Best Selling','Trending':'Trending','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Pre Order':'Pre Order','Best Writer':'Best Writer'};
+var NF_OLDTAGMAP={'Best Selling':'Best Selling','নতুন প্রকাশিত':'New Arrived','New Arrived':'New Arrived','Best Writer':'Best Writer'};
 var NF_TAXO=[['ইসলামি বই',['আকিদা','ফিকহ','হাদিস','তাফসির','সিরাত']],['একাডেমিক বই',['ক্লাস ১-৫','ক্লাস ৬-১০','HSC']],['মাদ্রাসার বই',['নাহু-সরফ','কিতাব']],['Pre Order',[]],['আত্মউন্নয়ন বই',['মোটিভেশন','লিডারশিপ']],['English বই',[]],['প্যাকেজসমূহ',[]],['Sunnah Item',['আতর','মিসওয়াক','পাঞ্জাবি','টুপি','হিজাব']],['Stationery',[]],['খাবার',['মধু','খেজুর','কালোজিরা']]];
 function catListNF(b){ if(b&&Array.isArray(b.cats)&&b.cats.length)return b.cats.slice(); return String((b&&b.cat)||'').split(',').map(function(s){return s.trim();}).filter(Boolean); }
 function bookCatsF(b){ return catListNF(b).filter(function(c){return !NF_TAGNAMES.has(c);}); }
