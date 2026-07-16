@@ -638,7 +638,8 @@ function showWishlist(){
 }
 function closeWishlist(){ document.getElementById('wishlistBox').classList.remove('open'); }
 function goToBook(idx){
-  window.location.href = 'AAbook.html?id=' + idx;
+  const b=typeof books!=='undefined'?books[idx]:null;
+  window.location.href = 'AAbook.html?id=' + (b&&b.bid?b.bid:idx); /* bid থাকলে SEO-friendly স্লাগ, না থাকলে পুরনো index */
 }
 function closeSidebars(){
   document.getElementById('sidebar')?.classList.remove('active');
@@ -670,7 +671,9 @@ function renderBook(){
   }
   const params = new URLSearchParams(window.location.search);
   const idParam = params.get('id');
-  currentIdx = idParam !== null ? parseInt(idParam) : 0;
+  /* আগে bid (বাংলা স্লাগ) দিয়ে মেলানোর চেষ্টা — না পেলে পুরনো লিংকের জন্য array index হিসেবে ধরা হয় */
+  currentIdx = idParam !== null ? books.findIndex(function(b){ return b && b.bid === idParam; }) : 0;
+  if(currentIdx < 0){ const n = parseInt(idParam); currentIdx = isNaN(n) ? -1 : n; }
   currentBook = books[currentIdx];
   if(!currentBook){
     /* নতুন আইটেম হতে পারে — Firebase লাইভ ডেটার অপেক্ষা করি, সাথে সাথে "পাওয়া যায়নি" নয় */
@@ -774,8 +777,8 @@ function renderBook(){
     document.title=b.name+' — NafahLife';
     const md=document.querySelector('meta[name="description"]')||(function(){const m=document.createElement('meta');m.name='description';document.head.appendChild(m);return m;})();
     md.content=b.name+' — '+(b.author||'')+' | মাত্র ৳'+b.price+' | NafahLife থেকে ক্যাশ অন ডেলিভারিতে অর্ডার করুন।';
-    /* canonical (প্রতি বইয়ের নিজস্ব লিংক) */
-    const canonHref='https://nafahlife.com/AAbook.html?id='+currentIdx;
+    /* canonical (প্রতি বইয়ের নিজস্ব লিংক) — bid থাকলে SEO-friendly স্লাগ, না থাকলে পুরনো index */
+    const canonHref='https://nafahlife.com/AAbook.html?id='+(b.bid||currentIdx);
     let cl=document.querySelector('link[rel="canonical"]')||(function(){const l=document.createElement('link');l.rel='canonical';document.head.appendChild(l);return l;})();
     cl.href=canonHref;
     /* Open Graph (শেয়ার করলে সুন্দর দেখাবে) */

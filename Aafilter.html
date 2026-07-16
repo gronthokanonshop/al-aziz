@@ -332,7 +332,8 @@ function goToBook(idx){
     let r=JSON.parse(localStorage.getItem('alaziz_recent'))||[];
     r=[idx,...r.filter(i=>i!==idx)].slice(0,8);
     localStorage.setItem('alaziz_recent',JSON.stringify(r));
-    navigateTo('AAbook.html?id='+idx);
+    const b=typeof books!=='undefined'?books[idx]:null;
+    navigateTo('AAbook.html?id='+(b&&b.bid?b.bid:idx)); /* bid থাকলে SEO-friendly স্লাগ, না থাকলে পুরনো index */
 }
 function addToCart(name,price,img){
     cart.push({name:name.trim(),price:Number(price),img});

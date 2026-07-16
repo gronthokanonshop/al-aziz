@@ -397,6 +397,12 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 .auth-input{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;background:var(--input-bg);color:var(--text);font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:14px;margin-bottom:10px;outline:none;box-sizing:border-box;}
 .auth-input:focus{border-color:#000;}
 .auth-btn{width:100%;padding:13px;background:linear-gradient(135deg,#cf6f33,#a85320);color:white;border:none;border-radius:10px;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:15px;font-weight:700;cursor:pointer;}
+.auth-forgot-link{display:block;text-align:right;font-size:12px;color:var(--text2);text-decoration:none;margin:-4px 0 12px;cursor:pointer;}
+.auth-divider{display:flex;align-items:center;gap:10px;margin:16px 0;color:var(--text2);font-size:12px;}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.auth-btn-google{width:100%;padding:12px;background:var(--card-solid,#fff);color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:14px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;}
+.auth-btn-google:hover{border-color:var(--primary);}
+.auth-btn-google:disabled{opacity:.6;cursor:default;}
 .toast{position:fixed;bottom:100px;left:50%;transform:translateX(-50%) translateY(0);background:#152716;color:#a8cca9;padding:12px 24px;font-size:14px;font-weight:600;display:none;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.3);border:1px solid #79b07b;border-radius:8px;font-family:'Noto Serif Bengali',Arial,sans-serif;}
 .toast.show{display:block;animation:toastIn 0.3s ease;}
 @keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(12px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
@@ -797,6 +803,31 @@ function loadHomeAuthors(){
         if(Array.isArray(v)&&v.length){ window.NF_HOME_AUTHORS=v.filter(function(a){return a&&a.name;}); renderHomeAuthorChips(); }
     }).catch(function(){});
 }
+/* ═══ অফার পোস্টার পপআপ (siteConfig/offerPopup) — অ্যাডমিন থেকে অন/অফ, ছবি, টেক্সট নিয়ন্ত্রিত ═══ */
+var offerPopLink='';
+function loadOfferPopup(){
+    if(typeof db==='undefined'||!db) return;
+    if(sessionStorage.getItem('aa_offerpop_shown')==='1') return; /* এই সেশনে একবার দেখানো হলে আর না */
+    db.ref('siteConfig/offerPopup').once('value').then(function(snap){
+        var v=snap.val();
+        if(!v||!v.enabled||!v.img) return;
+        offerPopLink=v.link||'';
+        var body=document.getElementById('offerPopBody');
+        body.innerHTML='<img src="'+String(v.img).replace(/"/g,'&quot;')+'" alt="অফার" style="width:100%;display:block;" onerror="closeOfferPopup()">'+
+            ((v.title||v.sub)?('<div style="padding:14px 16px 16px;">'+
+                (v.title?'<div style="font-weight:800;font-size:15px;color:var(--text,#233023);margin-bottom:4px;">'+String(v.title).replace(/</g,'&lt;')+'</div>':'')+
+                (v.sub?'<div style="font-size:12.5px;color:var(--text2,#6b7a6c);">'+String(v.sub).replace(/</g,'&lt;')+'</div>':'')+
+            '</div>'):'');
+        document.getElementById('offerPopOverlay').style.display='flex';
+        sessionStorage.setItem('aa_offerpop_shown','1');
+    }).catch(function(){});
+}
+function offerPopClick(){
+    if(offerPopLink) window.location.href=offerPopLink;
+}
+function closeOfferPopup(){
+    document.getElementById('offerPopOverlay').style.display='none';
+}
 </script>
 <div id="skeletonWrapper" class="sections" style="margin-top:10px;">
   <div class="cat-section">
@@ -936,6 +967,13 @@ function loadHomeAuthors(){
     <div style="width:36px;height:4px;background:var(--border);border-radius:4px;margin:12px auto 20px;"></div>
     <div id="wlModalInner" style="padding:0 20px;"></div>
 </div>
+<!-- অফার পোস্টার পপআপ — Firebase siteConfig/offerPopup থেকে (অ্যাডমিন প্যানেল থেকে নিয়ন্ত্রিত) -->
+<div id="offerPopOverlay" onclick="if(event.target===this)closeOfferPopup()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9997;align-items:center;justify-content:center;padding:20px;">
+  <div style="position:relative;width:100%;max-width:380px;background:var(--card-solid,#fff);border-radius:18px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.35);">
+    <button onclick="closeOfferPopup()" aria-label="বন্ধ করুন" style="position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,0.55);color:#fff;border:none;font-size:18px;line-height:1;cursor:pointer;z-index:1;display:flex;align-items:center;justify-content:center;">×</button>
+    <div id="offerPopBody" onclick="offerPopClick()" style="cursor:pointer;"></div>
+  </div>
+</div>
 <div class="cat-drawer-overlay" id="catDrawerOverlay" onclick="closeDrawer()"></div>
 <div class="cat-drawer" id="catDrawer">
   <div class="drawer-handle"></div>
@@ -966,6 +1004,7 @@ function loadHomeAuthors(){
       <div id="loginForm">
         <input id="loginEmail" type="email" placeholder="ইমেইল" class="auth-input">
         <input id="loginPass" type="password" placeholder="পাসওয়ার্ড" class="auth-input">
+        <a onclick="doForgotPassword()" class="auth-forgot-link">পাসওয়ার্ড ভুলে গেছেন?</a>
         <button id="loginBtn" onclick="doLogin()" class="auth-btn">লগইন করুন</button>
       </div>
       <div id="registerForm" style="display:none;">
@@ -974,6 +1013,16 @@ function loadHomeAuthors(){
         <input id="regPass" type="password" placeholder="পাসওয়ার্ড (কমপক্ষে ৬ অক্ষর)" class="auth-input">
         <button id="registerBtn" onclick="doRegister()" class="auth-btn">রেজিস্টার করুন</button>
       </div>
+      <div class="auth-divider"><span>অথবা</span></div>
+      <button type="button" id="googleBtn" onclick="doGoogleLogin()" class="auth-btn-google">
+        <svg viewBox="0 0 48 48" style="width:18px;height:18px;flex-shrink:0;">
+          <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+          <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+          <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+          <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+        </svg>
+        <span>Google দিয়ে চালিয়ে যান</span>
+      </button>
       <button onclick="closeAuthModal()" style="width:100%;margin-top:10px;padding:10px;background:transparent;border:1.5px solid var(--border);border-radius:12px;color:var(--text2);font-family:'Noto Serif Bengali',Arial,sans-serif;font-size:13px;cursor:pointer;">বাতিল</button>
     </div>
   </div>
@@ -1222,7 +1271,8 @@ function makeCard(b){
 function goToBook(idx){
   recentlyViewed=[idx,...recentlyViewed.filter(i=>i!==idx)].slice(0,8);
   localStorage.setItem('alaziz_recent',JSON.stringify(recentlyViewed));
-  window.location.href='AAbook.html?id='+idx;
+  const b=typeof books!=='undefined'?books[idx]:null;
+  window.location.href='AAbook.html?id='+(b&&b.bid?b.bid:idx); /* bid থাকলে SEO-friendly স্লাগ, না থাকলে পুরনো index */
 }
 function renderRecent(){
   const sec=document.getElementById('recentlySection'),row=document.getElementById('recentlyRow');
@@ -1442,8 +1492,38 @@ async function doRegister(){
   }catch(e){ setAuthErr(e.code==='auth/email-already-in-use'?'এই ইমেইলে আগেই একাউন্ট আছে':'রেজিস্ট্রেশন ব্যর্থ হয়েছে'); }
   btn.innerText='রেজিস্টার করুন'; btn.disabled=false;
 }
+async function doGoogleLogin(){
+  const btn=document.getElementById('googleBtn');
+  if(typeof firebase==='undefined'||!auth){setAuthErr('Google লগইন এখন লোড হয়নি, আবার চেষ্টা করুন');return;}
+  btn.disabled=true;
+  try{
+    const provider=new firebase.auth.GoogleAuthProvider();
+    const result=await auth.signInWithPopup(provider);
+    const user=result.user;
+    if(user){
+      const snap=await db.ref('users/'+user.uid).once('value');
+      if(!snap.exists()){
+        await db.ref('users/'+user.uid).set({name:user.displayName||'',email:user.email||'',createdAt:Date.now()});
+      }
+    }
+    closeAuthModal(); showToast('✅ স্বাগতম!');
+  }catch(e){
+    if(e.code!=='auth/popup-closed-by-user') setAuthErr('Google লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন');
+  }
+  btn.disabled=false;
+}
+async function doForgotPassword(){
+  const email=document.getElementById('loginEmail').value.trim();
+  if(!email){setAuthErr('আগে ইমেইলের ঘরে আপনার ইমেইল লিখুন');return;}
+  try{
+    await auth.sendPasswordResetEmail(email);
+    setAuthErr('✅ পাসওয়ার্ড রিসেট লিংক '+email+'-এ পাঠানো হয়েছে','ok');
+  }catch(e){
+    setAuthErr(e.code==='auth/user-not-found'?'এই ইমেইলে কোনো একাউন্ট নেই':'রিসেট লিংক পাঠানো যায়নি, আবার চেষ্টা করুন');
+  }
+}
 async function doLogout(){ await auth.signOut(); showToast('লগআউট হয়েছে','#6b7280'); updateAuthUI(null); }
-function setAuthErr(msg){ document.getElementById('authError').innerText=msg; }
+function setAuthErr(msg,type){ const el=document.getElementById('authError'); el.innerText=msg; el.style.color=type==='ok'?'#16a34a':'#dc2626'; }
 function updateAuthUI(user){
   const pill=document.querySelector('.bnav-login-pill .bnav-login-inner');
   const txt=document.querySelector('.bnav-login-pill .bnav-login-text');
@@ -1523,6 +1603,7 @@ window.onload=()=>{
   loadHomeCats();
   loadHomePubs();
   loadHomeAuthors();
+  setTimeout(loadOfferPopup,1200); /* বাকি পেজ লোড হওয়ার পর একটু দেরিতে দেখাবে, যাতে হুট করে ঝাঁপ না দেয় */
   updateCartUI();
   renderCouponSection();
   updateWLCount();

@@ -380,6 +380,16 @@
         .tool-card p{font-size:12px;color:var(--text-muted);margin-bottom:12px;}
         .migrate-btn{padding:7px 14px;border-radius:20px;border:1px solid #7c3aed;background:rgba(124,58,237,.12);color:#7c3aed;font-family:var(--font-main);font-size:12px;font-weight:600;cursor:pointer;transition:.15s;width:100%;padding:10px;border-radius:10px;font-size:13px;}
 
+        /* ── FRAUD/REPEAT CUSTOMER CHECK ── */
+        .fraud-stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:14px;}
+        .fraud-stat{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px 12px;text-align:center;}
+        .fraud-stat-val{font-size:20px;font-weight:800;color:var(--text-main);}
+        .fraud-stat-lbl{font-size:11px;color:var(--text-muted);margin-top:2px;}
+        .fraud-flag{display:flex;align-items:flex-start;gap:8px;background:#fef2f2;border:1px solid #fecaca;color:#991b1b;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:8px;}
+        .fraud-ok{display:flex;align-items:center;gap:8px;background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;border-radius:10px;padding:10px 12px;font-size:12.5px;font-weight:600;margin-bottom:8px;}
+        .fraud-order-row{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-bottom:1px solid var(--border);font-size:12.5px;}
+        .fraud-order-row:last-child{border-bottom:none;}
+
         /* ── MODAL ── */
         .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.4);backdrop-filter:blur(4px);z-index:2000;display:none;align-items:flex-end;justify-content:center;}
         .modal-overlay.open{display:flex;animation:fadeIn .2s ease;}
@@ -548,6 +558,52 @@
         /* ══ NOTIFICATION BELL ══ */
         .notif-badge{position:absolute;top:-4px;right:-4px;width:16px;height:16px;background:#EF4444;color:white;border-radius:50%;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;display:none;}
         .topbar-icon-btn{position:relative;}
+        /* ══ NOTIFICATION PANEL (dropdown) ══ */
+        .notif-panel-wrap{position:relative;}
+        .notif-panel{position:absolute;top:calc(100% + 10px);right:-8px;width:340px;max-width:calc(100vw - 24px);max-height:440px;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow-lg);z-index:2500;display:none;flex-direction:column;overflow:hidden;}
+        .notif-panel.open{display:flex;}
+        .notif-panel-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);flex-shrink:0;}
+        .notif-panel-title{font-weight:800;font-size:14px;color:var(--text-main);}
+        .notif-panel-markall{background:none;border:none;color:var(--primary);font-size:11.5px;font-weight:700;cursor:pointer;padding:4px 6px;}
+        .notif-panel-markall:hover{text-decoration:underline;}
+        .notif-panel-list{overflow-y:auto;flex:1;}
+        .notif-item{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:var(--trans);position:relative;}
+        .notif-item:hover{background:var(--primary-light);}
+        .notif-item.unread{background:rgba(198,106,48,0.08);}
+        .notif-item.unread::before{content:'';position:absolute;left:5px;top:18px;width:7px;height:7px;border-radius:50%;background:#c66a30;}
+        .notif-item-body{flex:1;min-width:0;padding-left:8px;}
+        .notif-item-name{font-weight:700;font-size:12.5px;color:var(--text-main);}
+        .notif-item-sub{font-size:11px;color:var(--text-muted);margin-top:2px;}
+        .notif-item-time{font-size:10px;color:var(--text-muted);margin-top:3px;}
+        .notif-panel-empty{padding:34px 16px;text-align:center;color:var(--text-muted);font-size:12.5px;}
+        .notif-panel-foot{padding:8px 14px;border-top:1px solid var(--border);flex-shrink:0;}
+        .notif-browser-btn{width:100%;background:var(--primary-light);color:var(--primary);border:1px dashed var(--primary);border-radius:9px;padding:7px 10px;font-size:11px;font-weight:700;cursor:pointer;}
+        .notif-browser-btn:hover{background:var(--primary);color:#fff;}
+        @media(max-width:600px){.notif-panel{position:fixed;top:64px;right:8px;left:8px;width:auto;max-width:none;}}
+        /* ── NEW ORDER POPUP ── */
+        .new-order-popup-container{position:fixed;top:86px;right:20px;z-index:3000;display:flex;flex-direction:column;gap:12px;max-width:380px;width:calc(100% - 40px);pointer-events:none;}
+        .new-order-popup{pointer-events:auto;background:#fffdf7;border:1px solid #ecd9c5;border-top:5px solid #2f7531;border-radius:16px;box-shadow:0 12px 32px rgba(0,0,0,0.22);overflow:hidden;position:relative;animation:popIn .35s cubic-bezier(0.16,1,0.3,1);}
+        .new-order-popup.closing{animation:popOut .25s ease forwards;}
+        @keyframes popIn{from{opacity:0;transform:translateX(60px) scale(.95)}to{opacity:1;transform:translateX(0) scale(1)}}
+        @keyframes popOut{from{opacity:1;transform:translateX(0) scale(1)}to{opacity:0;transform:translateX(60px) scale(.9)}}
+        .nop-head{background:linear-gradient(135deg,#2f7531,#3b9440);padding:12px 14px;display:flex;align-items:center;gap:8px;position:relative;}
+        .nop-bell{width:30px;height:30px;background:#c66a30;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;animation:pulse 1.4s infinite;}
+        .nop-title{color:#fff;font-weight:800;font-size:13px;flex:1;line-height:1.3;}
+        .nop-sub{color:#d9ecda;font-size:10px;}
+        .nop-close{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.18);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+        .nop-close:hover{background:rgba(255,255,255,0.32);}
+        .nop-body{padding:14px;}
+        .nop-name{font-size:15px;font-weight:800;color:#1c1c1c;margin-bottom:7px;}
+        .nop-row{display:flex;align-items:center;gap:7px;font-size:12.5px;color:#4b5563;margin-bottom:5px;}
+        .nop-row svg{flex-shrink:0;color:#2f7531;}
+        .nop-books{background:#eaf3ea;border-radius:8px;padding:7px 9px;font-size:12px;color:#1c1c1c;margin:8px 0;line-height:1.5;}
+        .nop-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+        .nop-total{font-size:16px;font-weight:800;color:#2f7531;}
+        .nop-btn{background:#1c1c1c;color:#c66a30;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;}
+        .nop-btn:hover{background:#333;}
+        .nop-progress{position:absolute;bottom:0;left:0;height:3px;background:#c66a30;animation:nopShrink 8s linear forwards;}
+        @keyframes nopShrink{from{width:100%}to{width:0%}}
+        @media(max-width:600px){.new-order-popup-container{top:70px;right:10px;left:10px;max-width:none;}}
         /* ── SALES REPORT ── */
         .report-controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px;}
         .report-controls input[type="date"]{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text-main);font-family:var(--font-main);font-size:13px;}
@@ -601,6 +657,9 @@
 
 <!-- TOAST CONTAINER -->
 <div class="toast-container" id="toastContainer"></div>
+
+<!-- NEW ORDER POPUP CONTAINER -->
+<div class="new-order-popup-container" id="newOrderPopupContainer"></div>
 
 <!-- ORDER DETAIL MODAL -->
 <div class="modal-overlay" id="orderModal" onclick="closeModalOnBg(event)">
@@ -685,6 +744,16 @@
                 <div class="courier-result" id="courierResult"></div>
             </div>
 
+            <!-- মোট টাকা বদলানো -->
+            <div class="m-section">
+                <div class="notes-label" style="margin-bottom:8px;">💰 মোট টাকা বদলান <span style="font-size:10px;color:var(--text-muted);font-weight:400;">(বিশেষ ছাড়/সমঝোতা হলে)</span></div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                    <input class="form-input" id="editTotalInput" type="number" min="0" placeholder="নতুন মোট (৳)" style="flex:1;min-width:120px;">
+                    <button class="btn btn-primary" onclick="saveOrderTotal()" style="flex-shrink:0;">সেভ</button>
+                </div>
+                <div id="totalSavedMsg" style="display:none;margin-top:6px;font-size:12px;font-weight:700;color:#059669;">✓ মোট টাকা আপডেট হয়েছে!</div>
+            </div>
+
             <!-- INVOICE PRINT -->
             <div class="m-section" style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button class="modal-update-btn" onclick="printInvoice()" style="flex:1;min-width:150px;background:#fdf8e8;color:#1c1c1c;border:1px solid #f3e6b8;">
@@ -732,7 +801,10 @@
             <input class="form-input" id="adminPass" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
         </div>
         <button class="btn btn-primary w-full" id="loginBtn" onclick="adminLogin()">লগইন করুন →</button>
-        <div style="margin-top:14px;text-align:center;">
+        <div style="margin-top:12px;text-align:center;">
+            <a href="#" id="forgotPassLink" onclick="adminForgotPass(event)" style="font-size:12px;color:#60a5fa;text-decoration:none;">পাসওয়ার্ড ভুলে গেছেন?</a>
+        </div>
+        <div style="margin-top:8px;text-align:center;">
             <a href="#" id="modSignupLink" onclick="toggleModSignup(event)" style="font-size:12px;color:#94a3b8;text-decoration:none;">মডারেটর হতে চান? অ্যাকাউন্ট খুলুন</a>
         </div>
     </div>
@@ -820,10 +892,22 @@
                 <button class="topbar-icon-btn" onclick="openGlobalSearch()" title="সার্চ">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                 </button>
-                <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotif()" title="Notification">
-                    <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span class="notif-badge" id="notifBadge">0</span>
-                </button>
+                <div class="notif-panel-wrap">
+                    <button class="topbar-icon-btn" id="notifBtn" onclick="toggleNotifPanel()" title="Notification">
+                        <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                        <span class="notif-badge" id="notifBadge">0</span>
+                    </button>
+                    <div class="notif-panel" id="notifPanel">
+                        <div class="notif-panel-head">
+                            <span class="notif-panel-title">🔔 নোটিফিকেশন</span>
+                            <button class="notif-panel-markall" onclick="markAllNotifsSeen()">সব পঠিত করুন</button>
+                        </div>
+                        <div class="notif-panel-list" id="notifPanelList"></div>
+                        <div class="notif-panel-foot" id="notifBrowserFoot" style="display:none;">
+                            <button class="notif-browser-btn" onclick="requestBrowserNotifPermission()">🔔 ব্রাউজার Notification চালু করুন (ঐচ্ছিক)</button>
+                        </div>
+                    </div>
+                </div>
                                 <button class="topbar-icon-btn" onclick="toggleDark()" id="darkBtn" title="Dark Mode">
                     <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
@@ -903,6 +987,21 @@
                         <div class="dash-panel-head"><span>ক্যাটাগরি অনুযায়ী বই</span></div>
                         <div class="bar-wrap" id="dashCatBars">
                             <div class="loading-spin" style="padding:20px 0;"><svg class="spin-ic" style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> লোড হচ্ছে...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dash-two-col" style="margin-top:20px;">
+                    <div class="dash-panel">
+                        <div class="dash-panel-head"><span>৭ দিনের অর্ডার ট্রেন্ড</span></div>
+                        <div style="padding:14px;height:240px;">
+                            <canvas id="orderTrendChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="dash-panel">
+                        <div class="dash-panel-head"><span>অর্ডার স্ট্যাটাস বিভাজন</span></div>
+                        <div style="padding:14px;height:240px;">
+                            <canvas id="orderStatusChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -1190,6 +1289,15 @@
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg> অর্ডার সংক্ষেপ</h3>
                     <div id="orderSummary" class="text-sm text-muted" style="line-height:2;">লোড হচ্ছে...</div>
                 </div>
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> Manual Fraud Check</h3>
+                    <p>ফোন নম্বর দিয়ে সেই কাস্টমারের সম্পূর্ণ অর্ডার হিস্ট্রি ও সন্দেহজনক প্যাটার্ন চেক করুন।</p>
+                    <div style="display:flex;gap:8px;margin:12px 0;flex-wrap:wrap;">
+                        <input type="tel" id="fraudPhoneInput" placeholder="যেমন: 01712345678" style="flex:1;min-width:200px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;font-family:var(--font-main);font-size:13px;background:var(--surface);color:var(--text-main);" onkeydown="if(event.key==='Enter')checkFraudPhone()">
+                        <button class="btn btn-primary" onclick="checkFraudPhone()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg> চেক করুন</button>
+                    </div>
+                    <div id="fraudCheckResult"></div>
+                </div>
                 <div class="tool-card">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> book.js ডাউনলোড</h3>
                     <p>বর্তমান বইয়ের লিস্ট book.js হিসেবে ডাউনলোড করুন।</p>
@@ -1221,6 +1329,42 @@
                         <button class="btn btn-secondary w-full" onclick="addBanner()">＋ তালিকায় যোগ করুন</button>
                     </div>
                     <button class="btn btn-primary w-full" onclick="saveBanners()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg> সব ব্যানার সেভ করুন (সাইটে লাইভ)</button>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> অফার পোস্টার পপআপ</h3>
+                    <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে (চেকআউট পেজ বাদে)। <b>চালু</b> রাখলে ও ছবির URL দিলে তবেই পপআপ দেখাবে, নাহলে দেখাবে না।</p>
+                    <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+                        <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;">
+                            <input type="checkbox" id="ofPopEnabled" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
+                            পোস্টার পপআপ চালু রাখুন
+                        </label>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">পোস্টার ছবির URL</label>
+                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                            <input class="form-input" id="ofPopImg" placeholder="https://i.ibb.co/..." style="flex:1;min-width:200px;">
+                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()">📤 imgbb আপলোড</button>
+                            <input type="file" id="ofPopImgFile" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this)">
+                        </div>
+                        <div id="ofPopImgPrev" style="margin-top:8px;"></div>
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">শিরোনাম (ঐচ্ছিক)</label>
+                        <input class="form-input" id="ofPopTitle" placeholder="যেমন: ঈদ স্পেশাল অফার!">
+                    </div>
+                    <div style="margin-bottom:10px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">সাবটাইটেল (ঐচ্ছিক)</label>
+                        <input class="form-input" id="ofPopSub" placeholder="যেমন: সব প্রোডাক্টে ২০% ছাড়, আজই অর্ডার করুন!">
+                    </div>
+                    <div style="margin-bottom:14px;">
+                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">ছবিতে ক্লিক করলে কোথায় যাবে (ঐচ্ছিক)</label>
+                        <input class="form-input" id="ofPopLink" placeholder="যেমন: filter.html?type=cat&value=Best Selling">
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveOfferPopup()">
+                        <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                        সেভ করুন (সাইটে লাইভ)
+                    </button>
                 </div>
 
                 <div class="tool-card" style="grid-column:1/-1;">
@@ -1374,6 +1518,7 @@
 <script src="Aafirebase-config.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 <script src="book.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════
@@ -1437,6 +1582,8 @@ let allOrders=[];
 let curFilter='all';
 let stockData={};
 let ordersRef=null;
+let orderTrendChartInst=null;
+let orderStatusChartInst=null;
 
 const STATUS_LABELS={pending:'পেন্ডিং',confirmed:'কনফার্ম',processing:'প্যাকেজিং',shipped:'শিপড',delivered:'ডেলিভারড'};
 const STATUS_CLASS={pending:'status-pending',confirmed:'status-confirmed',processing:'status-processing',shipped:'status-shipped',delivered:'status-delivered'};
@@ -1477,6 +1624,23 @@ function toggleModSignup(e){
     document.getElementById('loginSub').innerText=modMode?'অ্যাকাউন্ট খোলার পর মালিকের অনুমোদন লাগবে':'শুধুমাত্র অনুমোদিত admin এর জন্য';
     document.getElementById('loginBtn').innerText=modMode?'অ্যাকাউন্ট খুলুন →':'লগইন করুন →';
     document.getElementById('modSignupLink').innerText=modMode?'← লগইনে ফিরে যান':'মডারেটর হতে চান? অ্যাকাউন্ট খুলুন';
+}
+async function adminForgotPass(e){
+    if(e)e.preventDefault();
+    const email=document.getElementById('adminEmail').value.trim();
+    const err=document.getElementById('loginErr');
+    err.innerText='';err.style.color='#f87171';
+    if(!email){err.innerText='আগে উপরের ঘরে আপনার ইমেইল লিখুন, তারপর এখানে চাপুন';return;}
+    try{
+        await auth.sendPasswordResetEmail(email);
+        err.style.color='#34d399';
+        err.innerText='✅ '+email+'-এ রিসেট লিংক পাঠানো হয়েছে। Gmail খুলে (Spam-ও দেখুন) ১ ঘণ্টার মধ্যে নতুন লিংকে ক্লিক করে পাসওয়ার্ড দিন।';
+    }catch(ex){
+        if(ex.code==='auth/user-not-found')err.innerText='এই ইমেইলে কোনো অ্যাকাউন্ট নেই — বানান ঠিক আছে কিনা দেখুন';
+        else if(ex.code==='auth/invalid-email')err.innerText='ইমেইলটা ঠিকমতো লিখুন';
+        else if(ex.code==='auth/too-many-requests')err.innerText='একটু পরে আবার চেষ্টা করুন';
+        else err.innerText='রিসেট ইমেইল পাঠানো যায়নি — ইন্টারনেট দেখুন';
+    }
 }
 async function adminLogin(){
     const email=document.getElementById('adminEmail').value.trim();
@@ -1556,7 +1720,7 @@ function switchTab(tab, btnEl){
     });
     if(tab==='books') renderBookManage();
     if(tab==='reviews') loadReviewsAdmin();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadOfferPopupAdmin(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -1587,7 +1751,7 @@ function loadOrders(){
         snap.forEach(child=>{const val=child.val();if(val&&val.orderId)allOrders.push(val);});
         allOrders.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
         updateStats();
-        checkNewOrders(allOrders.length);
+        processOrderNotifications(allOrders);
         // Also update Orders tab duplicate stat cards
         const tv=document.getElementById('statTotalOrders');
         const pv=document.getElementById('statPendingOrders');
@@ -2294,8 +2458,53 @@ function beBookBodyHTML(i){
 }
 
 /* ── FIREBASE SYNC ── */
+/* ══════════════════════════════════════════════
+   স্থায়ী প্রোডাক্ট-আইডি (bid) — অ্যারের position-এর বদলে
+   এটা দিয়ে book.html?id=... লিংক বানানো হয়, যাতে প্রোডাক্ট যোগ/মুছা/রিঅর্ডার
+   করলেও পুরনো (Google-এ ইনডেক্স করা) লিংক ভুল প্রোডাক্ট না দেখায়।
+   একবার bid বসে গেলে সেটা আর পাল্টায় না (পরের সেভেও একই থাকে)।
+══════════════════════════════════════════════ */
+function slugifyBn(str){
+    return (str||'').toString().trim()
+        .replace(/[।,.!?;:'"()\[\]{}\/\\]/g,'')
+        .replace(/\s+/g,'-')
+        .toLowerCase()
+        .slice(0,60) || 'product';
+}
+async function ensureBookIdsAndMigrate(arr){
+    const used={};
+    arr.forEach(b=>{ if(b&&b.bid) used[b.bid]=true; });
+    const toMigrate=[];
+    /* প্রথমে সব প্রোডাক্টের bid সিঙ্ক্রোনাসভাবে বসিয়ে দিচ্ছি (নেটওয়ার্ক কল লাগে না, তাই দ্রুত) */
+    for(let i=0;i<arr.length;i++){
+        const b=arr[i];
+        if(!b||b.bid) continue;
+        const base=slugifyBn(b.name);
+        let bid=base,n=2;
+        while(used[bid]){ bid=base+'-'+n; n++; }
+        used[bid]=true;
+        b.bid=bid;
+        toMigrate.push({oldIndex:i,bid});
+    }
+    /* এই প্রোডাক্টগুলোর পুরনো reviews (এখনকার position দিয়ে রাখা ছিল) নতুন bid-তে
+       কপি করা হচ্ছে — সব প্রোডাক্টের জন্য একসাথে/সমান্তরালে (একটার পর একটা না, তাই
+       হাজারখানেক প্রোডাক্ট থাকলেও দ্রুত শেষ হয়) */
+    await Promise.all(toMigrate.map(async ({oldIndex,bid})=>{
+        try{
+            const rSnap=await db.ref('reviews/'+oldIndex).once('value');
+            if(rSnap.exists()){
+                const reviews=rSnap.val();
+                await Promise.all(Object.keys(reviews).map(rid=>db.ref('reviews/'+bid+'/'+rid).set(reviews[rid])));
+            }
+        }catch(e){ console.warn('review migrate skip for index',oldIndex,e); }
+    }));
+    return arr;
+}
+
+/* ── FIREBASE SYNC ── */
 async function syncBookToFirebase(idx, bookData, msg){ // idx & bookData reserved for future per-book sync
     try{
+        await ensureBookIdsAndMigrate(localBooks);
         await db.ref('bookList').set(localBooks);
         showToast(msg||'Firebase-এ সেভ হয়েছে','#2f7531');
     }catch(e){
@@ -2308,6 +2517,7 @@ async function syncAllBooksToFirebase(silent=false){
     const btn=document.getElementById('syncAllBtn');
     if(btn){btn.disabled=true;btn.innerHTML='<svg class="spin-ic" style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="2" x2="12" y2="6"></line><line x1="12" y1="18" x2="12" y2="22"></line><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"></line><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"></line><line x1="2" y1="12" x2="6" y2="12"></line><line x1="18" y1="12" x2="22" y2="12"></line><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"></line><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"></line></svg> সেভ হচ্ছে...';}
     try{
+        await ensureBookIdsAndMigrate(localBooks);
         await db.ref('bookList').set(localBooks);
         if(!silent)showToast('সব বই Firebase-এ সেভ হয়েছে! Website আপডেট হবে।','#2f7531');
     }catch(e){showToast('Firebase sync ব্যর্থ','#dc2626');}
@@ -2547,6 +2757,50 @@ async function saveBanners(){
     }catch(e){
         showToast('❌ সেভ ব্যর্থ — আবার চেষ্টা করুন','#dc2626');
     }
+}
+
+/* ══════════════════════════════════════════════
+   অফার পোস্টার পপআপ (siteConfig/offerPopup)
+══════════════════════════════════════════════ */
+function loadOfferPopupAdmin(){
+    db.ref('siteConfig/offerPopup').once('value').then(snap=>{
+        const v=snap.val()||{};
+        const cb=document.getElementById('ofPopEnabled');
+        if(cb)cb.checked=!!v.enabled;
+        const imgEl=document.getElementById('ofPopImg');
+        if(imgEl)imgEl.value=v.img||'';
+        const titleEl=document.getElementById('ofPopTitle');
+        if(titleEl)titleEl.value=v.title||'';
+        const subEl=document.getElementById('ofPopSub');
+        if(subEl)subEl.value=v.sub||'';
+        const linkEl=document.getElementById('ofPopLink');
+        if(linkEl)linkEl.value=v.link||'';
+        const prev=document.getElementById('ofPopImgPrev');
+        if(prev&&v.img)prev.innerHTML='<img src="'+escapeHTML(v.img)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
+    }).catch(()=>{});
+}
+async function saveOfferPopup(){
+    const enabled=!!(document.getElementById('ofPopEnabled')||{}).checked;
+    const img=(document.getElementById('ofPopImg')||{}).value||'';
+    const title=(document.getElementById('ofPopTitle')||{}).value||'';
+    const sub=(document.getElementById('ofPopSub')||{}).value||'';
+    const link=(document.getElementById('ofPopLink')||{}).value||'';
+    if(enabled&&!img){showToast('ছবির URL দিন অথবা পোস্টার বন্ধ রাখুন','#dc2626');return;}
+    const data={enabled,img,title,sub,link};
+    try{
+        await db.ref('siteConfig/offerPopup').set(data);
+        showToast('✅ অফার পোস্টার সেভ হয়েছে — সাইটে লাইভ!','#2f7531');
+    }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
+}
+function ofPopUploadImg(inp){
+    const f=inp.files[0]; inp.value='';
+    if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;}
+    uploadToImgbb(f,function(url){
+        const el=document.getElementById('ofPopImg');
+        if(el)el.value=url;
+        const prev=document.getElementById('ofPopImgPrev');
+        if(prev)prev.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
+    },1000);
 }
 
 /* ══════════════════════════════════════════════
@@ -2996,6 +3250,11 @@ function openModal(orderId){
     document.getElementById('modalBooks').innerHTML=renderBookItemsTable(o);
     document.getElementById('modalPayment').innerText=o.payment;
     document.getElementById('modalTotal').innerText=o.total;
+    /* মোট টাকা এডিট ইনপুট প্রিফিল */
+    const teIn=document.getElementById('editTotalInput');
+    if(teIn){teIn.value=parseInt(String(o.total||'').replace(/[^\d]/g,''))||'';}
+    const teMsg=document.getElementById('totalSavedMsg');
+    if(teMsg)teMsg.style.display='none';
     const offerSec=document.getElementById('modalOffersSection');
     const offerEl=document.getElementById('modalOffers');
     if(o.offers&&o.offers.length){
@@ -3052,6 +3311,89 @@ async function migratePhoneIndex(){
     }
 }
 
+
+/* ══════════════════════════════════════════════
+   FRAUD / REPEAT CUSTOMER CHECK
+══════════════════════════════════════════════ */
+function normalizePhoneDigits(p){
+    let d=String(p||'').replace(/[^\d]/g,'');
+    if(d.length>11) d=d.slice(-11); // strip country code (+880 etc), keep last 11 digits
+    return d;
+}
+
+function checkFraudPhone(){
+    const inputEl=document.getElementById('fraudPhoneInput');
+    const resultEl=document.getElementById('fraudCheckResult');
+    const raw=inputEl.value.trim();
+    if(!raw){showToast('একটা ফোন নম্বর লিখুন','#dc2626');return;}
+    const target=normalizePhoneDigits(raw);
+    if(target.length<7){resultEl.innerHTML='<div class="fraud-flag">⚠️ সঠিক ফোন নম্বর দিন</div>';return;}
+
+    const matches=allOrders.filter(o=>normalizePhoneDigits(o.phone)===target);
+
+    if(!matches.length){
+        resultEl.innerHTML=`<div class="fraud-ok"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg> এই নম্বরে কোনো অর্ডার হিস্ট্রি পাওয়া যায়নি — নতুন কাস্টমার।</div>`;
+        return;
+    }
+
+    matches.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+
+    const total=matches.length;
+    const statusCnt={pending:0,confirmed:0,processing:0,shipped:0,delivered:0};
+    matches.forEach(o=>{const s=o.status||'pending';if(statusCnt[s]!==undefined)statusCnt[s]++;else statusCnt[s]=1;});
+    const delivered=statusCnt.delivered||0;
+    const pending=statusCnt.pending||0;
+    const completionRate=total?Math.round((delivered/total)*100):0;
+
+    // একই দিনে একাধিক অর্ডার (flooding) চেক
+    const dayMap={};
+    matches.forEach(o=>{const day=new Date(o.createdAt||0).toDateString();dayMap[day]=(dayMap[day]||0)+1;});
+    const maxSameDay=Math.max(...Object.values(dayMap),0);
+
+    // ── রেড ফ্ল্যাগ যাচাই ──
+    const flags=[];
+    if(total>=5 && delivered===0){
+        flags.push('এই নম্বরে '+total+'টি অর্ডার হয়েছে কিন্তু একটিও ডেলিভারি সম্পন্ন হয়নি।');
+    }
+    if(total>=3 && completionRate<30 && total<5){
+        flags.push('ডেলিভারি সম্পন্নের হার মাত্র '+completionRate+'%, গড়ের চেয়ে অনেক কম।');
+    }
+    if(pending>=4){
+        flags.push('এখনো '+pending+'টি অর্ডার পেন্ডিং অবস্থায় আছে — যাচাই না করে কনফার্ম করবেন না।');
+    }
+    if(maxSameDay>=3){
+        flags.push('একই দিনে '+maxSameDay+'টি অর্ডার করা হয়েছে — সম্ভবত ভুয়া/টেস্ট অর্ডার।');
+    }
+
+    const uniqueBooks=[...new Set(matches.map(o=>o.books).filter(Boolean))];
+
+    resultEl.innerHTML=`
+        <div class="fraud-stat-grid">
+            <div class="fraud-stat"><div class="fraud-stat-val">${total}</div><div class="fraud-stat-lbl">মোট অর্ডার</div></div>
+            <div class="fraud-stat"><div class="fraud-stat-val" style="color:#2f7531;">${delivered}</div><div class="fraud-stat-lbl">ডেলিভারড</div></div>
+            <div class="fraud-stat"><div class="fraud-stat-val" style="color:#d97706;">${pending}</div><div class="fraud-stat-lbl">পেন্ডিং</div></div>
+            <div class="fraud-stat"><div class="fraud-stat-val">${completionRate}%</div><div class="fraud-stat-lbl">সম্পন্নের হার</div></div>
+        </div>
+        ${flags.length?flags.map(f=>`<div class="fraud-flag">🚩 ${escapeHTML(f)}</div>`).join(''):'<div class="fraud-ok"><svg style="width:16px;height:16px;flex-shrink:0;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> কোনো সন্দেহজনক প্যাটার্ন পাওয়া যায়নি।</div>'}
+        <div style="margin-top:12px;">
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">অর্ডার করা প্রোডাক্টসমূহ (${uniqueBooks.length} ধরনের):</div>
+            <div class="nop-books" style="margin:0 0 12px 0;">${escapeHTML(uniqueBooks.join(' · ')||'—')}</div>
+        </div>
+        <div style="font-size:12px;font-weight:700;color:var(--text-muted);margin-bottom:6px;">সম্পূর্ণ অর্ডার হিস্ট্রি:</div>
+        <div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;">
+            ${matches.map(o=>`
+                <div class="fraud-order-row" style="cursor:pointer;" onclick="switchTab('orders',document.getElementById('navOrders'));setTimeout(()=>openModal('${escapeHTML(o.orderId)}'),200);">
+                    <div>
+                        <div style="font-weight:700;color:var(--text-main);">${escapeHTML(o.orderId)}</div>
+                        <div style="color:var(--text-muted);font-size:11px;">${new Date(o.createdAt||0).toLocaleString('bn-BD')}</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <span class="status-badge ${STATUS_CLASS[o.status]||'status-pending'}" style="font-size:9px;">${STATUS_LABELS[o.status]||escapeHTML(o.status)}</span>
+                        <div style="font-weight:700;color:var(--primary);margin-top:3px;">${escapeHTML(o.total||'')}</div>
+                    </div>
+                </div>`).join('')}
+        </div>`;
+}
 
 /* ══════════════════════════════════════════════
    DASHBOARD RENDER
@@ -3119,6 +3461,122 @@ function renderDashboard(){
         } else {
             catEl.innerHTML='<div class="text-muted text-sm" style="padding:10px 0;">বই লোড হয়নি</div>';
         }
+    }
+
+    renderDashboardCharts();
+}
+
+/* ══════════════════════════════════════════════
+   DASHBOARD CHARTS (Chart.js)
+══════════════════════════════════════════════ */
+function renderDashboardCharts(){
+    if(typeof Chart==='undefined')return;
+
+    // ── ৭ দিনের অর্ডার ট্রেন্ড (Line) ──
+    const trendCanvas=document.getElementById('orderTrendChart');
+    if(trendCanvas){
+        const days=[];
+        const counts=[];
+        const revenue=[];
+        const now=new Date();
+        for(let i=6;i>=0;i--){
+            const d=new Date(now);
+            d.setDate(now.getDate()-i);
+            d.setHours(0,0,0,0);
+            const dayStart=d.getTime();
+            const dayEnd=dayStart+86400000;
+            const dayOrders=allOrders.filter(o=>(o.createdAt||0)>=dayStart&&(o.createdAt||0)<dayEnd);
+            days.push(d.toLocaleDateString('bn-BD',{weekday:'short',day:'numeric',month:'short'}));
+            counts.push(dayOrders.length);
+            revenue.push(dayOrders.reduce((s,o)=>s+(parseInt(String(o.total||'').replace(/[^\d]/g,''))||0),0));
+        }
+        if(orderTrendChartInst)orderTrendChartInst.destroy();
+        orderTrendChartInst=new Chart(trendCanvas,{
+            type:'line',
+            data:{
+                labels:days,
+                datasets:[{
+                    label:'অর্ডার সংখ্যা',
+                    data:counts,
+                    borderColor:'#2f7531',
+                    backgroundColor:'rgba(47,117,49,0.12)',
+                    borderWidth:2.5,
+                    tension:0.35,
+                    fill:true,
+                    pointBackgroundColor:'#2f7531',
+                    pointRadius:4,
+                    pointHoverRadius:6
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false,
+                plugins:{
+                    legend:{display:false},
+                    tooltip:{
+                        backgroundColor:'#16301a',
+                        padding:10,
+                        titleFont:{family:'Noto Serif Bengali'},
+                        bodyFont:{family:'Noto Serif Bengali'},
+                        callbacks:{
+                            afterLabel:function(ctx){
+                                return 'বিক্রি: ৳'+revenue[ctx.dataIndex].toLocaleString('bn-BD');
+                            }
+                        }
+                    }
+                },
+                scales:{
+                    y:{beginAtZero:true,ticks:{stepSize:1,font:{family:'Noto Serif Bengali'}},grid:{color:'rgba(0,0,0,0.05)'}},
+                    x:{ticks:{font:{family:'Noto Serif Bengali',size:10}},grid:{display:false}}
+                }
+            }
+        });
+    }
+
+    // ── অর্ডার স্ট্যাটাস (Donut) ──
+    const statusCanvas=document.getElementById('orderStatusChart');
+    if(statusCanvas){
+        const statusColors={pending:'#cfe8cf',confirmed:'#9ed49e',processing:'#5fb463',shipped:'#3b9440',delivered:'#2f7531'};
+        const statusCount={};
+        allOrders.forEach(o=>{const s=o.status||'pending';statusCount[s]=(statusCount[s]||0)+1;});
+        const labels=Object.keys(statusCount);
+        const data=labels.map(s=>statusCount[s]);
+        const colors=labels.map(s=>statusColors[s]||'#888');
+        if(orderStatusChartInst)orderStatusChartInst.destroy();
+        orderStatusChartInst=new Chart(statusCanvas,{
+            type:'doughnut',
+            data:{
+                labels:labels.map(s=>STATUS_LABELS[s]||s),
+                datasets:[{
+                    data:data,
+                    backgroundColor:colors,
+                    borderColor:'#ffffff',
+                    borderWidth:2,
+                    hoverOffset:6
+                }]
+            },
+            options:{
+                responsive:true,
+                maintainAspectRatio:false,
+                cutout:'62%',
+                plugins:{
+                    legend:{
+                        position:'bottom',
+                        labels:{
+                            boxWidth:10,
+                            padding:10,
+                            font:{family:'Noto Serif Bengali',size:11}
+                        }
+                    },
+                    tooltip:{
+                        backgroundColor:'#16301a',
+                        padding:10,
+                        titleFont:{family:'Noto Serif Bengali'},
+                        bodyFont:{family:'Noto Serif Bengali'}
+                    }
+                }
+            }
+        });
     }
 }
 
@@ -3670,62 +4128,264 @@ function buildInvoiceHTML(o){
     </div>`;
 }
 
+/* ── অর্ডারের মোট টাকা বদলানো ── */
+async function saveOrderTotal(){
+    if(!modalOrderId)return;
+    const v=parseInt(document.getElementById('editTotalInput').value||'0');
+    if(!v||v<0){showToast('সঠিক টাকার অঙ্ক দিন','#dc2626');return;}
+    try{
+        await db.ref('orders/'+modalOrderId+'/total').set('৳'+v);
+        await db.ref('orders/'+modalOrderId+'/totalEditedAt').set(Date.now());
+        const o=allOrders.find(x=>x.orderId===modalOrderId);
+        if(o)o.total='৳'+v;
+        const mt=document.getElementById('modalTotal');
+        if(mt)mt.innerText='৳'+v;
+        const msg=document.getElementById('totalSavedMsg');
+        if(msg){msg.style.display='block';setTimeout(()=>msg.style.display='none',2500);}
+        renderOrders();
+    }catch(e){showToast('❌ আপডেট ব্যর্থ','#dc2626');}
+}
+
 /* ══════════════════════════════════════════════
    NEW ORDER NOTIFICATION
 ══════════════════════════════════════════════ */
-let notifEnabled=false;
-let lastOrderCount=0;
-let notifCount=0;
+let notifShownLocally=new Set();   // এই session-এ ইতিমধ্যে popup queue-তে ঢোকানো হয়েছে এমন orderId (duplicate popup আটকাতে)
+let notifPopupQueue=[];
+let notifPopupPlaying=false;
+let notifFirstLoad=true;   // প্রথমবার সব পুরনো অর্ডার লোড হওয়ার সময় popup storm আটকাতে
 
-async function toggleNotif(){
-    if(!notifEnabled){
-        if(Notification.permission==='default'){
-            const perm=await Notification.requestPermission();
-            if(perm!=='granted'){showToast('Notification অনুমতি দিন','#dc2626');return;}
-        }
-        notifEnabled=true;
-        lastOrderCount=allOrders.length;
-        showToast('🔔 নতুন অর্ডার Notification চালু!','#2f7531');
-        document.getElementById('notifBtn').style.color='var(--primary)';
-    } else {
-        notifEnabled=false;
-        showToast('🔕 Notification বন্ধ','#dc2626');
-        document.getElementById('notifBtn').style.color='';
-        notifCount=0;
-        updateNotifBadge();
+function processOrderNotifications(orders){
+    if(!Array.isArray(orders))return;
+
+    // প্রথমবার পেজ লোড হওয়ার সময় — পুরনো সব অর্ডারকে চুপচাপ "দেখা হয়েছে/পাঠানো হয়েছে" মার্ক করে দেওয়া হয়,
+    // যাতে ফিচারটা নতুন চালু করার পর হঠাৎ শত শত পুরনো অর্ডারের popup/badge না দেখায়।
+    if(notifFirstLoad){
+        notifFirstLoad=false;
+        const updates={};
+        orders.forEach(o=>{
+            if(!o||!o.orderId)return;
+            notifShownLocally.add(o.orderId);
+            if(o.notificationShown!==true){updates['orders/'+o.orderId+'/notificationShown']=true;o.notificationShown=true;}
+            if(o.seen!==true){updates['orders/'+o.orderId+'/seen']=true;o.seen=true;}
+        });
+        if(Object.keys(updates).length)db.ref().update(updates).catch(()=>{});
+        updateNotifBadge(orders);
+        renderNotifPanel(orders);
+        return;
     }
+
+    // ১) popup: notificationShown!==true এমন সব অর্ডার (সত্যিকারের নতুন অর্ডার)
+    const toPopup=orders.filter(o=>o&&o.orderId&&o.notificationShown!==true&&!notifShownLocally.has(o.orderId));
+    if(toPopup.length){
+        toPopup.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+        toPopup.forEach(o=>{
+            notifShownLocally.add(o.orderId);
+            notifPopupQueue.push(o);
+        });
+        runNotifPopupQueue();
+    }
+
+    updateNotifBadge(orders);
+    renderNotifPanel(orders);
 }
 
-function checkNewOrders(newTotal){
-    if(!notifEnabled)return;
-    if(newTotal>lastOrderCount){
-        const newCount=newTotal-lastOrderCount;
-        notifCount+=newCount;
-        updateNotifBadge();
-        if(Notification.permission==='granted'){
-            new Notification('NafahLife — নতুন অর্ডার!',{
-                body:`${newCount}টি নতুন অর্ডার এসেছে`,
-                icon:'https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f4da.png'
-            });
+function runNotifPopupQueue(){
+    if(notifPopupPlaying)return;
+    notifPopupPlaying=true;
+    const step=()=>{
+        const o=notifPopupQueue.shift();
+        if(!o){notifPopupPlaying=false;return;}
+        showNewOrderPopup(o);
+        playBeep();
+        if(typeof Notification!=='undefined'&&Notification.permission==='granted'){
+            try{
+                new Notification('NafahLife — নতুন অর্ডার!',{
+                    body:`${o.name||''} — ${o.total||''}`,
+                    icon:'https://cdn.jsdelivr.net/npm/twemoji@14/assets/72x72/1f6cd.png'
+                });
+            }catch(e){}
         }
-        // Play beep sound
-        try{
-            const ctx=new AudioContext();
-            const osc=ctx.createOscillator();
-            const gain=ctx.createGain();
-            osc.connect(gain);gain.connect(ctx.destination);
-            osc.frequency.value=880;gain.gain.value=0.3;
-            osc.start();setTimeout(()=>osc.stop(),200);
-        }catch(e){}
-        lastOrderCount=newTotal;
-    }
+        // popup একবার দেখানো হয়ে গেছে — DB-তে চিরস্থায়ীভাবে মার্ক করে দিচ্ছি, আর কখনো popup হবে না
+        db.ref('orders/'+o.orderId+'/notificationShown').set(true).catch(()=>{});
+        setTimeout(step,900);
+    };
+    step();
 }
 
-function updateNotifBadge(){
+function updateNotifBadge(orders){
     const badge=document.getElementById('notifBadge');
     if(!badge)return;
-    if(notifCount>0){badge.style.display='flex';badge.textContent=notifCount>9?'9+':notifCount;}
+    const src=orders||allOrders;
+    const unread=src.filter(o=>o&&o.seen!==true).length;
+    if(unread>0){badge.style.display='flex';badge.textContent=unread>9?'9+':unread;}
     else{badge.style.display='none';}
+}
+
+function toggleNotifPanel(){
+    const panel=document.getElementById('notifPanel');
+    if(!panel)return;
+    const opening=!panel.classList.contains('open');
+    panel.classList.toggle('open',opening);
+    if(opening){
+        renderNotifPanel(allOrders);
+        const foot=document.getElementById('notifBrowserFoot');
+        if(foot)foot.style.display=(typeof Notification!=='undefined'&&Notification.permission==='default')?'block':'none';
+    }
+}
+
+// প্যানেলের বাইরে ক্লিক করলে বন্ধ হয়ে যাবে
+document.addEventListener('click',function(e){
+    const wrap=document.querySelector('.notif-panel-wrap');
+    if(!wrap)return;
+    if(!wrap.contains(e.target)){
+        const panel=document.getElementById('notifPanel');
+        if(panel)panel.classList.remove('open');
+    }
+});
+
+function renderNotifPanel(orders){
+    const list=document.getElementById('notifPanelList');
+    if(!list)return;
+    const src=(orders||allOrders).slice().sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).slice(0,40);
+    if(!src.length){
+        list.innerHTML='<div class="notif-panel-empty">এখনো কোনো অর্ডার আসেনি</div>';
+        return;
+    }
+    list.innerHTML=src.map(o=>{
+        const unread=o.seen!==true;
+        const t=o.createdAt?timeAgoNotif(o.createdAt):'';
+        return `<div class="notif-item ${unread?'unread':''}" onclick="openModal('${escapeHTML(o.orderId)}');markOrderSeen('${escapeHTML(o.orderId)}')">
+            <div class="notif-item-body">
+                <div class="notif-item-name">${escapeHTML(o.name||'অর্ডার')} — ${escapeHTML(o.total||'')}</div>
+                <div class="notif-item-sub">${escapeHTML(o.orderId||'')}</div>
+                <div class="notif-item-time">${t}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function timeAgoNotif(ts){
+    const diff=Date.now()-ts;
+    const m=Math.floor(diff/60000);
+    if(m<1)return 'এইমাত্র';
+    if(m<60)return m+' মিনিট আগে';
+    const h=Math.floor(m/60);
+    if(h<24)return h+' ঘণ্টা আগে';
+    const d=Math.floor(h/24);
+    return d+' দিন আগে';
+}
+
+async function markOrderSeen(orderId){
+    if(!orderId)return;
+    try{
+        await db.ref('orders/'+orderId+'/seen').set(true);
+        const o=allOrders.find(x=>x.orderId===orderId);
+        if(o)o.seen=true;
+        updateNotifBadge(allOrders);
+        renderNotifPanel(allOrders);
+    }catch(e){}
+}
+
+async function markAllNotifsSeen(){
+    const unread=allOrders.filter(o=>o&&o.seen!==true);
+    if(!unread.length)return;
+    try{
+        const updates={};
+        unread.forEach(o=>{updates['orders/'+o.orderId+'/seen']=true;o.seen=true;});
+        await db.ref().update(updates);
+        updateNotifBadge(allOrders);
+        renderNotifPanel(allOrders);
+        showToast('✅ সব নোটিফিকেশন পঠিত হলো','#2f7531');
+    }catch(e){showToast('❌ ব্যর্থ হলো','#dc2626');}
+}
+
+async function requestBrowserNotifPermission(){
+    if(typeof Notification==='undefined'){showToast('এই ব্রাউজার Notification সাপোর্ট করে না','#dc2626');return;}
+    try{
+        const perm=await Notification.requestPermission();
+        if(perm==='granted'){
+            showToast('🔔 ব্রাউজার Notification চালু হলো','#2f7531');
+            const foot=document.getElementById('notifBrowserFoot');
+            if(foot)foot.style.display='none';
+        }else{
+            showToast('Notification অনুমতি দেওয়া হয়নি — তবে প্যানেলে সব অর্ডার দেখতে পাবেন','#dc2626');
+        }
+    }catch(e){}
+}
+
+/* ── Global AudioContext — ব্রাউজার autoplay restriction এড়াতে ──
+   প্রথম click/keydown-এ একবার resume() করা হয়; তারপর সব সময় বাজবে। */
+const _nfAudioCtx=(function(){
+    try{return new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+})();
+(function(){
+    function _resumeCtx(){if(_nfAudioCtx&&_nfAudioCtx.state==='suspended'){_nfAudioCtx.resume().catch(()=>{});}}
+    document.addEventListener('click',_resumeCtx,{once:true});
+    document.addEventListener('keydown',_resumeCtx,{once:true});
+})();
+
+function playBeep(){
+    try{
+        if(!_nfAudioCtx)return;
+        const ctx=_nfAudioCtx;
+        const doPlay=function(){
+            [880,1175].forEach((freq,i)=>{
+                const osc=ctx.createOscillator();
+                const gain=ctx.createGain();
+                osc.connect(gain);gain.connect(ctx.destination);
+                osc.type='sine';osc.frequency.value=freq;
+                const start=ctx.currentTime+i*0.16;
+                gain.gain.setValueAtTime(0.001,start);
+                gain.gain.exponentialRampToValueAtTime(0.35,start+0.02);
+                gain.gain.exponentialRampToValueAtTime(0.001,start+0.2);
+                osc.start(start);osc.stop(start+0.22);
+            });
+        };
+        if(ctx.state==='suspended'){ctx.resume().then(doPlay).catch(()=>{});}
+        else{doPlay();}
+    }catch(e){}
+}
+
+function showNewOrderPopup(o){
+    const container=document.getElementById('newOrderPopupContainer');
+    if(!container||!o)return;
+    const id='nop_'+Math.random().toString(36).slice(2,9);
+    const div=document.createElement('div');
+    div.className='new-order-popup';
+    div.id=id;
+    div.innerHTML=`
+        <div class="nop-head">
+            <div class="nop-bell">
+                <svg style="width:16px;height:16px;" viewBox="0 0 24 24" fill="none" stroke="#1c1c1c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            </div>
+            <div style="flex:1;">
+                <div class="nop-title">🎉 নতুন অর্ডার এসেছে!</div>
+                <div class="nop-sub">${escapeHTML(o.orderId||'')}</div>
+            </div>
+            <button class="nop-close" onclick="closeOrderPopup('${id}')">✕</button>
+        </div>
+        <div class="nop-body">
+            <div class="nop-name">${escapeHTML(o.name||'')}</div>
+            <div class="nop-row">
+                <svg style="width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                <span>${escapeHTML(o.phone||'')}</span>
+            </div>
+            <div class="nop-books">${escapeHTML(o.books||'')}</div>
+            <div class="nop-foot">
+                <span class="nop-total">${escapeHTML(o.total||'')}</span>
+                <button class="nop-btn" onclick="openModal('${escapeHTML(o.orderId)}');closeOrderPopup('${id}')">দেখুন →</button>
+            </div>
+        </div>
+        <div class="nop-progress"></div>`;
+    container.appendChild(div);
+    setTimeout(()=>closeOrderPopup(id),8000);
+}
+
+function closeOrderPopup(id){
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.classList.add('closing');
+    setTimeout(()=>el.remove(),260);
 }
 
 /* ══════════════════════════════════════════════

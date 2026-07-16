@@ -451,9 +451,9 @@ if ('serviceWorker' in navigator) {
 
     var css = document.createElement('style');
     css.textContent = `
-    #aaFab{position:fixed;left:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;}
+    #aaFab{position:fixed;right:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;}
     #aaFab.lifted{bottom:76px;}
-    #aaFab .aa-fab-actions{display:flex;flex-direction:column;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}
+    #aaFab .aa-fab-actions{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}
     #aaFab.open .aa-fab-actions{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
     #aaFab .aa-fab-item{display:flex;align-items:center;gap:9px;text-decoration:none;}
     #aaFab .aa-fab-lbl{background:#1a2e1b;color:#fff;font-size:12px;font-weight:700;padding:5px 11px;border-radius:20px;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.22);}
