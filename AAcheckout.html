@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>চেকআউট — NafahLife</title>
-<link rel="icon" href="nafah-logo.png" type="image/png">
+<link rel="icon" href="logo.jpeg" type="image/jpeg">
 <meta name="description" content="NafahLife চেকআউট — ক্যাশ অন ডেলিভারিতে ইসলামিক বই অর্ডার করুন। ঢাকায় ডেলিভারি ৳৬০, ঢাকার বাইরে ৳৯০।">
 <meta name="robots" content="noindex">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://i.ibb.co"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -176,7 +176,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
   <div class="nav-container">
     <div class="nav-top">
       <a href="index.html" class="nav-logo">
-        <img src="nafah-logo.png" alt="NafahLife" style="height:42px;width:auto;">
+        <img src="logo.jpeg" alt="NafahLife" style="height:42px;width:auto;">
       </a>
       <div class="nav-links" style="margin-left:auto">
         <a href="index.html" class="nav-link bng">হোম</a>
@@ -287,6 +287,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
             <button class="coupon-btn bng" onclick="applyCoupon()">প্রয়োগ</button>
           </div>
           <div id="couponMsg" style="font-size:12px;font-weight:600;margin-top:8px;display:none"></div>
+          <button id="couponRemoveBtn" onclick="removeCoupon()" class="bng" style="display:none;margin-top:8px;background:none;border:none;color:var(--danger,#dc2626);font-size:12px;font-weight:700;cursor:pointer;padding:0;text-decoration:underline;">✕ কুপন বাতিল করুন</button>
         </div>
       </div>
     </div>
@@ -384,7 +385,7 @@ select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-i
 <footer class="footer">
   <div class="footer-container">
     <div>
-      <h3 class="bng"><img src="nafah-logo.png" alt="NafahLife" style="height:44px;width:auto;"></h3>
+      <h3 class="bng"><img src="logo.jpeg" alt="NafahLife" style="height:44px;width:auto;"></h3>
       <p class="bng">বাংলাদেশের সবচেয়ে বিশ্বস্ত অনলাইন ইসলামিক বুকশপ।</p>
     </div>
     <div>
@@ -473,8 +474,14 @@ function updateThanas(){
   delivCharge = dist === 'ঢাকা' ? 60 : 90;
   updateTotal();
 }
+/* কার্টের প্রাইস সরাসরি বিশ্বাস না করে, প্রতিবার বই/প্রোডাক্টের আসল (Firebase/book.js) দাম দিয়ে যাচাই করা হয় —
+   কেউ localStorage এডিট করে দাম কমিয়ে ফেললেও এখানে ধরা পড়ে যায় */
+function getVerifiedPrice(itemName){
+  const real = (typeof books !== 'undefined') ? books.find(b => b.name === itemName) : null;
+  return real ? real.price : null;
+}
 function getSubtotal(){
-  return cart.reduce((s,i) => s + (i.price||0), 0);
+  return cart.reduce((s,i) => s + (getVerifiedPrice(i.name) ?? i.price ?? 0), 0);
 }
 function updateTotal(){
   const { sub, discountAmt, deliv, grand } = calcTotals();
@@ -488,6 +495,8 @@ function updateTotal(){
   } else {
     document.getElementById('discountRow').style.display = 'none';
   }
+  const crb = document.getElementById('couponRemoveBtn');
+  if(crb) crb.style.display = coupon ? 'inline-block' : 'none';
   document.getElementById('bkashAmt').textContent = '৳' + grand;
   var _na=document.getElementById('nagadAmt'); if(_na) _na.textContent='৳'+grand;
   document.getElementById('cartBadge').textContent = cart.length;
@@ -501,8 +510,9 @@ function renderSummary(){
   }
   const g = {};
   cart.forEach(i => {
+    const vp = getVerifiedPrice(i.name) ?? i.price ?? 0;
     if(g[i.name]) g[i.name].qty++;
-    else g[i.name] = {price: i.price, qty: 1, img: i.img||''};
+    else g[i.name] = {price: vp, qty: 1, img: i.img||''};
   });
   box.innerHTML = Object.entries(g).map(([name,item]) => `
     <div class="os-item">
@@ -520,6 +530,22 @@ function persistCoupon(){
   localStorage.setItem('alaziz_discount', discPct);
   localStorage.setItem('alaziz_discflat', discFlat);
   localStorage.setItem('alaziz_freedeliv', freeDeliv ? '1' : '0');
+  /* ctype/cvalue-ও সেট করা হয় যাতে অন্য পেজের কার্ট-ড্রয়ারে (যেটা nfCouponLabel ব্যবহার করে) সঠিক লেবেল দেখায় */
+  if(!coupon){ localStorage.removeItem('alaziz_ctype'); localStorage.removeItem('alaziz_cvalue'); }
+  else if(freeDeliv){ localStorage.setItem('alaziz_ctype','delivery'); localStorage.setItem('alaziz_cvalue','0'); }
+  else if(discFlat>0){ localStorage.setItem('alaziz_ctype','taka'); localStorage.setItem('alaziz_cvalue',String(discFlat)); }
+  else{ localStorage.setItem('alaziz_ctype','percent'); localStorage.setItem('alaziz_cvalue',String(discPct)); }
+}
+function removeCoupon(){
+  coupon = ''; discPct = 0; discFlat = 0; freeDeliv = false;
+  if(typeof nfRemoveCouponAll === 'function') nfRemoveCouponAll(); /* alaziz_ctype/cvalue-সহ সব কুপন key ক্লিয়ার করে (AAcommon.js) */
+  else { localStorage.removeItem('alaziz_coupon'); localStorage.removeItem('alaziz_discount'); localStorage.removeItem('alaziz_discflat'); localStorage.removeItem('alaziz_freedeliv'); }
+  document.getElementById('couponInput').value = '';
+  const msg = document.getElementById('couponMsg');
+  msg.style.display = 'block'; msg.style.color = 'var(--danger)';
+  msg.textContent = '🗑️ কুপন বাতিল করা হয়েছে!';
+  setTimeout(()=>{ msg.style.display = 'none'; }, 2500);
+  updateTotal();
 }
 async function applyCoupon(){
   const code = document.getElementById('couponInput').value.trim().toUpperCase();

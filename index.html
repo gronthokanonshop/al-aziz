@@ -2,18 +2,18 @@
 <html lang="bn" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="nafah-logo.png" type="image/png">
+<link rel="icon" href="logo.jpeg" type="image/jpeg">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ</title>
 <link rel="canonical" href="https://nafahlife.com/">
 <meta name="description" content="NafahLife — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
 <meta name="theme-color" content="#2a562b">
 <link rel="manifest" href="manifest.webmanifest">
-<link rel="apple-touch-icon" href="nafah-logo.png">
+<link rel="apple-touch-icon" href="logo.jpeg">
 <meta property="og:type" content="website">
 <meta property="og:title" content="NafahLife — ইসলামিক বইয়ের অনলাইন বুকশপ">
 <meta property="og:description" content="সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।">
-<meta property="og:image" content="nafah-logo.png">
+<meta property="og:image" content="logo.jpeg">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -21,7 +21,7 @@
   "name": "NafahLife",
   "alternateName": "NafahLife Bookshop",
   "url": "https://nafahlife.com/",
-  "logo": "https://nafahlife.com/nafah-logo.png",
+  "logo": "https://nafahlife.com/logo.jpeg",
   "description": "সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বইয়ের নির্ভরযোগ্য অনলাইন শপ। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।",
   "telephone": "+8801577272305",
   "address": {"@type": "PostalAddress", "addressLocality": "Dhaka", "addressCountry": "BD"},
@@ -545,7 +545,7 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
 </div>
 <div class="sidebar" id="sidebar">
   <div class="sidebar-header">
-    <h3 style="display:flex;align-items:center;gap:8px;font-size:16px;"><img src="nafah-logo-dark.png" alt="NafahLife" style="height:32px;width:auto;"> <span style="color:#fff;font-weight:600;">মেনু</span></h3>
+    <h3 style="display:flex;align-items:center;gap:8px;font-size:16px;"><img src="logo.jpeg" alt="NafahLife" style="height:32px;width:auto;"> <span style="color:#fff;font-weight:600;">মেনু</span></h3>
     <button style="background:none;border:none;color:#fff;font-size:24px;cursor:pointer;" onclick="closeSidebars()">×</button>
   </div>
   <div>
@@ -610,8 +610,8 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
     <div class="navbar-brand" onclick="scrollToTop()" style="height:46px;display:flex;align-items:center;">
-      <img class="logo-light" src="nafah-logo.png" alt="NafahLife" style="height:46px;width:auto;">
-      <img class="logo-dark" src="nafah-logo-dark.png" alt="NafahLife" style="height:46px;width:auto;">
+      <img class="logo-light" src="logo.jpeg" alt="NafahLife" style="height:46px;width:auto;">
+      <img class="logo-dark" src="logo.jpeg" alt="NafahLife" style="height:46px;width:auto;">
     </div>
     <div class="navbar-search-bar">
       <input class="navbar-search-input" id="navSearchInput" placeholder="বই, লেখক বা প্রকাশনী খুঁজুন..." oninput="navSearchLive(this.value)" onfocus="openSearch()" autocomplete="off">
@@ -899,8 +899,8 @@ function closeOfferPopup(){
 </div>
 <footer>
   <div class="footer-logo-row" style="flex-direction:column;gap:8px;">
-    <img class="logo-light" src="nafah-logo.png" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
-    <img class="logo-dark" src="nafah-logo-dark.png" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
+    <img class="logo-light" src="logo.jpeg" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
+    <img class="logo-dark" src="logo.jpeg" alt="NafahLife" style="height:54px;width:auto;" onerror="this.style.display='none'">
     <div class="footer-tagline">বাংলাদেশের বিশ্বস্ত অনলাইন ইসলামিক বুকশপ</div>
   </div>
   <div class="footer-grid">
@@ -1610,6 +1610,10 @@ window.onload=()=>{
   if(localStorage.getItem('alaziz_opencart')==='1'){
     localStorage.removeItem('alaziz_opencart');
     setTimeout(()=>showCart(),500);
+  }
+  if(localStorage.getItem('alaziz_openwish')==='1'){
+    localStorage.removeItem('alaziz_openwish');
+    setTimeout(()=>showWishlist(),500);
   }
   if(typeof auth!=='undefined') auth.onAuthStateChanged(user=>updateAuthUI(user));
   loadReviewSlider();

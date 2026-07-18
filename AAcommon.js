@@ -453,6 +453,7 @@ if ('serviceWorker' in navigator) {
     css.textContent = `
     #aaFab{position:fixed;right:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;}
     #aaFab.lifted{bottom:76px;}
+    body:has(#cartBox.open) #aaFab,body:has(#aaCartDrawer.open) #aaFab{display:none;} /* কার্ট খোলা থাকলে ৩-ডট বাটন কার্টের নিচে/আড়ালে চলে যাবে */
     #aaFab .aa-fab-actions{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}
     #aaFab.open .aa-fab-actions{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
     #aaFab .aa-fab-item{display:flex;align-items:center;gap:9px;text-decoration:none;}
