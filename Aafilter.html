@@ -92,6 +92,7 @@
         .bc-pub{font-size:10px;color:var(--text2);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
         .bc-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;line-height:1.45;height:36px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
         .bc-author{font-size:11px;color:var(--text2);margin-bottom:5px;}
+        .hadiya-chip{font-size:10px;font-weight:700;color:#a85320;background:rgba(207,111,51,0.10);border:1px dashed rgba(207,111,51,0.45);border-radius:8px;padding:2px 7px;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
         .price-row{display:flex;align-items:center;gap:5px;margin-bottom:7px;flex-wrap:wrap;}
         .price-sell{color:var(--danger);font-weight:bold;font-size:13px;}
         .price-orig{color:var(--text2);font-size:11px;text-decoration:line-through;}
@@ -312,6 +313,7 @@ function makeCard(b,delay){
             <div class="bc-name">${b.name}</div>
             <div class="bc-author">${b.author||b.brand||''}</div>
             <div class="price-row"><span class="price-sell">৳ ${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳ ${b.original_price}</span>`:''}</div>
+            ${b.hadiya?`<div class="hadiya-chip">🎁 ${escapeHTML(b.hadiya)}</div>`:''}
             ${inStock
                 ?`<button class="bc-btn" data-name="${escapeHTML(b.name)}" data-price="${b.price}" data-img="${escapeHTML(getImg(b))}" onclick="event.stopPropagation();addToCart(this.dataset.name,this.dataset.price,this.dataset.img)">কার্টে যোগ করুন</button>`
                 :`<button class="bc-btn" disabled onclick="event.stopPropagation();" style="background:#9ca3af;cursor:not-allowed;opacity:.75;">স্টক শেষ</button>`}
@@ -418,7 +420,13 @@ function nfFilterMatch(b,type,value){
     if(type==='pub') return b.pub===value;
     return catHasNF(b,value);
 }
-function nfSubcatsOf(cat){ for(var i=0;i<NF_TAXO.length;i++){ if(NF_TAXO[i][0]===cat)return NF_TAXO[i][1].slice(); } return []; }
+function nfSubcatsOf(cat){
+    /* অ্যাডমিনে বদলানো তালিকা (AAcommon-এর window.NF_CAT_TREE) থাকলে সেটাই */
+    if(window.NF_CAT_TREE&&window.NF_CAT_TREE.length){ var f=window.NF_CAT_TREE.find(function(c){return c.name===cat;}); if(f) return (f.subs||[]).slice(); }
+    for(var i=0;i<NF_TAXO.length;i++){ if(NF_TAXO[i][0]===cat)return NF_TAXO[i][1].slice(); } return [];
+}
+function nfTaxoNames(){ return (window.NF_CAT_TREE&&window.NF_CAT_TREE.length)?window.NF_CAT_TREE.map(function(c){return c.name;}):NF_TAXO.map(function(x){return x[0];}); }
+function nfTagList(){ return (window.NF_TAGS&&window.NF_TAGS.length)?window.NF_TAGS.slice():['Best Selling','New Arrived','Best Writer']; }
 var currentSub='';
 var NF_CAT_ICON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 7c-2-2-5-2-8-1v13c3-1 6-1 8 1 2-2 5-2 8-1V6c-3-1-6-1-8 1z"/></svg>';
 function buildCats(){
@@ -510,7 +518,7 @@ function openFilterDrawer(){ renderDrawer(); document.getElementById('fdOverlay'
 function closeFilterDrawer(){ document.getElementById('fdOverlay').classList.remove('open'); document.getElementById('filterDrawer').classList.remove('open'); document.body.style.overflow=''; }
 function renderDrawer(){
     const counts={}; books.forEach(function(b){ bookCatsF(b).forEach(function(c){counts[c]=(counts[c]||0)+1;}); });
-    const taxo=NF_TAXO.map(function(x){return x[0];});
+    const taxo=nfTaxoNames();
     const extra=Object.keys(counts).filter(function(c){return taxo.indexOf(c)<0;}).sort((a,b)=>a.localeCompare(b,'bn'));
     const cats=taxo.concat(extra).filter(function(c){return counts[c];});
     document.getElementById('fdCats').innerHTML=
@@ -521,7 +529,7 @@ function renderDrawer(){
     document.getElementById('fdSubs').innerHTML=subs.length
         ? '<div class="fd-opt '+(!drawerSub?'on':'')+'" onclick="fdSetSub(\'\')">সব</div>'+subs.map(function(s){return '<div class="fd-opt '+(drawerSub===s?'on':'')+'" data-v="'+escapeHTML(s)+'" onclick="fdSetSub(this.dataset.v)">'+escapeHTML(s)+'</div>';}).join('')
         : '';
-    document.getElementById('fdTags').innerHTML=['Best Selling','New Arrived','Best Writer'].map(function(t){return '<div class="fd-opt '+(drawerTags.indexOf(t)>-1?'on':'')+'" data-v="'+t+'" onclick="fdToggleTag(this.dataset.v)">'+t+'</div>';}).join('');
+    document.getElementById('fdTags').innerHTML=nfTagList().map(function(t){return '<div class="fd-opt '+(drawerTags.indexOf(t)>-1?'on':'')+'" data-v="'+escapeHTML(t)+'" onclick="fdToggleTag(this.dataset.v)">'+escapeHTML(t)+'</div>';}).join('');
 }
 function fdSetCat(c){ drawerCategory=c||null; drawerSub=''; renderDrawer(); }
 function fdSetSub(s){ drawerSub=s||''; renderDrawer(); }
@@ -547,6 +555,44 @@ function applyDrawerFilters(){
     window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
+<!-- ═══ FOOTER (হোমপেজের মতো) ═══ -->
+<style>
+footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rgba(53,107,55,0.08);color:#5a4a4d;margin-top:26px;padding-bottom:20px;}
+[data-theme="dark"] footer{background:#0e1c12;}
+.footer-logo-row{padding:22px 16px 14px;display:flex;flex-direction:column;align-items:center;gap:8px;border-bottom:1px solid rgba(53,107,55,0.12);}
+.footer-tagline{font-size:11px;color:var(--text2);}
+.footer-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:16px;border-bottom:1px solid rgba(53,107,55,0.12);}
+.footer-col-title{font-size:13px;font-weight:800;color:var(--text);margin-bottom:10px;}
+.footer-link{display:block;color:var(--text);text-decoration:none;font-size:13px;margin-bottom:8px;transition:.2s;}
+.footer-link:hover{color:#2f7531;padding-left:4px;}
+.footer-copy{text-align:center;font-size:11px;color:var(--text2);padding:12px 16px 0;}
+@media(min-width:1140px){.footer-grid,.footer-logo-row{max-width:1100px;margin-left:auto;margin-right:auto;}}
+</style>
+<footer>
+  <div class="footer-logo-row">
+    <img src="logo.jpeg" alt="NafahLife" style="height:54px;width:auto;border-radius:8px;" onerror="this.style.display='none'">
+    <div class="footer-tagline">বাংলাদেশের বিশ্বস্ত অনলাইন ইসলামিক বুকশপ</div>
+  </div>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-col-title">তথ্য</div>
+      <a href="about.html" class="footer-link">আমাদের সম্পর্কে</a>
+      <a href="delivery.html" class="footer-link">ডেলিভারি নীতি</a>
+      <a href="return.html" class="footer-link">রিটার্ন নীতি</a>
+      <a href="faq.html" class="footer-link">সাধারণ জিজ্ঞাসা (FAQ)</a>
+      <a href="blog.html" class="footer-link">ব্লগ ও লেখা প্রতিযোগিতা</a>
+      <a href="contact.html" class="footer-link">যোগাযোগ</a>
+    </div>
+    <div>
+      <div class="footer-col-title">যোগাযোগ</div>
+      <a href="tel:+8801577272305" class="footer-link">📞 01577272305</a>
+      <a href="https://wa.me/8801577272305" target="_blank" class="footer-link">💬 WhatsApp</a>
+      <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" class="footer-link">📘 Facebook</a>
+      <span class="footer-link" style="cursor:default;">📍 ঢাকা, বাংলাদেশ</span>
+    </div>
+  </div>
+  <p class="footer-copy">&copy; ২০২৬ <strong>NafahLife</strong> — সর্বস্বত্ব সংরক্ষিত</p>
+</footer>
 <!-- ফিল্টার drawer -->
 <div class="fd-overlay" id="fdOverlay" onclick="closeFilterDrawer()"></div>
 <div class="filter-drawer" id="filterDrawer">

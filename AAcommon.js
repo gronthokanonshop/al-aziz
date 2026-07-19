@@ -64,6 +64,24 @@ window.bookTags = function (b) {
 };
 window.bookHasTag = function (b, tag) { return bookTags(b).indexOf(tag) > -1; };
 window.bookHasCat = function (b, cat) { return bookCats(b).indexOf(cat) > -1; };
+/* অ্যাডমিনে বদলানো ক্যাটাগরি/উপ-বিভাগ/ট্যাগ তালিকা থাকলে সেটাই সাইটে চলবে (siteConfig/taxonomy) */
+(function () {
+    try {
+        fetch('https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/siteConfig/taxonomy.json')
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (v) {
+                if (!v) return;
+                if (Array.isArray(v.cats) && v.cats.length) {
+                    NF_CAT_TREE.length = 0;
+                    v.cats.forEach(function (c) { if (c && c.name) NF_CAT_TREE.push({ name: c.name, subs: Array.isArray(c.subs) ? c.subs : [] }); });
+                }
+                if (Array.isArray(v.tags) && v.tags.length) {
+                    NF_TAGS.length = 0;
+                    v.tags.forEach(function (t) { if (t) { NF_TAGS.push(String(t)); NF_TAG_NAMES.add(String(t)); } });
+                }
+            }).catch(function () {});
+    } catch (e) {}
+})();
 
 /* ═══ PAGE NAVIGATION (smooth fade) ═══ */
 function navigateTo(url) {
@@ -451,7 +469,7 @@ if ('serviceWorker' in navigator) {
 
     var css = document.createElement('style');
     css.textContent = `
-    #aaFab{position:fixed;right:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;}
+    #aaFab{position:fixed;right:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;display:flex;flex-direction:column;align-items:flex-end;}
     #aaFab.lifted{bottom:76px;}
     body:has(#cartBox.open) #aaFab,body:has(#aaCartDrawer.open) #aaFab{display:none;} /* কার্ট খোলা থাকলে ৩-ডট বাটন কার্টের নিচে/আড়ালে চলে যাবে */
     #aaFab .aa-fab-actions{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}

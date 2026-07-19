@@ -375,6 +375,10 @@
         /* ══════════════════════════════════════════
            TOOLS — original style (unchanged)
         ══════════════════════════════════════════ */
+        #navToolsSub{display:flex;flex-direction:column;gap:2px;padding:2px 0 6px 14px;}
+        .nav-sub-item{display:block;width:calc(100% - 8px);text-align:left;padding:7px 12px;font-size:12px;font-weight:600;color:var(--text-muted);background:none;border:none;border-left:2px solid var(--border);border-radius:0 8px 8px 0;cursor:pointer;font-family:'Noto Serif Bengali',Arial,sans-serif;transition:.15s;}
+        .nav-sub-item:hover{color:var(--primary);background:var(--primary-light);}
+        .nav-sub-item.active{color:var(--primary);border-left-color:var(--primary);background:var(--primary-light);font-weight:700;}
         .tool-card{background:var(--surface);border-radius:14px;padding:16px;border:1px solid var(--border);margin-bottom:12px;}
         .tool-card h3{font-size:13px;font-weight:700;color:var(--text-main);margin-bottom:6px;}
         .tool-card p{font-size:12px;color:var(--text-muted);margin-bottom:12px;}
@@ -862,6 +866,20 @@
                 <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                 টুলস
             </button>
+            <div id="navToolsSub">
+                <button class="nav-sub-item" onclick="switchTool('all',this)">সব টুলস</button>
+                <button class="nav-sub-item" onclick="switchTool('banner',this)">🖼️ ব্যানার</button>
+                <button class="nav-sub-item" onclick="switchTool('offer',this)">📢 অফার পোস্টার</button>
+                <button class="nav-sub-item" onclick="switchTool('coupon',this)">🏷️ কুপন</button>
+                <button class="nav-sub-item" onclick="switchTool('chips',this)">🟩 হোমপেজ চিপ</button>
+                <button class="nav-sub-item" onclick="switchTool('taxo',this)">🗂️ ক্যাটাগরি-ট্যাগ তালিকা</button>
+                <button class="nav-sub-item" onclick="switchTool('authfix',this)">✍️ লেখক/প্রকাশনী ঠিক</button>
+                <button class="nav-sub-item" onclick="switchTool('blog',this)">📝 ব্লগ</button>
+                <button class="nav-sub-item" onclick="switchTool('media',this)">📷 ছবি ও Pixel</button>
+                <button class="nav-sub-item" onclick="switchTool('mods',this)">👥 মডারেটর</button>
+                <button class="nav-sub-item" onclick="switchTool('courier',this)">🚚 কুরিয়ার</button>
+                <button class="nav-sub-item" onclick="switchTool('data',this)">🧰 ডাউনলোড ও অন্যান্য</button>
+            </div>
         </nav>
 
         <div class="sidebar-footer">
@@ -1195,6 +1213,7 @@
                         </div>
                         <div class="form-group"><label class="be-label">ছবির লিংক</label><div style="display:flex;gap:8px;align-items:center;"><input class="form-input" id="fa_img" placeholder="https://..." style="flex:1;"><label class="btn" style="flex-shrink:0;cursor:pointer;background:#e8f3ea;color:#14532d;border:1px solid #b8dfc0;white-space:nowrap;">📷 আপলোড<input type="file" accept="image/*" style="display:none;" onchange="faUploadImg(this)"></label></div></div>
                         <div class="form-group editor-full"><label class="be-label">বিবরণ</label><textarea class="form-input" id="fa_desc" rows="2" placeholder="বিবরণ..."></textarea></div>
+                        <div class="form-group editor-full"><label class="be-label">🎁 হাদিয়া (সাথে ফ্রি কিছু থাকলে লিখুন — সাইটে highlight হয়ে দেখাবে)</label><input class="form-input" id="fa_hadiya" placeholder="যেমন: ফ্রি আতর ৩ মিলি / সুন্দর বুকমার্ক"></div>
                     </div>
                     <div class="flex gap-2">
                         <button class="btn btn-primary" onclick="beAddBook()"><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> যোগ করুন ও Firebase-এ সেভ</button>
@@ -1333,34 +1352,14 @@
 
                 <div class="tool-card" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> অফার পোস্টার পপআপ</h3>
-                    <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে (চেকআউট পেজ বাদে)। <b>চালু</b> রাখলে ও ছবির URL দিলে তবেই পপআপ দেখাবে, নাহলে দেখাবে না।</p>
+                    <p style="margin-bottom:12px;">সাইটে ঢুকলেই ছবিওয়ালা অফার পোস্টার দেখাবে। <b>সর্বোচ্চ ৩টা পোস্টার</b> দেওয়া যায় — একজন কাস্টমার <b>২ ঘণ্টায় ১ বারই</b> পপআপ দেখবে, প্রতিবার ঘুরে ঘুরে ভিন্ন পোস্টার। যে স্লটে ছবি নেই সেটা বাদ যাবে।</p>
                     <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
                         <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:700;">
                             <input type="checkbox" id="ofPopEnabled" style="width:18px;height:18px;cursor:pointer;accent-color:var(--primary);">
                             পোস্টার পপআপ চালু রাখুন
                         </label>
                     </div>
-                    <div style="margin-bottom:10px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">পোস্টার ছবির URL</label>
-                        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-                            <input class="form-input" id="ofPopImg" placeholder="https://i.ibb.co/..." style="flex:1;min-width:200px;">
-                            <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('ofPopImgFile').click()">📤 imgbb আপলোড</button>
-                            <input type="file" id="ofPopImgFile" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this)">
-                        </div>
-                        <div id="ofPopImgPrev" style="margin-top:8px;"></div>
-                    </div>
-                    <div style="margin-bottom:10px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">শিরোনাম (ঐচ্ছিক)</label>
-                        <input class="form-input" id="ofPopTitle" placeholder="যেমন: ঈদ স্পেশাল অফার!">
-                    </div>
-                    <div style="margin-bottom:10px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">সাবটাইটেল (ঐচ্ছিক)</label>
-                        <input class="form-input" id="ofPopSub" placeholder="যেমন: সব প্রোডাক্টে ২০% ছাড়, আজই অর্ডার করুন!">
-                    </div>
-                    <div style="margin-bottom:14px;">
-                        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">ছবিতে ক্লিক করলে কোথায় যাবে (ঐচ্ছিক)</label>
-                        <input class="form-input" id="ofPopLink" placeholder="যেমন: filter.html?type=cat&value=Best Selling">
-                    </div>
+                    <div id="ofSlots"></div>
                     <button class="btn btn-primary w-full" onclick="saveOfferPopup()">
                         <svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                         সেভ করুন (সাইটে লাইভ)
@@ -1466,6 +1465,42 @@
                         <div class="be-img-preview" id="haImgPrev" style="margin-top:8px;"></div>
                     </div>
                     <button class="btn btn-primary w-full" onclick="saveHomeAuthors()">💾 লেখক চিপ সেভ করুন (হোমপেজে লাইভ)</button>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h6"></path></svg> ক্যাটাগরি, উপ-বিভাগ ও ট্যাগ তালিকা</h3>
+                    <p style="margin-bottom:12px;">ভুল নাম মুছুন বা নতুন যোগ করুন — <b>সেভ করলেই</b> অ্যাডমিনের ড্রপডাউন ও পুরো সাইটে (হোম চিপ, ফিল্টার, drawer) এই তালিকাই চলবে। মুছলে পুরনো বইয়ের ডেটা বদলায় না, শুধু তালিকা থেকে যায়।</p>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;">বিভাগ ও উপ-বিভাগ</div>
+                    <div id="taxoCatList" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+                        <input class="form-input" id="taxoNewCat" placeholder="নতুন বিভাগের নাম" style="flex:1;min-width:140px;">
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="addTaxoCat()">＋ বিভাগ যোগ</button>
+                    </div>
+                    <div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;">ট্যাগ (হোমপেজ সেকশন এগুলো দিয়েই হয়)</div>
+                    <div id="taxoTagList" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:10px;"></div>
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+                        <input class="form-input" id="taxoNewTag" placeholder="নতুন ট্যাগের নাম" style="flex:1;min-width:140px;">
+                        <button class="btn btn-ghost btn-sm" type="button" onclick="addTaxoTag()">＋ ট্যাগ যোগ</button>
+                    </div>
+                    <button class="btn btn-primary w-full" onclick="saveTaxonomy()">💾 তালিকা সেভ করুন (সাইটে লাইভ)</button>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2 2 0 0 1 3 3L7 19l-4 1 1-4z"></path></svg> লেখক / প্রকাশনী ঠিক করুন</h3>
+                    <p style="margin-bottom:12px;">কোনো লেখক বা প্রকাশনীর নাম ভুল লেখা হলে — এখান থেকে বাছুন, নতুন নাম লিখুন, "নাম বদলে দিন" চাপুন — <b>সব বইয়ে একসাথে</b> ঠিক হয়ে Firebase-এ সেভ হবে। "মুছে দিন" চাপলে নামটা সব বই থেকে ফাঁকা হয়ে যাবে।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                        <select class="form-input" id="afField" onchange="afFillList()" style="flex:1;min-width:120px;">
+                            <option value="author">লেখক</option>
+                            <option value="pub">প্রকাশনী</option>
+                        </select>
+                        <select class="form-input" id="afOld" style="flex:2;min-width:180px;"></select>
+                    </div>
+                    <input class="form-input" id="afNew" placeholder="সঠিক / নতুন নাম লিখুন" style="margin-bottom:12px;">
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="afRename()">✅ নাম বদলে দিন (সব বইয়ে)</button>
+                        <button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="afClear()">🗑️ মুছে দিন (ফাঁকা হবে)</button>
+                    </div>
+                    <div id="afMsg" style="margin-top:10px;font-size:12px;font-weight:600;"></div>
                 </div>
 
                 <div class="tool-card">
@@ -1681,6 +1716,7 @@ async function adminLogin(){
 function showDashboard(){
     document.getElementById('loginGate').style.display='none';
     document.getElementById('appShell').classList.remove('hidden');
+    loadTaxonomyRuntime(); /* সেভ-করা ক্যাটাগরি/ট্যাগ তালিকা আগে লোড */
     /* মডারেটর হলে মালিক-only অংশ লুকাও */
     const courierCard=document.getElementById('courierCard');
     const modCard=document.getElementById('modManageCard');
@@ -1720,7 +1756,7 @@ function switchTab(tab, btnEl){
     });
     if(tab==='books') renderBookManage();
     if(tab==='reviews') loadReviewsAdmin();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadOfferPopupAdmin(); }
+    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadOfferPopupAdmin(); loadTaxonomyAdmin(); afFillList(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -2197,8 +2233,10 @@ function beAddBook(){
         newBook.brand=(g('fa_brand')?.value||'').trim();
         newBook.attributes=(beAttrSel['add']||[]).filter(a=>a.label&&a.label.trim());
     }
+    const hadiyaVal=(g('fa_hadiya')?.value||'').trim();
+    if(hadiyaVal) newBook.hadiya=hadiyaVal;
     localBooks.push(newBook);
-    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand'].forEach(id=>{const el=g(id);if(el)el.value='';});
+    ['fa_name','fa_price','fa_oprice','fa_pages','fa_img','fa_desc','fa_subjectnew','fa_authornew','fa_pubnew','fa_brand','fa_hadiya'].forEach(id=>{const el=g(id);if(el)el.value='';});
     beAttrSel['add']=[];
     beToggleAddForm();
     beOpenIdx=localBooks.length-1;
@@ -2261,6 +2299,9 @@ function beSaveBook(idx){
     b.subcat=(g('nf_subcatnew_'+idx)?.value||'').trim()||g('nf_subcat_'+idx).value||'';
     b.tags=nfReadTags(idx);
     delete b.cats;
+    /* 🎁 হাদিয়া */
+    const hv=(g('be_hadiya_'+idx)?.value||'').trim();
+    if(hv) b.hadiya=hv; else delete b.hadiya;
     beUpdateStats();
     beRenderList();
     beOpenIdx=idx;
@@ -2442,6 +2483,7 @@ function beBookBodyHTML(i){
                         <label class="be-label">বিবরণ</label>
                         <textarea class="form-input" id="be_desc_${i}" rows="2">${escapeHTML(b.desc||'')}</textarea>
                     </div>
+                    <div class="form-group editor-full"><label class="be-label">🎁 হাদিয়া (সাথে ফ্রি কিছু থাকলে লিখুন — সাইটে highlight হয়ে দেখাবে; খালি রাখলে দেখাবে না)</label><input class="form-input" id="be_hadiya_${i}" value="${escapeHTML(b.hadiya||'')}" placeholder="যেমন: ফ্রি আতর ৩ মিলি"></div>
                 </div>
                 <div class="be-edit-actions">
                     <button class="btn btn-primary btn-sm" onclick="beSaveBook(${i})">
@@ -2760,46 +2802,197 @@ async function saveBanners(){
 }
 
 /* ══════════════════════════════════════════════
+   ক্যাটাগরি/উপ-বিভাগ/ট্যাগ তালিকা ম্যানেজার (siteConfig/taxonomy)
+══════════════════════════════════════════════ */
+let taxoData={cats:[],tags:[]};
+function taxoDefaults(){
+    return {cats:NF_CAT_TREE.map(c=>({name:c.name,subs:(c.subs||[]).slice()})), tags:NF_TAGS.map(t=>t.name)};
+}
+function loadTaxonomyAdmin(){
+    db.ref('siteConfig/taxonomy').once('value').then(s=>{
+        const v=s.val();
+        taxoData=(v&&Array.isArray(v.cats)&&v.cats.length)
+            ? {cats:v.cats.filter(c=>c&&c.name).map(c=>({name:c.name,subs:Array.isArray(c.subs)?c.subs.slice():[]})), tags:Array.isArray(v.tags)?v.tags.slice():[]}
+            : taxoDefaults();
+        if(!taxoData.tags.length) taxoData.tags=NF_TAGS.map(t=>t.name);
+        renderTaxo();
+    }).catch(()=>{ taxoData=taxoDefaults(); renderTaxo(); });
+}
+function renderTaxo(){
+    const cl=document.getElementById('taxoCatList'); if(!cl)return;
+    cl.innerHTML=taxoData.cats.map(function(c,i){
+        const subs=(c.subs||[]).map(function(s,j){
+            return '<span style="display:inline-flex;align-items:center;gap:4px;background:var(--primary-light);color:var(--primary);border-radius:20px;padding:3px 5px 3px 10px;font-size:11.5px;font-weight:700;">'+escapeHTML(s)
+                +'<button type="button" onclick="removeTaxoSub('+i+','+j+')" style="background:rgba(47,117,49,0.18);color:var(--primary);border:none;border-radius:50%;width:16px;height:16px;line-height:1;cursor:pointer;font-size:12px;">×</button></span>';
+        }).join(' ');
+        return '<div style="border:1px solid var(--border);border-radius:9px;padding:9px 11px;">'
+            +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><b style="flex:1;">'+escapeHTML(c.name)+'</b>'
+            +'<button type="button" class="btn btn-sm" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeTaxoCat('+i+')">✕ বিভাগ মুছুন</button></div>'
+            +'<div style="display:flex;flex-wrap:wrap;gap:5px;align-items:center;">'+(subs||'<span style="font-size:11px;color:var(--text-muted);font-style:italic;">কোনো উপ-বিভাগ নেই</span>')+'</div>'
+            +'<div style="display:flex;gap:6px;margin-top:7px;">'
+            +'<input class="form-input" id="taxoSubNew_'+i+'" placeholder="নতুন উপ-বিভাগ" style="flex:1;font-size:12px;padding:6px 10px;">'
+            +'<button type="button" class="btn btn-ghost btn-sm" onclick="addTaxoSub('+i+')">＋</button></div>'
+            +'</div>';
+    }).join('');
+    const tl=document.getElementById('taxoTagList');
+    if(tl) tl.innerHTML=taxoData.tags.map(function(t,i){
+        return '<span style="display:inline-flex;align-items:center;gap:5px;background:var(--primary-light);color:var(--primary);border:1px solid rgba(47,117,49,0.3);border-radius:20px;padding:5px 7px 5px 12px;font-size:12px;font-weight:700;">'+escapeHTML(t)
+            +'<button type="button" onclick="removeTaxoTag('+i+')" style="background:rgba(47,117,49,0.18);color:var(--primary);border:none;border-radius:50%;width:17px;height:17px;line-height:1;cursor:pointer;font-size:13px;">×</button></span>';
+    }).join('');
+}
+function addTaxoCat(){ const el=document.getElementById('taxoNewCat'); const v=(el.value||'').trim(); if(!v)return; if(taxoData.cats.some(c=>c.name===v)){showToast('এই বিভাগ আগেই আছে','#dc2626');return;} taxoData.cats.push({name:v,subs:[]}); el.value=''; renderTaxo(); }
+function removeTaxoCat(i){ if(!confirm('"'+taxoData.cats[i].name+'" বিভাগ তালিকা থেকে মুছবেন?'))return; taxoData.cats.splice(i,1); renderTaxo(); }
+function addTaxoSub(i){ const el=document.getElementById('taxoSubNew_'+i); const v=(el.value||'').trim(); if(!v)return; if(taxoData.cats[i].subs.includes(v)){showToast('এই উপ-বিভাগ আগেই আছে','#dc2626');return;} taxoData.cats[i].subs.push(v); renderTaxo(); }
+function removeTaxoSub(i,j){ taxoData.cats[i].subs.splice(j,1); renderTaxo(); }
+function addTaxoTag(){ const el=document.getElementById('taxoNewTag'); const v=(el.value||'').trim(); if(!v)return; if(taxoData.tags.includes(v)){showToast('এই ট্যাগ আগেই আছে','#dc2626');return;} taxoData.tags.push(v); el.value=''; renderTaxo(); }
+function removeTaxoTag(i){ if(!confirm('"'+taxoData.tags[i]+'" ট্যাগ মুছবেন?'))return; taxoData.tags.splice(i,1); renderTaxo(); }
+function applyTaxonomyRuntime(){
+    NF_CAT_TREE.length=0; taxoData.cats.forEach(c=>NF_CAT_TREE.push({name:c.name,subs:(c.subs||[]).slice()}));
+    NF_TAGS.length=0; taxoData.tags.forEach(t=>{NF_TAGS.push({name:t}); NF_TAG_NAMES.add(t);});
+}
+async function saveTaxonomy(){
+    if(!taxoData.cats.length){showToast('কমপক্ষে ১টা বিভাগ রাখুন','#dc2626');return;}
+    try{
+        await db.ref('siteConfig/taxonomy').set({cats:taxoData.cats, tags:taxoData.tags});
+        applyTaxonomyRuntime();
+        beRenderList();
+        showToast('✅ তালিকা সেভ হয়েছে — অ্যাডমিন ও সাইটে লাইভ!','#2f7531');
+    }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
+}
+/* লগইনের পরই সেভ-করা তালিকা লোড করে চালু করি */
+function loadTaxonomyRuntime(){
+    db.ref('siteConfig/taxonomy').once('value').then(s=>{
+        const v=s.val(); if(!v)return;
+        if(Array.isArray(v.cats)&&v.cats.length){ NF_CAT_TREE.length=0; v.cats.forEach(c=>{if(c&&c.name)NF_CAT_TREE.push({name:c.name,subs:Array.isArray(c.subs)?c.subs:[]});}); }
+        if(Array.isArray(v.tags)&&v.tags.length){ NF_TAGS.length=0; v.tags.forEach(t=>{NF_TAGS.push({name:String(t)}); NF_TAG_NAMES.add(String(t));}); }
+    }).catch(()=>{});
+}
+
+/* ══════════════════════════════════════════════
+   লেখক/প্রকাশনী একসাথে ঠিক করা (rename/clear সব বইয়ে)
+══════════════════════════════════════════════ */
+function afFillList(){
+    const field=(document.getElementById('afField')||{}).value||'author';
+    const sel=document.getElementById('afOld'); if(!sel)return;
+    const counts={};
+    (localBooks||[]).forEach(b=>{const v=(b[field]||'').trim(); if(v)counts[v]=(counts[v]||0)+1;});
+    const names=Object.keys(counts).sort((a,b)=>a.localeCompare(b,'bn'));
+    sel.innerHTML='<option value="">— বাছুন —</option>'+names.map(n=>'<option value="'+escapeHTML(n)+'">'+escapeHTML(n)+' ('+counts[n]+'টি বই)</option>').join('');
+}
+function afRename(){
+    const field=document.getElementById('afField').value;
+    const oldName=document.getElementById('afOld').value;
+    const newName=(document.getElementById('afNew').value||'').trim();
+    const msg=document.getElementById('afMsg');
+    if(!oldName){msg.style.color='#dc2626';msg.textContent='আগে তালিকা থেকে নামটা বাছুন';return;}
+    if(!newName){msg.style.color='#dc2626';msg.textContent='নতুন নামটা লিখুন';return;}
+    let n=0; localBooks.forEach(b=>{ if((b[field]||'').trim()===oldName){ b[field]=newName; n++; } });
+    syncAllBooksToFirebase(true);
+    beRenderList(); afFillList();
+    document.getElementById('afNew').value='';
+    msg.style.color='#2f7531'; msg.textContent='✅ '+n+'টি বইয়ে "'+oldName+'" → "'+newName+'" করা হয়েছে ও Firebase-এ সেভ হয়েছে';
+}
+function afClear(){
+    const field=document.getElementById('afField').value;
+    const oldName=document.getElementById('afOld').value;
+    const msg=document.getElementById('afMsg');
+    if(!oldName){msg.style.color='#dc2626';msg.textContent='আগে তালিকা থেকে নামটা বাছুন';return;}
+    if(!confirm('"'+oldName+'" নামটা সব বই থেকে মুছে ফাঁকা করবেন?'))return;
+    let n=0; localBooks.forEach(b=>{ if((b[field]||'').trim()===oldName){ b[field]=''; n++; } });
+    syncAllBooksToFirebase(true);
+    beRenderList(); afFillList();
+    msg.style.color='#2f7531'; msg.textContent='✅ '+n+'টি বই থেকে নামটা মুছে ফেলা হয়েছে';
+}
+
+/* ══════════════════════════════════════════════
+   টুলস সাব-মেনু — sidebar থেকে আলাদা আলাদা টুল
+══════════════════════════════════════════════ */
+const TOOL_GROUPS={
+    all:null,
+    banner:['হোমপেজ ব্যানার'],
+    offer:['অফার পোস্টার'],
+    coupon:['কুপন কোড'],
+    chips:['হোমপেজ ক্যাটাগরি চিপ','হোমপেজ প্রকাশনী চিপ','হোমপেজ প্রিয় লেখক চিপ'],
+    taxo:['ক্যাটাগরি, উপ-বিভাগ ও ট্যাগ'],
+    authfix:['লেখক / প্রকাশনী ঠিক'],
+    blog:['পাঠকদের ব্লগ'],
+    media:['ছবি আপলোড','Facebook Pixel'],
+    mods:['মডারেটর ম্যানেজ'],
+    courier:['Courier API'],
+    data:['book.js ডাউনলোড','sitemap.xml','Phone Index','অর্ডার সংক্ষেপ','Manual Fraud']
+};
+function switchTool(key,btn){
+    switchTab('tools', document.getElementById('navTools'));
+    document.querySelectorAll('.nav-sub-item').forEach(b=>b.classList.remove('active'));
+    if(btn)btn.classList.add('active');
+    const names=TOOL_GROUPS[key];
+    document.querySelectorAll('#tabPanelTools .tool-card').forEach(c=>{
+        if(!names){c.style.display='';return;}
+        const h=(c.querySelector('h3')||{}).textContent||'';
+        c.style.display=names.some(n=>h.indexOf(n)>-1)?'':'none';
+    });
+    window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ══════════════════════════════════════════════
    অফার পোস্টার পপআপ (siteConfig/offerPopup)
 ══════════════════════════════════════════════ */
+function ofRenderSlots(posters){
+    const box=document.getElementById('ofSlots'); if(!box)return;
+    posters=posters||[];
+    box.innerHTML=[0,1,2].map(function(i){
+        const p=posters[i]||{};
+        return '<div style="border:1.5px dashed var(--border);border-radius:10px;padding:12px;margin-bottom:12px;">'
+            +'<div style="font-size:12px;font-weight:800;color:var(--text-muted);margin-bottom:8px;">পোস্টার '+(i+1)+(i===0?'':' (ঐচ্ছিক)')+'</div>'
+            +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;">'
+            +'<input class="form-input" id="ofImg'+i+'" value="'+escapeHTML(p.img||'')+'" placeholder="ছবির URL (https://i.ibb.co/...)" style="flex:1;min-width:180px;">'
+            +'<button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById(\'ofFile'+i+'\').click()">📤 আপলোড</button>'
+            +'<input type="file" id="ofFile'+i+'" accept="image/*" style="display:none;" onchange="ofPopUploadImg(this,'+i+')">'
+            +'</div>'
+            +'<div id="ofPrev'+i+'" style="margin-bottom:8px;">'+((p.img)?'<img src="'+escapeHTML(p.img)+'" style="max-width:160px;max-height:100px;border-radius:8px;">':'')+'</div>'
+            +'<input class="form-input" id="ofTitle'+i+'" value="'+escapeHTML(p.title||'')+'" placeholder="শিরোনাম (ঐচ্ছিক)" style="margin-bottom:8px;">'
+            +'<input class="form-input" id="ofSub'+i+'" value="'+escapeHTML(p.sub||'')+'" placeholder="সাবটাইটেল (ঐচ্ছিক)" style="margin-bottom:8px;">'
+            +'<input class="form-input" id="ofLink'+i+'" value="'+escapeHTML(p.link||'')+'" placeholder="ক্লিকে কোথায় যাবে (ঐচ্ছিক) — যেমন: Aafilter.html?type=tag&value=Best Selling">'
+            +'</div>';
+    }).join('');
+}
 function loadOfferPopupAdmin(){
     db.ref('siteConfig/offerPopup').once('value').then(snap=>{
         const v=snap.val()||{};
         const cb=document.getElementById('ofPopEnabled');
         if(cb)cb.checked=!!v.enabled;
-        const imgEl=document.getElementById('ofPopImg');
-        if(imgEl)imgEl.value=v.img||'';
-        const titleEl=document.getElementById('ofPopTitle');
-        if(titleEl)titleEl.value=v.title||'';
-        const subEl=document.getElementById('ofPopSub');
-        if(subEl)subEl.value=v.sub||'';
-        const linkEl=document.getElementById('ofPopLink');
-        if(linkEl)linkEl.value=v.link||'';
-        const prev=document.getElementById('ofPopImgPrev');
-        if(prev&&v.img)prev.innerHTML='<img src="'+escapeHTML(v.img)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
-    }).catch(()=>{});
+        let posters=Array.isArray(v.posters)?v.posters:[];
+        if(!posters.length&&v.img) posters=[{img:v.img,title:v.title||'',sub:v.sub||'',link:v.link||''}]; /* পুরনো একক ফরম্যাট */
+        ofRenderSlots(posters);
+    }).catch(()=>{ ofRenderSlots([]); });
 }
 async function saveOfferPopup(){
     const enabled=!!(document.getElementById('ofPopEnabled')||{}).checked;
-    const img=(document.getElementById('ofPopImg')||{}).value||'';
-    const title=(document.getElementById('ofPopTitle')||{}).value||'';
-    const sub=(document.getElementById('ofPopSub')||{}).value||'';
-    const link=(document.getElementById('ofPopLink')||{}).value||'';
-    if(enabled&&!img){showToast('ছবির URL দিন অথবা পোস্টার বন্ধ রাখুন','#dc2626');return;}
-    const data={enabled,img,title,sub,link};
+    const posters=[];
+    [0,1,2].forEach(function(i){
+        const img=((document.getElementById('ofImg'+i)||{}).value||'').trim();
+        if(!img)return;
+        posters.push({
+            img:img,
+            title:((document.getElementById('ofTitle'+i)||{}).value||'').trim(),
+            sub:((document.getElementById('ofSub'+i)||{}).value||'').trim(),
+            link:((document.getElementById('ofLink'+i)||{}).value||'').trim()
+        });
+    });
+    if(enabled&&!posters.length){showToast('কমপক্ষে ১টা পোস্টারের ছবি দিন অথবা পপআপ বন্ধ রাখুন','#dc2626');return;}
     try{
-        await db.ref('siteConfig/offerPopup').set(data);
-        showToast('✅ অফার পোস্টার সেভ হয়েছে — সাইটে লাইভ!','#2f7531');
+        await db.ref('siteConfig/offerPopup').set({enabled:enabled, posters:posters});
+        showToast('✅ অফার পোস্টার সেভ হয়েছে ('+posters.length+'টা) — সাইটে লাইভ!','#2f7531');
     }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
 }
-function ofPopUploadImg(inp){
+function ofPopUploadImg(inp,slot){
     const f=inp.files[0]; inp.value='';
     if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;}
     uploadToImgbb(f,function(url){
-        const el=document.getElementById('ofPopImg');
+        const el=document.getElementById('ofImg'+slot);
         if(el)el.value=url;
-        const prev=document.getElementById('ofPopImgPrev');
-        if(prev)prev.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:180px;max-height:120px;border-radius:8px;margin-top:4px;">';
+        const prev=document.getElementById('ofPrev'+slot);
+        if(prev)prev.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:160px;max-height:100px;border-radius:8px;">';
     },1000);
 }
 
@@ -3189,15 +3382,18 @@ function downloadSitemap(){
 
 /* ── DOWNLOAD book.js ── */
 function downloadBookJs(){
-    const FIELDS=['name','author','price','original_price','cat','subject','cover','pub','pages','img','desc'];
+    /* সব ফিল্ড এক্সপোর্ট হয় — type/subcat/tags/brand/attributes/hadiya সহ (নাহলে ডেটা হারাবে) */
+    const STR_FIELDS=['name','type','author','subject','cover','pub','pages','cat','subcat','brand','hadiya','img','desc'];
     const src=localBooks.length?localBooks:(typeof books!=='undefined'?books:[]);
+    const esc=s=>String(s).replace(/\\/g,'\\\\').replace(/"/g,'\\"');
     const lines=src.map(b=>{
-        const fields=FIELDS.map(f=>{
-            const v=b[f]??'';
-            if(f==='price'||f==='original_price')return `${f}: ${Number(v)||0}`;
-            return `${f}: "${String(v).replace(/\\/g,'\\\\').replace(/"/g,'\\"')}"`;
-        }).join(', ');
-        return `  { ${fields} }`;
+        const parts=[];
+        STR_FIELDS.forEach(f=>{ const v=b[f]; if(v!==undefined&&v!==null&&String(v)!=='') parts.push(`${f}: "${esc(v)}"`); });
+        parts.push(`price: ${Number(b.price)||0}`);
+        parts.push(`original_price: ${Number(b.original_price)||0}`);
+        if(Array.isArray(b.tags)&&b.tags.length) parts.push(`tags: [${b.tags.map(t=>`"${esc(t)}"`).join(', ')}]`);
+        if(Array.isArray(b.attributes)&&b.attributes.length) parts.push(`attributes: [${b.attributes.map(a=>`{label: "${esc(a.label||'')}", value: "${esc(a.value||'')}"}`).join(', ')}]`);
+        return `  { ${parts.join(', ')} }`;
     });
     const code=`const books = [\n${lines.join(',\n')}\n];`;
     const blob=new Blob([code],{type:'text/javascript;charset=utf-8'});

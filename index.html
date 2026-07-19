@@ -301,6 +301,7 @@ body::after{content:'';position:fixed;bottom:100px;left:-100px;width:300px;heigh
 .book-card-info{padding:10px;flex:1;display:flex;flex-direction:column;}
 .bc-name{font-size:12.5px;font-weight:700;line-height:1.45;margin-bottom:3px;height:38px;overflow:hidden;color:var(--text);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;}
 .bc-author{font-size:11px;color:var(--text2);margin-bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:16px;}
+.hadiya-chip{font-size:10.5px;font-weight:700;color:#a85320;background:rgba(207,111,51,0.10);border:1px dashed rgba(207,111,51,0.45);border-radius:8px;padding:3px 8px;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .price-row{display:flex;align-items:center;gap:5px;margin-bottom:7px;}
 .price-sell{color:var(--danger);font-weight:800;font-size:13px;}
 .price-orig{color:var(--text2);font-size:11px;text-decoration:line-through;}
@@ -609,9 +610,9 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
     <button onclick="document.getElementById('sidebar').classList.add('active');document.getElementById('overlay').classList.add('active');" style="background:none;border:none;cursor:pointer;padding:4px;color:#000;display:flex;align-items:center;">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <div class="navbar-brand" onclick="scrollToTop()" style="height:46px;display:flex;align-items:center;">
-      <img class="logo-light" src="logo.jpeg" alt="NafahLife" style="height:46px;width:auto;">
-      <img class="logo-dark" src="logo.jpeg" alt="NafahLife" style="height:46px;width:auto;">
+    <div class="navbar-brand" onclick="scrollToTop()" style="height:46px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;">
+      <img class="logo-light" src="logo.jpeg" alt="NafahLife" style="height:44px;width:auto;border-radius:8px;">
+      <img class="logo-dark" src="logo.jpeg" alt="NafahLife" style="height:44px;width:auto;border-radius:8px;">
     </div>
     <div class="navbar-search-bar">
       <input class="navbar-search-input" id="navSearchInput" placeholder="বই, লেখক বা প্রকাশনী খুঁজুন..." oninput="navSearchLive(this.value)" onfocus="openSearch()" autocomplete="off">
@@ -803,23 +804,33 @@ function loadHomeAuthors(){
         if(Array.isArray(v)&&v.length){ window.NF_HOME_AUTHORS=v.filter(function(a){return a&&a.name;}); renderHomeAuthorChips(); }
     }).catch(function(){});
 }
-/* ═══ অফার পোস্টার পপআপ (siteConfig/offerPopup) — অ্যাডমিন থেকে অন/অফ, ছবি, টেক্সট নিয়ন্ত্রিত ═══ */
+/* ═══ অফার পোস্টার পপআপ (siteConfig/offerPopup) — সর্বোচ্চ ৩টা পোস্টার,
+   একজন কাস্টমার ২ ঘণ্টায় ১ বারই দেখবে; প্রতিবার ভিন্ন পোস্টার (ঘুরে ঘুরে) ═══ */
 var offerPopLink='';
+var OFFER_GAP_MS = 2*60*60*1000; /* ২ ঘণ্টা */
 function loadOfferPopup(){
     if(typeof db==='undefined'||!db) return;
-    if(sessionStorage.getItem('aa_offerpop_shown')==='1') return; /* এই সেশনে একবার দেখানো হলে আর না */
+    var last=parseInt(localStorage.getItem('aa_offerpop_last')||'0');
+    if(Date.now()-last < OFFER_GAP_MS) return; /* ২ ঘণ্টার মধ্যে আর না */
     db.ref('siteConfig/offerPopup').once('value').then(function(snap){
         var v=snap.val();
-        if(!v||!v.enabled||!v.img) return;
-        offerPopLink=v.link||'';
+        if(!v||!v.enabled) return;
+        /* নতুন ফরম্যাট: posters:[{img,title,sub,link}] — পুরনো একক-পোস্টারও কাজ করবে */
+        var posters=Array.isArray(v.posters)?v.posters.filter(function(p){return p&&p.img;}):[];
+        if(!posters.length && v.img) posters=[{img:v.img,title:v.title||'',sub:v.sub||'',link:v.link||''}];
+        if(!posters.length) return;
+        var idx=parseInt(localStorage.getItem('aa_offerpop_idx')||'0');
+        var p=posters[idx % posters.length];
+        offerPopLink=p.link||'';
         var body=document.getElementById('offerPopBody');
-        body.innerHTML='<img src="'+String(v.img).replace(/"/g,'&quot;')+'" alt="অফার" style="width:100%;display:block;" onerror="closeOfferPopup()">'+
-            ((v.title||v.sub)?('<div style="padding:14px 16px 16px;">'+
-                (v.title?'<div style="font-weight:800;font-size:15px;color:var(--text,#233023);margin-bottom:4px;">'+String(v.title).replace(/</g,'&lt;')+'</div>':'')+
-                (v.sub?'<div style="font-size:12.5px;color:var(--text2,#6b7a6c);">'+String(v.sub).replace(/</g,'&lt;')+'</div>':'')+
+        body.innerHTML='<img src="'+String(p.img).replace(/"/g,'&quot;')+'" alt="অফার" style="width:100%;display:block;" onerror="closeOfferPopup()">'+
+            ((p.title||p.sub)?('<div style="padding:14px 16px 16px;">'+
+                (p.title?'<div style="font-weight:800;font-size:15px;color:var(--text,#233023);margin-bottom:4px;">'+String(p.title).replace(/</g,'&lt;')+'</div>':'')+
+                (p.sub?'<div style="font-size:12.5px;color:var(--text2,#6b7a6c);">'+String(p.sub).replace(/</g,'&lt;')+'</div>':'')+
             '</div>'):'');
         document.getElementById('offerPopOverlay').style.display='flex';
-        sessionStorage.setItem('aa_offerpop_shown','1');
+        localStorage.setItem('aa_offerpop_last', String(Date.now()));
+        localStorage.setItem('aa_offerpop_idx', String(idx+1)); /* পরেরবার পরের পোস্টার */
     }).catch(function(){});
 }
 function offerPopClick(){
@@ -1262,6 +1273,7 @@ function makeCard(b){
       <div class="bc-name">${b.name}</div>
       <div class="bc-author">${bookType(b)==='প্রোডাক্ট'?(b.brand||''):(b.author||'')}</div>
       <div class="price-row"><span class="price-sell">৳${b.price}</span>${b.original_price>b.price?`<span class="price-orig">৳${b.original_price}</span>`:''}</div>
+      ${b.hadiya?`<div class="hadiya-chip">🎁 ${String(b.hadiya).replace(/</g,'&lt;')}</div>`:''}
       ${inStock
         ?`<button class="bc-btn" onclick="event.stopPropagation();addToCart('${b.name.replace(/'/g,"\\'")}',${b.price},'${getImg(b)}')">কার্টে যোগ করুন</button>`
         :`<button class="bc-btn" disabled style="opacity:.5;cursor:not-allowed;background:#9ca3af;">স্টক শেষ</button>`}
@@ -1324,8 +1336,8 @@ function renderSections(list){
   const w=document.getElementById('sectionsWrapper');
   w.style.display='block';
   let html='';
-  /* ১. বই — ট্যাগ অনুযায়ী সেকশন */
-  NF_TAG_SECTIONS.forEach(tag=>{
+  /* ১. বই — ট্যাগ অনুযায়ী সেকশন (অ্যাডমিনে ট্যাগ বদলালে সেটাই) */
+  ((window.NF_TAGS&&window.NF_TAGS.length)?window.NF_TAGS:NF_TAG_SECTIONS).forEach(tag=>{
     const bks=list.filter(b=>bookType(b)!=='প্রোডাক্ট' && bookTags(b).includes(tag));
     if(bks.length) html+=nfSectionHtml(tag, 'tag-'+tag, {type:'tag',value:tag}, bks);
   });
