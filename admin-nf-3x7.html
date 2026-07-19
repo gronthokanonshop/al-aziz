@@ -93,7 +93,7 @@
 
         /* ── SIDEBAR ── */
         .sidebar{
-            width:220px;min-height:100vh;flex-shrink:0;
+            width:220px;height:100vh;flex-shrink:0;
             background:var(--sidebar-bg);
             display:flex;flex-direction:column;
             position:fixed;top:0;left:0;z-index:200;
@@ -114,8 +114,10 @@
         .sidebar-logo-icon img{width:100%;height:100%;object-fit:contain;display:block;}
         .sidebar-logo-text h2{font-size:14px;font-weight:700;color:#fff;line-height:1.2;}
         .sidebar-logo-text span{font-size:10px;color:rgba(255,255,255,0.3);}
-        .sidebar-nav{flex:1;padding:10px 8px;overflow-y:auto;scrollbar-width:none;}
-        .sidebar-nav::-webkit-scrollbar{display:none;}
+        .sidebar-nav{flex:1;min-height:0;padding:10px 8px;overflow-y:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.25) transparent;}
+        .sidebar-nav::-webkit-scrollbar{width:5px;}
+        .sidebar-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.22);border-radius:10px;}
+        .sidebar-nav::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.4);}
         .nav-section-label{font-size:9px;font-weight:700;letter-spacing:1.3px;text-transform:uppercase;color:rgba(255,255,255,0.25);padding:10px 10px 5px;}
         .nav-item{
             display:flex;align-items:center;gap:9px;
@@ -1329,6 +1331,21 @@
                 </div>
 
                 <div class="tool-card" style="grid-column:1/-1;">
+                    <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg> হোমপেজের উপরের হিরো ব্যানার</h3>
+                    <p style="margin-bottom:12px;">হোমপেজের সবচেয়ে উপরের সবুজ ফিক্সড ব্যানারটা এখান থেকে ছবি দিয়ে বদলান। ছবি দিলে বাকি লেখা/আইকন সরে গিয়ে শুধু <b>"বেস্টসেলার দেখুন"</b> বাটন থাকবে, ছবিতে ক্লিক করলেও বেস্টসেলার পেজে যাবে। <b>প্রস্তাবিত সাইজ: ১০৪০ × ৪০০ পিক্সেল (2.6:1)</b>। ছবি মুছে ফেললে আগের ডিজাইন ফিরে আসবে।</p>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;">
+                        <input class="form-input" id="heroImgInput" placeholder="ছবির লিংক (URL)" style="flex:1;min-width:200px;">
+                        <button class="btn btn-ghost btn-sm" type="button" style="flex-shrink:0;white-space:nowrap;" onclick="document.getElementById('heroImgFile').click()">📤 imgbb আপলোড</button>
+                        <input type="file" id="heroImgFile" accept="image/*" style="display:none;" onchange="heroUploadImg(this)">
+                    </div>
+                    <div id="heroImgPrev" style="margin-bottom:12px;"></div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="saveHeroBanner()">💾 সেভ করুন (হোমপেজে লাইভ)</button>
+                        <button class="btn" style="background:#fee2e2;color:#b91c1c;border:1px solid #fecaca;" onclick="removeHeroBanner()">🗑️ ছবি মুছে আগের ডিজাইন ফেরান</button>
+                    </div>
+                </div>
+
+                <div class="tool-card" style="grid-column:1/-1;">
                     <h3><svg style="width:1em;height:1em;vertical-align:-0.15em;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="M21 15l-5-5L5 21"></path></svg> হোমপেজ ব্যানার / অফার</h3>
                     <p style="margin-bottom:12px;">হোমপেজের স্লাইডার ব্যানার এখান থেকেই বদলান। ছবির লিংক (URL) দিন, অথবা ছবি ছাড়া শুধু অফারের লেখা দিন। সেভ করলেই সাইটে লাইভ হবে। <b>প্রস্তাবিত ছবির সাইজ: ১২০০ × ৪০০ পিক্সেল (৩:১)</b> — এই মাপে দিলে ছবির কোনো পাশ কাটবে না।</p>
                     <div id="bannerList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px;"></div>
@@ -1756,7 +1773,7 @@ function switchTab(tab, btnEl){
     });
     if(tab==='books') renderBookManage();
     if(tab==='reviews') loadReviewsAdmin();
-    if(tab==='tools'){ renderOrderSummary(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadOfferPopupAdmin(); loadTaxonomyAdmin(); afFillList(); }
+    if(tab==='tools'){ renderOrderSummary(); loadHeroBannerAdmin(); loadBannersAdmin(); loadCouponsAdmin(); loadBlogAdmin(); loadModAdmin(); loadImgbbKey(); loadPixelId(); loadHomeCatsAdmin(); loadHomePubsAdmin(); loadHomeAuthorsAdmin(); loadOfferPopupAdmin(); loadTaxonomyAdmin(); afFillList(); }
     if(tab==='report') renderReport();
     if(tab==='editor') beInit();
     if(tab==='daily') renderDailyOrders();
@@ -2741,6 +2758,39 @@ async function saveHomeAuthors(){
 }
 
 /* ══════════════════════════════════════════════
+   হোমপেজের উপরের ফিক্সড হিরো ব্যানার (siteConfig/heroBanner)
+══════════════════════════════════════════════ */
+function loadHeroBannerAdmin(){
+    db.ref('siteConfig/heroBanner').once('value').then(snap=>{
+        const v=snap.val()||{};
+        const el=document.getElementById('heroImgInput'); if(el)el.value=v.img||'';
+        const prev=document.getElementById('heroImgPrev');
+        if(prev)prev.innerHTML=v.img?'<img src="'+escapeHTML(v.img)+'" style="max-width:260px;max-height:110px;border-radius:8px;">':'';
+    }).catch(()=>{});
+}
+function heroUploadImg(inp){
+    const f=inp.files[0]; inp.value='';
+    if(typeof uploadToImgbb!=='function'){showToast('আগে টুলস → imgbb key দিন','#dc2626');return;}
+    uploadToImgbb(f,function(url){
+        const el=document.getElementById('heroImgInput'); if(el)el.value=url;
+        const prev=document.getElementById('heroImgPrev');
+        if(prev)prev.innerHTML='<img src="'+escapeHTML(url)+'" style="max-width:260px;max-height:110px;border-radius:8px;">';
+    },1040);
+}
+async function saveHeroBanner(){
+    const img=(document.getElementById('heroImgInput')||{}).value.trim();
+    try{
+        await db.ref('siteConfig/heroBanner').set(img?{img:img}:null);
+        showToast(img?'✅ হিরো ব্যানার সেভ হয়েছে — হোমপেজে লাইভ!':'✅ ছবি সরানো হয়েছে — আগের ডিজাইন ফিরবে','#2f7531');
+    }catch(e){showToast('❌ সেভ ব্যর্থ','#dc2626');}
+}
+async function removeHeroBanner(){
+    document.getElementById('heroImgInput').value='';
+    document.getElementById('heroImgPrev').innerHTML='';
+    await saveHeroBanner();
+}
+
+/* ══════════════════════════════════════════════
    হোমপেজ ব্যানার ম্যানেজমেন্ট
 ══════════════════════════════════════════════ */
 let bannerData = [];
@@ -2909,7 +2959,7 @@ function afClear(){
 ══════════════════════════════════════════════ */
 const TOOL_GROUPS={
     all:null,
-    banner:['হোমপেজ ব্যানার'],
+    banner:['হোমপেজের উপরের হিরো ব্যানার','হোমপেজ ব্যানার'],
     offer:['অফার পোস্টার'],
     coupon:['কুপন কোড'],
     chips:['হোমপেজ ক্যাটাগরি চিপ','হোমপেজ প্রকাশনী চিপ','হোমপেজ প্রিয় লেখক চিপ'],

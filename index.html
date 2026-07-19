@@ -233,6 +233,13 @@ body::after{content:'';position:fixed;bottom:100px;left:-100px;width:300px;heigh
 .hero-stat-num{font-size:16px;font-weight:900;color:#fff;display:block;}
 .hero-stat-label{font-size:9px;color:rgba(255,255,255,0.70);font-weight:500;}
 @media(max-width:420px){.hero-stats{display:none;}}
+/* অ্যাডমিন থেকে ছবি আপলোড করলে — hero-section ব্যাকগ্রাউন্ড ছবি হয়ে যায়,
+   বাকি টেক্সট/আইকন লুকিয়ে শুধু বেস্টসেলার বাটনটা থাকে */
+.hero-section.has-img{padding:0;min-height:0;background:none;aspect-ratio:2.6/1;cursor:pointer;}
+.hero-section.has-img .hero-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;}
+.hero-section.has-img::before,.hero-section.has-img::after{display:none;}
+.hero-section.has-img .hero-badge,.hero-section.has-img .hero-title,.hero-section.has-img .hero-sub,.hero-section.has-img .hero-stats{display:none;}
+.hero-section.has-img .hero-btn{position:absolute;left:20px;bottom:16px;z-index:2;}
 .banner-wrap{max-width:100%;margin:10px 14px;overflow:hidden;border-radius:14px;box-shadow:0 6px 30px rgba(0,0,0,0.20);position:relative;}
 .banner-slider{display:flex;transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);}
 .banner-slide{flex-shrink:0;width:100%;height:auto;aspect-ratio:3/1;min-height:120px;position:relative;overflow:hidden;display:flex;align-items:center;}
@@ -635,12 +642,13 @@ footer{background:#ffffff;border-top:3px solid #2f7531;box-shadow:0 -4px 20px rg
     </div>
   </div>
 </nav>
-<div class="hero-section">
+<div class="hero-section" id="heroSection" onclick="if(this.classList.contains('has-img'))navigateToFilter('tag','Best Selling')">
+  <img class="hero-bg-img" id="heroBgImg" src="" alt="" style="display:none;">
   <div style="position:relative;z-index:2;flex:1;">
     <div class="hero-badge"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z"/></svg> নতুন কালেকশন এসেছে</div>
     <div class="hero-title"><svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h6v16H4zM10 4h6v16h-6z"/><path d="M16 5l4 .8-2.5 15.4-4-.8"/></svg> জ্ঞান অর্জনই<br>সর্বোত্তম সম্পদ</div>
     <div class="hero-sub">ইসলামিক বই থেকে শুরু করে একাডেমিক — সবকিছু এক জায়গায়। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।</div>
-    <button class="hero-btn" onclick="navigateToFilter('cat','Best Selling')">বেস্টসেলার দেখুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    <button class="hero-btn" onclick="event.stopPropagation();navigateToFilter('tag','Best Selling')">বেস্টসেলার দেখুন <svg class="emi" viewBox="0 0 24 24" style="width:1em;height:1em;vertical-align:-0.15em;display:inline-block;flex-shrink:0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
   </div>
   <div class="hero-stats">
     <div class="hero-stat"><span class="hero-stat-num">৫০০+</span><span class="hero-stat-label">বই</span></div>
@@ -1322,6 +1330,21 @@ function loadHomeCats(){
     if(Array.isArray(v)&&v.length){ window.NF_HOME_CATS=v.filter(c=>c&&c.name); renderHomeCatChips(); }
   }).catch(function(){});
 }
+/* ═══ উপরের fixed hero banner — অ্যাডমিন থেকে ছবি আপলোড করলে ব্যাকগ্রাউন্ড হয়ে যায় ═══ */
+function loadHeroBanner(){
+  if(typeof db==='undefined'||!db) return;
+  db.ref('siteConfig/heroBanner').once('value').then(function(snap){
+    var v=snap.val();
+    var sec=document.getElementById('heroSection'), img=document.getElementById('heroBgImg');
+    if(!sec||!img) return;
+    if(v&&v.img){
+      img.src=v.img; img.style.display='block';
+      sec.classList.add('has-img');
+    } else {
+      sec.classList.remove('has-img'); img.style.display='none';
+    }
+  }).catch(function(){});
+}
 /* বইয়ের ট্যাগ-সেকশন (গ্রন্থকাননের মতো) */
 const NF_TAG_SECTIONS=['Best Selling','New Arrived','Best Writer'];
 function nfSectionHtml(title, id, target, items){
@@ -1615,6 +1638,7 @@ window.onload=()=>{
   loadHomeCats();
   loadHomePubs();
   loadHomeAuthors();
+  loadHeroBanner();
   setTimeout(loadOfferPopup,1200); /* বাকি পেজ লোড হওয়ার পর একটু দেরিতে দেখাবে, যাতে হুট করে ঝাঁপ না দেয় */
   updateCartUI();
   renderCouponSection();

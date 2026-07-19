@@ -469,8 +469,8 @@ if ('serviceWorker' in navigator) {
 
     var css = document.createElement('style');
     css.textContent = `
-    #aaFab{position:fixed;right:16px;bottom:20px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;display:flex;flex-direction:column;align-items:flex-end;}
-    #aaFab.lifted{bottom:76px;}
+    #aaFab{position:fixed;right:10px;bottom:30px;z-index:9990;font-family:'Noto Serif Bengali',Arial,sans-serif;display:flex;flex-direction:column;align-items:flex-end;}
+    #aaFab.lifted{bottom:86px;}
     body:has(#cartBox.open) #aaFab,body:has(#aaCartDrawer.open) #aaFab{display:none;} /* কার্ট খোলা থাকলে ৩-ডট বাটন কার্টের নিচে/আড়ালে চলে যাবে */
     #aaFab .aa-fab-actions{display:flex;flex-direction:column;align-items:flex-end;gap:12px;margin-bottom:12px;opacity:0;pointer-events:none;transform:translateY(14px) scale(.85);transition:.28s cubic-bezier(.2,.8,.2,1);}
     #aaFab.open .aa-fab-actions{opacity:1;pointer-events:auto;transform:translateY(0) scale(1);}
@@ -527,6 +527,55 @@ if ('serviceWorker' in navigator) {
         var f = document.getElementById('aaFab');
         if (f && f.classList.contains('open') && !f.contains(e.target)) f.classList.remove('open');
     });
+})();
+
+/* ═══════════════════════════════════════
+   শেয়ার্ড BOTTOM NAV — সব পেজে (চেকআউট বাদে)
+   index/AAbook-এর নিজস্ব bottom-nav আছে — সেখানে বসবে না
+═══════════════════════════════════════ */
+(function () {
+    var path = (location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    if (path.indexOf('aacheckout') > -1 || path.indexOf('admin') > -1) return; /* চেকআউট ও অ্যাডমিনে নয় */
+    function build() {
+        if (document.querySelector('.bottom-nav')) return; /* পেজের নিজস্ব nav থাকলে স্কিপ */
+        var css = document.createElement('style');
+        css.textContent = `
+        .aa-bnav{position:fixed;bottom:0;left:0;right:0;height:62px;background:rgba(255,255,255,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid rgba(79,141,81,0.14);display:flex;align-items:center;z-index:900;box-shadow:0 -4px 20px rgba(79,141,81,0.10);font-family:'Noto Serif Bengali',Arial,sans-serif;}
+        [data-theme="dark"] .aa-bnav{background:rgba(14,28,18,0.97);border-top-color:rgba(121,176,123,0.22);}
+        .aa-bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:6px 0;color:var(--text2,#6b7280);transition:.2s;text-decoration:none;position:relative;}
+        .aa-bnav-item.active{color:#2f7531;}
+        [data-theme="dark"] .aa-bnav-item.active{color:#79b07b;}
+        .aa-bnav-item svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}
+        .aa-bnav-label{font-size:10px;font-weight:600;}
+        .aa-bnav-badge{position:absolute;top:2px;right:calc(50% - 20px);background:#dc2626;color:#fff;font-size:9px;font-weight:700;min-width:16px;height:16px;border-radius:50%;display:none;align-items:center;justify-content:center;border:1.5px solid #fff;padding:0 3px;}
+        .aa-bnav-badge.show{display:flex;}
+        body{padding-bottom:70px;}`;
+        document.head.appendChild(css);
+        var items = [
+            { file: 'index.html', label: 'হোম', svg: '<svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>', click: "navigateTo('index.html')" },
+            { file: 'aafilter.html', label: 'বই', svg: '<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></svg>', click: "navigateTo('Aafilter.html')" },
+            { file: '__cart__', label: 'ব্যাগ', svg: '<svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg><span class="aa-bnav-badge" id="bnavBadge">0</span>', click: "showCart()" },
+            { file: 'aatrack.html', label: 'ট্র্যাক', svg: '<svg viewBox="0 0 24 24"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>', click: "navigateTo('Aatrack.html')" },
+            { file: 'contact.html', label: 'যোগাযোগ', svg: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>', click: "navigateTo('contact.html')" }
+        ];
+        var nav = document.createElement('div');
+        nav.className = 'aa-bnav bottom-nav';
+        nav.innerHTML = items.map(function (it) {
+            var active = (it.file === path) ? ' active' : '';
+            return '<div class="aa-bnav-item' + active + '" onclick="' + it.click + '">' + it.svg + '<span class="aa-bnav-label">' + it.label + '</span></div>';
+        }).join('');
+        document.body.appendChild(nav);
+        /* ৩-ডট বাটন nav-এর উপরে তুলি + ব্যাজ আপডেট */
+        var fab = document.getElementById('aaFab');
+        if (fab) fab.classList.add('lifted');
+        try {
+            var c = JSON.parse(localStorage.getItem('alaziz_cart') || '[]').length;
+            var bd = document.getElementById('bnavBadge');
+            if (bd) { bd.innerText = c; bd.classList.toggle('show', c > 0); }
+        } catch (e) {}
+    }
+    if (document.body) build();
+    else document.addEventListener('DOMContentLoaded', build);
 })();
 
 /* ═══ Facebook Pixel — অ্যাডমিন থেকে সেট করা ID থাকলে সব পেজে চালু ═══ */
