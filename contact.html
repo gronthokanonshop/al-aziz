@@ -2,44 +2,58 @@
 <html lang="bn" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="nafah-logo.png" type="image/png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="logo.jpeg" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
 <title>যোগাযোগ — NafahLife</title>
-<link rel="canonical" href="https://nafahlife.com/contact.html">
-<meta name="description" content="NafahLife-এর সাথে যোগাযোগ করুন — ফোন, WhatsApp বা Facebook-এ। সকাল ৯টা থেকে রাত ১০টা পর্যন্ত সাপোর্ট।">
 <meta name="theme-color" content="#2a562b">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://i.ibb.co"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" content="NafahLife-এর সাথে যোগাযোগ করুন — WhatsApp, ফোন বা Facebook-এ। বই অর্ডার বা যেকোনো প্রশ্নে আমরা পাশে আছি।">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="AAcommon.css">
 <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
 .page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
-.hero-banner{background:linear-gradient(135deg,#152716,#2f7531);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:20px;}
+.hero-banner{background:linear-gradient(135deg,#1a2e1b,#2a562b);padding:28px 24px;text-align:center;margin-bottom:20px;}
 .hero-banner h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
-.hero-banner p{font-size:12px;color:#a8cca9;}
+.hero-banner p{font-size:12px;color:#c5dfc5;}
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;}
-.contact-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;text-decoration:none;display:block;transition:.2s;}
-.contact-card:hover{border-color:#2f7531;transform:translateY(-2px);}
+.contact-card{background:var(--card);border:1px solid var(--border);padding:18px 14px;text-align:center;text-decoration:none;display:block;transition:.2s;}
+.contact-card:hover{border-color:#2a562b;transform:translateY(-2px);}
 .contact-card .icon{font-size:28px;margin-bottom:8px;}
 .contact-card .label{font-size:12px;font-weight:700;color:var(--text);margin-bottom:3px;}
-.contact-card .val{font-size:12px;color:#2f7531;font-weight:600;}
-[data-theme="dark"] .contact-card .val{color:#79b07b;}
-.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
-.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #cf6f33;}
+.contact-card .val{font-size:12px;color:#2a562b;font-weight:600;}
+.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
+.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #2a562b;}
 .hours-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;}
 .hours-row:last-child{border:none;}
 .hours-row span:first-child{color:var(--text2);}
-.hours-row .open{color:#2f7531;font-weight:700;}
-[data-theme="dark"] .hours-row .open{color:#79b07b;}
+.hours-row .open{color:#2a562b;font-weight:700;}
 .hours-row .closed{color:#dc2626;font-weight:700;}
-.wa-big{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#128c7e,#25d366);border-radius:14px;padding:18px;margin-bottom:14px;cursor:pointer;text-decoration:none;transition:.2s;}
+.wa-big{display:flex;align-items:center;justify-content:center;gap:12px;background:linear-gradient(135deg,#128c7e,#25d366);padding:18px;margin-bottom:14px;cursor:pointer;text-decoration:none;transition:.2s;}
 .wa-big:hover{opacity:0.92;}
 .wa-big span{font-size:15px;font-weight:800;color:#fff;}
 </style>
 </head>
-<body>
+<body class="gk-info">
 <nav class="navbar">
   <div class="navbar-top">
-    <button class="back-btn" onclick="goBack()">‹</button>
+    <button class="back-btn" onclick="history.back()">‹</button>
     <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">যোগাযোগ</span>
     <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
   </div>
@@ -51,7 +65,7 @@
     <p>যেকোনো প্রশ্ন বা সমস্যায় আমরা সদা প্রস্তুত</p>
   </div>
 
-  <a href="https://wa.me/8801577272305" target="_blank" class="wa-big">
+  <a href="https://wa.me/8801577272305" target="_blank" rel="noopener" class="wa-big">
     <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:32px;" alt="WhatsApp">
     <span>WhatsApp এ এখনই মেসেজ করুন</span>
   </a>
@@ -67,7 +81,7 @@
       <div class="label">ইমেইল</div>
       <div class="val">Gmail</div>
     </a>
-    <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" class="contact-card">
+    <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" rel="noopener" class="contact-card">
       <div class="icon">📘</div>
       <div class="label">Facebook</div>
       <div class="val">আমাদের পেজ</div>
@@ -84,10 +98,13 @@
     <div class="hours-row"><span>শনি — বৃহস্পতি</span><span class="open">সকাল ৯টা — রাত ১০টা</span></div>
     <div class="hours-row"><span>শুক্রবার</span><span class="open">বিকাল ৪টা — রাত ১০টা</span></div>
     <div class="hours-row"><span>সরকারি ছুটি</span><span class="closed">সীমিত সেবা</span></div>
-    <div class="hours-row"><span>জরুরি যোগাযোগ</span><span class="open">WhatsApp</span></div>
+    <div class="hours-row"><span>জরুরি যোগাযোগ</span><span style="color:#2a562b;font-weight:700;">WhatsApp</span></div>
   </div>
 </div>
 
 <script src="AAcommon.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#2a562b,#3a7c3c);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>

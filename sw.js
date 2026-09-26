@@ -1,5 +1,5 @@
 /* NafahLife — Service Worker (অফলাইন সাপোর্ট + অ্যাপের মতো ইনস্টল) */
-const CACHE = 'nafahlife-v2';
+const CACHE = 'nafahlife-v3';
 const CORE = [
   'AAcommon.css',
   'nafah-logo.png',
@@ -7,7 +7,7 @@ const CORE = [
   'book-placeholder.svg'
 ];
 /* যেসব ফাইল ঘন ঘন বদলায় — সবসময় নতুন লোড হবে (পুরনো ক্যাশ দেখাবে না) */
-const ALWAYS_FRESH = ['book.js', 'aabooks-live.js', 'AAcommon.js', 'sitemap.xml'];
+const ALWAYS_FRESH = ['book.js', 'book-desc.js', 'aabooks-live.js', 'AAcommon.js', 'AAcommon.css', 'nfsearch.js', 'nf-assistant.js', 'sitemap.xml'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(()=>{}));

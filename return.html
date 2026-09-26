@@ -2,37 +2,54 @@
 <html lang="bn" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<link rel="icon" href="nafah-logo.png" type="image/png">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<link rel="icon" href="logo.jpeg" type="image/png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
+<script>
+(function(){
+  try{
+    /* মোবাইল/ডেস্কটপ ভিউ টগল আপাতত বন্ধ — আগে বেছে রাখা মোডও মুছে দিই যাতে সবাই স্বাভাবিক ভিউ পায়।
+       আবার চালু করতে: এই দুই লাইনের বদলে var mode = localStorage.getItem('od_view_mode'); ফেরত দিন,
+       আর নিচের viewModeFab বাটন থেকে style="display:none" সরান */
+    localStorage.removeItem('od_view_mode');
+    var mode = null;
+    if(mode === 'desktop'){
+      document.getElementById('viewportMeta').setAttribute('content','width=1280');
+    } else if(mode === 'mobile' && window.innerWidth > 900){
+      location.replace('mobile-view.html?page=' + encodeURIComponent((location.pathname.split('/').pop() || 'index.html') + location.search));
+    }
+  }catch(e){}
+})();
+</script>
+
 <title>রিটার্ন নীতি — NafahLife</title>
-<link rel="canonical" href="https://nafahlife.com/return.html">
-<meta name="description" content="NafahLife রিটার্ন ও এক্সচেঞ্জ নীতি — ডেলিভারির ৩ দিনের মধ্যে রিটার্ন। ভুল বা ক্ষতিগ্রস্ত বইয়ে ফ্রি রিপ্লেসমেন্ট।">
 <meta name="theme-color" content="#2a562b">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="preconnect" href="https://i.ibb.co"><link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Bengali:wght@400;600;700;800&display=swap" rel="stylesheet">
+<meta name="description" content="NafahLife-এর রিটার্ন ও এক্সচেঞ্জ নীতি — ভুল বা ক্ষতিগ্রস্ত বই পেলে সহজে বদলে নিন।">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="AAcommon.css">
 <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
 <style>
 .page-wrap{max-width:580px;margin:0 auto;padding:24px 16px 100px;}
-.hero-banner{background:linear-gradient(135deg,#7c2d12,#ea580c);border-radius:16px;padding:28px 24px;text-align:center;margin-bottom:20px;}
+.hero-banner{background:linear-gradient(135deg,#7c2d12,#ea580c);padding:28px 24px;text-align:center;margin-bottom:20px;}
 .hero-banner h1{font-size:22px;font-weight:900;color:#fff;margin-bottom:4px;}
 .hero-banner p{font-size:12px;color:#fed7aa;}
-.info-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px;margin-bottom:14px;}
-.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #cf6f33;}
+.info-card{background:var(--card);border:1px solid var(--border);padding:20px;margin-bottom:14px;}
+.info-card h3{font-size:15px;font-weight:800;color:var(--text);margin-bottom:12px;padding-left:10px;border-left:3px solid #2a562b;}
 .info-card p,.info-card li{font-size:13.5px;color:var(--text2);line-height:1.9;}
+.info-card ul{padding-left:18px;}
 .step-row{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);}
 .step-row:last-child{border:none;}
-.step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#224f23,#2f7531);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.step-num{width:32px;height:32px;border-radius:50%;background:#2a562b;color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .step-title{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:2px;}
 .step-sub{font-size:12px;color:var(--text2);}
 .ok-item{display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--text2);}
 .ok-item:last-child{border:none;}
-.note{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);border-radius:14px;padding:14px;font-size:12.5px;color:var(--text2);line-height:1.8;}
+.note{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.2);padding:14px;font-size:12.5px;color:var(--text2);line-height:1.8;}
 </style>
 </head>
-<body>
+<body class="gk-info">
 <nav class="navbar">
   <div class="navbar-top">
-    <button class="back-btn" onclick="goBack()">‹</button>
+    <button class="back-btn" onclick="history.back()">‹</button>
     <span style="flex:1;font-size:15px;font-weight:700;color:var(--text);">রিটার্ন নীতি</span>
     <button class="dark-pill" onclick="toggleDark()" id="darkBtn">🌙</button>
   </div>
@@ -46,7 +63,7 @@
 
   <div class="info-card">
     <h3>রিটার্নের শর্তাবলী</h3>
-    <div class="ok-item"><span>✅</span><span>বই ডেলিভারির <strong>৩ দিনের মধ্যে</strong> রিটার্ন রিকোয়েস্ট করতে হবে</span></div>
+    <div class="ok-item"><span>✅</span><span>বই ডেলিভারির <strong>৭ দিনের মধ্যে</strong> রিটার্ন রিকোয়েস্ট করতে হবে</span></div>
     <div class="ok-item"><span>✅</span><span>বইয়ের কোনো পাতা ছেঁড়া বা ক্ষতিগ্রস্ত হলে রিটার্ন হবে</span></div>
     <div class="ok-item"><span>✅</span><span>ভুল বই পাঠানো হলে সম্পূর্ণ বিনামূল্যে রিটার্ন ও রিপ্লেসমেন্ট</span></div>
     <div class="ok-item"><span>❌</span><span>পড়া বা ব্যবহার করা বই রিটার্ন গ্রহণযোগ্য নয়</span></div>
@@ -75,10 +92,13 @@
 
   <div class="note">
     💬 যেকোনো সমস্যায় সরাসরি আমাদের সাথে কথা বলুন। আমরা সবসময় আপনার পাশে আছি।<br>
-    📞 <strong>01577272305</strong> (সকাল ৯টা — রাত ১০টা)
+    📞 <strong>01577272305</strong> (শনি–বৃহস্পতি সকাল ৯টা, শুক্রবার বিকাল ৪টা — রাত ১০টা)
   </div>
 </div>
 
 <script src="AAcommon.js"></script>
+<style>.view-toggle-fab{position:fixed;bottom:84px;left:18px;z-index:140;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#2a562b,#3a7c3c);color:#fff;border:none;box-shadow:0 4px 16px rgba(0,0,0,0.28);display:flex;align-items:center;justify-content:center;font-size:1.35rem;cursor:pointer;padding:0;line-height:1;}
+@media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
+<button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
 </html>
