@@ -1,23 +1,36 @@
-/* NafahLife — Service Worker (অফলাইন সাপোর্ট + অ্যাপের মতো ইনস্টল) */
-const CACHE = 'nafahlife-v3';
-const CORE = [
-  'AAcommon.css',
-  'nafah-logo.png',
-  'nafah-logo-dark.png',
-  'book-placeholder.svg'
+/* ═══════════════════════════════════════════════
+   NafahLife — Service Worker (অফলাইন সাপোর্ট + অ্যাপের মতো ইনস্টল)
+   • পেজ (HTML) সবসময় তাজা নেট থেকে; নেট না থাকলে শেষবার দেখা কপি
+   • JS/CSS/ছবি: নেট থেকে আনে, কিন্তু নেট ধীর হলে (৩.৫ সেকেন্ডে না এলে)
+     ক্যাশে থাকা কপি সাথে সাথে দেখায় — ধীর মোবাইল নেটে সাইট আটকে থাকে না
+   • Firebase/বাইরের সাইট কখনো ক্যাশ করে না — সবসময় লাইভ
+   নতুন ভার্সনে CACHE-এর নামটা বদলালেই পুরনো ক্যাশ মুছে যায়।
+═══════════════════════════════════════════════ */
+const CACHE = 'nafahlife-v4';
+const SLOW_MS = 3500;
+const SHELL = [
+  './index.html',
+  './AAcommon.css',
+  './AAcommon.js',
+  './book.js',
+  './aabooks-live.js',
+  './nfsearch.js',
+  './Aafirebase-config.js',
+  './logo.jpeg',
+  './book-placeholder.svg',
+  './icon-192.png',
+  './icon-512.png'
 ];
-/* যেসব ফাইল ঘন ঘন বদলায় — সবসময় নতুন লোড হবে (পুরনো ক্যাশ দেখাবে না) */
-const ALWAYS_FRESH = ['book.js', 'book-desc.js', 'aabooks-live.js', 'AAcommon.js', 'AAcommon.css', 'nfsearch.js', 'nf-assistant.js', 'sitemap.xml'];
 
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(CORE)).catch(()=>{}));
+  e.waitUntil(caches.open(CACHE).then(c => c.addAll(SHELL)).catch(() => {}));
   self.skipWaiting();
 });
 
 self.addEventListener('activate', e => {
-  e.waitUntil(caches.keys().then(keys => Promise.all(
-    keys.filter(k => k !== CACHE).map(k => caches.delete(k))
-  )));
+  e.waitUntil(
+    caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE && k !== 'gk-booklist').map(k => caches.delete(k))))
+  );
   self.clients.claim();
 });
 
@@ -25,36 +38,34 @@ self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  /* Firebase/API বা অন্য হোস্ট — সবসময় নেটওয়ার্ক (ক্যাশ নয়) */
-  if (url.origin !== location.origin || url.pathname.endsWith('.json')) return;
-  /* ঘন ঘন বদলানো ফাইল (book.js ইত্যাদি) — network-first, তাই নতুন বই/দাম সাথে সাথে দেখাবে */
-  if (ALWAYS_FRESH.some(name => url.pathname.endsWith(name))) {
-    e.respondWith(
-      fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
-        return res;
-      }).catch(() => caches.match(req))
-    );
-    return;
-  }
-  /* HTML — network-first (নতুন আপডেট সাথে সাথে পায়), fallback ক্যাশ */
-  if (req.headers.get('accept') && req.headers.get('accept').includes('text/html')) {
-    e.respondWith(
-      fetch(req).then(res => {
-        const copy = res.clone();
-        caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
-        return res;
-      }).catch(() => caches.match(req).then(m => m || caches.match('index.html')))
-    );
-    return;
-  }
-  /* বাকি অ্যাসেট — cache-first */
-  e.respondWith(
-    caches.match(req).then(m => m || fetch(req).then(res => {
-      const copy = res.clone();
-      caches.open(CACHE).then(c => c.put(req, copy)).catch(()=>{});
+  /* Firebase/API বা অন্য হোস্ট, আর .json — সবসময় নেটওয়ার্ক (ক্যাশ নয়) */
+  if (url.origin !== self.location.origin || url.pathname.endsWith('.json')) return;
+
+  const isPage = req.mode === 'navigate';
+  /* AAbook.html?id=… হাজারটা আলাদা কপি না রেখে পেজের একটাই কপি রাখি (বই নিজে book.js থেকে আসে) */
+  const key = isPage ? new Request(url.origin + url.pathname) : req;
+
+  e.respondWith((async () => {
+    const cache = await caches.open(CACHE);
+    const network = fetch(req).then(res => {
+      if (res && res.ok && res.type === 'basic') cache.put(key, res.clone()).catch(() => {});
       return res;
-    }))
-  );
+    });
+
+    if (!isPage) {
+      const cached = await cache.match(key);
+      if (cached) {
+        const slow = new Promise(r => setTimeout(() => r(cached), SLOW_MS));
+        return Promise.race([network.catch(() => cached), slow]);
+      }
+    }
+    try {
+      return await network;
+    } catch (err) {
+      const hit = await cache.match(key, { ignoreSearch: true });
+      if (hit) return hit;
+      if (isPage) { const home = await cache.match('./index.html'); if (home) return home; }
+      return Response.error();
+    }
+  })());
 });

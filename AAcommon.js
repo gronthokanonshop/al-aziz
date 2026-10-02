@@ -27,13 +27,26 @@ window.GK_STOCK_READY = fetch('https://screenshot-2db71-default-rtdb.asia-southe
     })
     .catch(function () { return false; });
 
+/* ═══ SVG আইকনসহ নিরাপদ লেখা — টোস্ট/বার্তায় <i class="gi gi-ok"></i> ধরনের আইকন রেখে
+   বাকি সব escape করে (বইয়ের নাম ইত্যাদিতে < > থাকলেও HTML ভাঙে না) ═══ */
+window.gkIconText = function (msg) {
+    return escapeHTML(msg).replace(/&lt;i class=(?:&quot;)?(gi[a-z0-9 -]*?)(?:&quot;)?&gt;&lt;\/i&gt;/g, '<i class="$1"></i>');
+};
+
+/* ═══ অ্যাডমিন/পাঠকের লেখা তথ্যে (বিবরণ, রিভিউ, ব্লগ) কেউ ইমোজি দিলে সাইটে দেখাই না ═══ */
+window.gkStripEmoji = function (s) {
+    try { return String(s == null ? '' : s).replace(/[\u{1F000}-\u{1FAFF}\u{2600}-\u{27BF}\u{2B00}-\u{2BFF}\u{1F1E6}-\u{1F1FF}\u{FE0F}\u{200D}]/gu, ''); }
+    catch (e) { return String(s == null ? '' : s); }
+};
+
 /* ═══ DARK MODE ═══ */
+var GK_IC_MOON = '<i class="gi gi-moon"></i>', GK_IC_SUN = '<i class="gi gi-sun"></i>';
 function toggleDark() {
     const h = document.documentElement;
     const isDark = h.getAttribute('data-theme') === 'dark';
     h.setAttribute('data-theme', isDark ? 'light' : 'dark');
     const btn = document.getElementById('darkBtn');
-    if (btn) btn.innerText = isDark ? '🌙' : '☀️';
+    if (btn) btn.innerHTML = isDark ? GK_IC_MOON : GK_IC_SUN;
     localStorage.setItem('alaziz_theme', isDark ? 'light' : 'dark');
 }
 
@@ -45,17 +58,19 @@ function toggleDark() {
         /* dark হলে বাটনের আইকনও মিলিয়ে দাও */
         if (saved === 'dark') {
             const btn = document.getElementById('darkBtn');
-            if (btn && btn.innerText.trim() === '🌙') btn.innerText = '☀️';
+            if (btn) btn.innerHTML = GK_IC_SUN;
         }
     }
 })();
 
-/* ═══ TOAST NOTIFICATION ═══ */
+/* ═══ TOAST NOTIFICATION ═══
+   AAcommon.js সবার শেষে লোড হয় বলে সব পেজে এই একটাই টোস্ট চলে (পেজের নিজস্বগুলো ঢাকা পড়ে)।
+   রং না দিলে: সতর্কতা/ভুলের বার্তা লাল, বাকিগুলো সবুজ — আগে চেকআউটের "নাম লিখুন!" সবুজে দেখাত */
 function showToast(msg, color) {
     const t = document.createElement('div');
     t.className = 'toast';
-    t.style.background = color || '#2a562b';
-    t.innerText = msg;
+    t.style.background = color || (/gi-(warn|no)\b/.test(String(msg)) ? '#dc2626' : '#2a562b');
+    t.innerHTML = window.gkIconText(msg);
     document.body.appendChild(t);
     setTimeout(() => t.remove(), 2200);
 }
@@ -92,9 +107,9 @@ window.gkGiftBarHTML = function (subtotal) {
     subtotal = Number(subtotal) || 0;
     if (!t || subtotal <= 0) return '';
     var bn = function (n) { return String(n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; }); };
-    if (subtotal >= t) return '<div class="gk-gift done"><div class="gk-gift-txt">🎁 অভিনন্দন! এই অর্ডারে আপনি হাদিয়া পাচ্ছেন</div></div>';
+    if (subtotal >= t) return '<div class="gk-gift done"><div class="gk-gift-txt"><i class=gi-gift></i> অভিনন্দন! এই অর্ডারে আপনি হাদিয়া পাচ্ছেন</div></div>';
     var pct = Math.max(4, Math.min(100, Math.round(subtotal / t * 100)));
-    return '<div class="gk-gift"><div class="gk-gift-txt">🎁 আর মাত্র ৳' + bn(t - subtotal) + ' কিনলেই পাচ্ছেন হাদিয়া</div>' +
+    return '<div class="gk-gift"><div class="gk-gift-txt"><i class=gi-gift></i> আর মাত্র ৳' + bn(t - subtotal) + ' কিনলেই পাচ্ছেন হাদিয়া</div>' +
         '<div class="gk-gift-track"><div class="gk-gift-fill" style="width:' + pct + '%"></div></div></div>';
 };
 
@@ -157,6 +172,70 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
     });
 }
 
+/* ═══ "NafahLife অ্যাপ — ইনস্টল" ব্যানার (হোম স্ক্রিনে দোকান) ═══
+   Chrome / Edge / Android: ব্রাউজার যখন জানায় সাইটটা ইনস্টল করা যায় (beforeinstallprompt), ৬ সেকেন্ড পর
+   নিচে ব্যানার; "ইনস্টল" চাপলে ব্রাউজারের নিজের ইনস্টল-বাক্স আসে। iPhone/iPad-এ সেই সুবিধা নেই, তাই
+   "শেয়ার → Add to Home Screen" দেখিয়ে দিই। × চাপলে ৭ দিন আর দেখায় না; ইনস্টল হয়ে গেলে বা অ্যাপের
+   ভেতর থেকে খুললে কখনো না। চেকআউটে দেখায় না (অর্ডারের সময় বিরক্ত না করতে)। */
+(function () {
+    var KEY = 'gk_ib_hide', DAY = 864e5;
+    function ls(k, v) { try { if (v === undefined) return localStorage.getItem(k); if (v === null) localStorage.removeItem(k); else localStorage.setItem(k, v); } catch (e) { return null; } }
+    var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    if (standalone || /checkout\.html/i.test(location.pathname)) return;
+    var ua = navigator.userAgent || '';
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var mobile = isIOS || /Android|Mobile/i.test(ua);
+    var deferred = null, timer = null;
+    function blocked() { if (ls('gk_app_installed')) return true; var t = Number(ls(KEY) || 0); return !!t && Date.now() < t; }
+    var X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>';
+    var SHARE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>';
+    function close(days) {
+        var el = document.getElementById('gkInstall');
+        if (el) { el.classList.remove('show'); setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 350); }
+        document.body.classList.remove('gk-ib-on');
+        if (days) ls(KEY, String(Date.now() + days * DAY));
+    }
+    function build(ios) {
+        if (blocked() || document.getElementById('gkInstall') || !document.body) return;
+        /* মোবাইলের নিচের মেনুর ঠিক উপরে বসে */
+        var nav = document.querySelector('.bottom-nav');
+        var off = (nav && nav.offsetHeight && getComputedStyle(nav).display !== 'none') ? nav.offsetHeight + 10 : 18;
+        var el = document.createElement('div');
+        el.id = 'gkInstall'; el.className = 'gk-ib';
+        el.setAttribute('role', 'dialog'); el.setAttribute('aria-label', 'NafahLife অ্যাপ ইনস্টল');
+        el.style.bottom = 'calc(' + off + 'px + env(safe-area-inset-bottom, 0px))';
+        el.innerHTML = '<img src="icon-192.png" alt="" class="gk-ib-ic" width="46" height="46">' +
+            '<div class="gk-ib-tx"><b>NafahLife অ্যাপ</b><span>' +
+            (ios ? 'ব্রাউজারের শেয়ার ' + SHARE + ' চাপুন, তারপর "Add to Home Screen"'
+                 : (mobile ? 'ফোনের হোম স্ক্রিনে রাখুন — এক চাপেই দোকানে' : 'কম্পিউটারে রাখুন — এক ক্লিকেই দোকানে')) +
+            '</span></div>' +
+            (ios ? '' : '<button type="button" class="gk-ib-go">ইনস্টল</button>') +
+            '<button type="button" class="gk-ib-x" aria-label="বন্ধ করুন">' + X + '</button>';
+        document.body.appendChild(el);
+        el.querySelector('.gk-ib-x').onclick = function () { close(7); };
+        var go = el.querySelector('.gk-ib-go');
+        if (go) go.onclick = function () {
+            var d = deferred; deferred = null;
+            if (!d) { close(0); return; }
+            d.prompt();
+            Promise.resolve(d.userChoice).then(function (c) {
+                if (c && c.outcome === 'accepted') { ls('gk_app_installed', '1'); close(0); } else close(3);
+            }).catch(function () { close(3); });
+        };
+        document.body.classList.add('gk-ib-on');
+        requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add('show'); }); });
+    }
+    window.addEventListener('beforeinstallprompt', function (e) {
+        e.preventDefault(); deferred = e;
+        if (blocked()) return;
+        clearTimeout(timer); timer = setTimeout(function () { build(false); }, 6000);
+    });
+    window.addEventListener('appinstalled', function () { ls('gk_app_installed', '1'); close(0); });
+    if (isIOS && !blocked()) setTimeout(function () { build(true); }, 8000);
+    /* অন্য কোথাও থেকে ডাকতে (পরীক্ষা / ভবিষ্যতে মেনুর লিংক) */
+    window.gkShowInstall = function (ios) { ls(KEY, null); build(ios === undefined ? isIOS : !!ios); };
+})();
+
 /* ═══ ভাসমান "Contact us" — চাপলে যোগাযোগের কার্ড (WhatsApp / Messenger / কল), সব পেজে ═══ */
 (function () {
     var PHONE = '01577-272305', TEL = '+8801577272305';
@@ -192,13 +271,13 @@ if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
                         '<span class="gkc-status' + (on ? '' : ' off') + '"><i></i>' + (on ? 'অনলাইনে আছি · সাধারণত কয়েক মিনিটে উত্তর' : 'এখন অফলাইন · মেসেজ রাখুন, সকালে উত্তর দেব') + '</span></div>' +
                     '<button type="button" class="gkc-x" aria-label="বন্ধ করুন" onclick="gkToggleContact()">&times;</button>' +
                 '</div>' +
-                '<div class="gkc-hello">আসসালামু আলাইকুম 👋<br>বই, অর্ডার বা ডেলিভারি নিয়ে যেকোনো প্রশ্ন থাকলে নিচের যেকোনো একটায় যোগাযোগ করুন।</div>' +
+                '<div class="gkc-hello">আসসালামু আলাইকুম <i class=gi-wave></i><br>বই, অর্ডার বা ডেলিভারি নিয়ে যেকোনো প্রশ্ন থাকলে নিচের যেকোনো একটায় যোগাযোগ করুন।</div>' +
                 '<div class="gkc-list">' +
                     row('gkc-wa', WA, IC_WA, 'WhatsApp-এ চ্যাট করুন', PHONE, true) +
                     row('gkc-msgr', MSGR, IC_MSGR, 'Messenger-এ মেসেজ দিন', 'Facebook পেজ', true) +
                     row('gkc-call', 'tel:' + TEL, IC_CALL, 'সরাসরি কল করুন', PHONE, false) +
                 '</div>' +
-                '<div class="gkc-foot">⏰ শনি–বৃহস্পতি সকাল ৯টা · শুক্রবার বিকাল ৪টা — রাত ১০টা</div>' +
+                '<div class="gkc-foot"><i class=gi-clock></i> শনি–বৃহস্পতি সকাল ৯টা · শুক্রবার বিকাল ৪টা — রাত ১০টা</div>' +
             '</div>' +
             '<button type="button" class="gkc-fab" aria-label="Contact us" onclick="gkToggleContact()">' +
                 '<span class="gkc-fab-ic">' +
@@ -345,7 +424,7 @@ window.gkToggleContact = function () {
         var elSub = document.getElementById('subtotal'); if (elSub) elSub.innerText = bnNum(subtotal);
         var elTot = document.getElementById('total'); if (elTot) elTot.innerText = bnNum(subtotal);
         var sv = document.getElementById('gkcbSave');
-        if (sv) { var s = mrp - subtotal; sv.style.display = s > 0 ? '' : 'none'; sv.innerHTML = s > 0 ? '🎉 আপনি <b>৳' + bnNum(s) + '</b> সাশ্রয় করছেন' : ''; }
+        if (sv) { var s = mrp - subtotal; sv.style.display = s > 0 ? '' : 'none'; sv.innerHTML = s > 0 ? '<i class=gi-party></i> আপনি <b>৳' + bnNum(s) + '</b> সাশ্রয় করছেন' : ''; }
         var ob = document.getElementById('cartOfferBanner');
         if (ob) {
             var giftHtml = (count && typeof window.gkGiftBarHTML === 'function') ? window.gkGiftBarHTML(subtotal) : '';
@@ -365,10 +444,10 @@ window.gkToggleContact = function () {
         if (applied) {
             var ct = localStorage.getItem('alaziz_ctype') || 'percent';
             var cv = parseInt(localStorage.getItem('alaziz_cvalue') || localStorage.getItem('alaziz_discount') || '0');
-            var label = '🎉 ' + applied + ' — ' + ((typeof window.gkCouponLabel === 'function') ? window.gkCouponLabel({ type: ct, value: cv }) : cv + '% ডিসকাউন্ট');
+            var label = '<i class=gi-party></i> ' + applied + ' — ' + ((typeof window.gkCouponLabel === 'function') ? window.gkCouponLabel({ type: ct, value: cv }) : cv + '% ডিসকাউন্ট');
             sec.innerHTML = '<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(42,86,43,0.08);border:1.5px dashed #2a562b;border-radius:8px;">' +
                 '<span style="flex:1;font-size:13px;font-weight:700;color:#2a562b;">' + label + '</span>' +
-                '<button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;">✕ বাতিল</button></div>';
+                '<button onclick="removeCoupon()" style="background:#fee2e2;color:#dc2626;border:none;border-radius:6px;padding:4px 10px;font-size:12px;font-weight:700;cursor:pointer;"><i class=gi-x></i> বাতিল</button></div>';
         } else {
             sec.innerHTML = '<div style="display:flex;gap:6px;">' +
                 '<input type="text" id="couponCode" placeholder="কুপন কোড লিখুন" style="flex:1;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:\'Hind Siliguri\',Arial,sans-serif;font-size:13px;outline:none;">' +
@@ -380,7 +459,7 @@ window.gkToggleContact = function () {
         localStorage.removeItem('alaziz_discount');
         localStorage.removeItem('alaziz_ctype');
         localStorage.removeItem('alaziz_cvalue');
-        showToast('🗑️ কুপন বাতিল হয়েছে', '#6b7280');
+        showToast('<i class=gi-trash></i> কুপন বাতিল হয়েছে', '#6b7280');
         window.gkCartUpdateUI();
         window.renderCouponSection();
     };
@@ -393,11 +472,11 @@ window.gkToggleContact = function () {
             localStorage.setItem('alaziz_ctype', info.type);
             localStorage.setItem('alaziz_cvalue', String(info.value));
             localStorage.setItem('alaziz_discount', String(info.type === 'percent' ? info.value : 0));
-            showToast('🎉 ' + window.gkCouponLabel(info) + ' যুক্ত হয়েছে!', '#2a562b');
+            showToast('<i class=gi-party></i> ' + window.gkCouponLabel(info) + ' যুক্ত হয়েছে!', '#2a562b');
             window.gkCartUpdateUI();
             window.renderCouponSection();
         } else {
-            showToast('❌ ভুল কুপন কোড!', '#dc2626');
+            showToast('<i class=gi-no></i> ভুল কুপন কোড!', '#dc2626');
         }
     };
     /* আলাদা নাম — AAbook.html-এর নিজস্ব changeQty(d) (পেজের পরিমাণ বক্স) এটাকে ঢেকে দিত, ফলে কার্টে +/- কাজ করত না */
@@ -433,7 +512,7 @@ window.gkToggleContact = function () {
     window.closeCart = window.closeCart || window.gkCloseCart;
     window.openOrderForm = window.openOrderForm || function () {
         var c = readCart();
-        if (!c.length) return showToast('⚠️ কার্ট খালি!', '#dc2626');
+        if (!c.length) return showToast('<i class=gi-warn></i> কার্ট খালি!', '#dc2626');
         var inp = document.getElementById('couponCode');
         var code = inp ? inp.value.trim() : '';
         var appliedCoupon = localStorage.getItem('alaziz_coupon');
@@ -530,7 +609,7 @@ window.gkToggleContact = function () {
         overlay.id = 'gkOfferPosterOverlay';
         overlay.innerHTML =
             '<div class="gk-offer-poster-box">' +
-                '<button type="button" class="gk-offer-poster-close" aria-label="বন্ধ করুন">✕</button>' +
+                '<button type="button" class="gk-offer-poster-close" aria-label="বন্ধ করুন"><i class=gi-x></i></button>' +
                 (config.img ? '<img src="' + escapeHTML(config.img) + '" alt="অফার" class="gk-offer-poster-img" style="' + (config.link ? 'cursor:pointer;' : '') + '" />' : '') +
                 (config.title ? '<div class="gk-offer-poster-title">' + escapeHTML(config.title) + '</div>' : '') +
                 (config.sub ? '<div class="gk-offer-poster-sub">' + escapeHTML(config.sub) + '</div>' : '') +
@@ -562,7 +641,7 @@ window.gkToggleContact = function () {
             if (typeof firebase === 'undefined' || !firebase.database) return;
             if (isPosterDismissed()) return;
 
-            firebase.database().ref('siteConfig/offerPopups').once('value').then(function (snap) {
+            firebase.database().ref('siteConfig/offerPopups').once('value').then(function (s) { return s.exists() ? s : firebase.database().ref('siteConfig/offerPopup').once('value'); }).then(function (snap) {
                 var v = snap.val();
                 if (!v || v.enabled !== true) return;
                 var posters = Array.isArray(v.posters) ? v.posters.filter(Boolean)
@@ -897,7 +976,7 @@ window.gkToggleContact = function () {
         if (!box) return;
         var msgHtml = msg ? '<div style="padding:9px 12px;margin:10px;background:#eef5ee;border:1.5px solid #9cc79d;border-radius:8px;color:#1f3f20;font-size:12.5px;font-weight:700;">' + msg + '</div>' : '';
         if (!wl.length) {
-            box.innerHTML = msgHtml + '<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;">🤍</div><p>উইশলিস্ট খালি</p></div>';
+            box.innerHTML = msgHtml + '<div style="text-align:center;padding:60px 20px;color:var(--text2);"><div style="font-size:40px;margin-bottom:10px;"><i class=gi-heart-o></i></div><p>উইশলিস্ট খালি</p></div>';
         } else if (typeof books !== 'undefined') {
             /* getImg/goToBook সব পেজে থাকে না (যেমন AAbook.html) — না থাকলে নিজেই ছবি বের করে
                আর বইয়ের পেজে নিয়ে যায়, যাতে সব পেজে হোমের মতো ছবিসহ পূর্ণ তালিকা দেখায় */
@@ -917,7 +996,7 @@ window.gkToggleContact = function () {
                 return '<div style="display:flex;align-items:center;gap:10px;padding:12px;border-bottom:1px solid var(--border);cursor:pointer;" onclick="gkWLOpen(' + idx + ')">' +
                     '<img src="' + escapeHTML(imgOf(b)) + '" style="width:44px;height:58px;object-fit:cover;border-radius:6px;">' +
                     '<div style="flex:1;"><div style="font-size:13px;font-weight:700;color:var(--text);">' + safeName + '</div><div style="font-size:12px;color:#dc2626;font-weight:bold;">৳' + (Number(b.price) || 0) + '</div></div>' +
-                    '<button data-name="' + safeName + '" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()">❌</button></div>';
+                    '<button data-name="' + safeName + '" onclick="event.stopPropagation();toggleWL(event,this.dataset.name)" style="background:none;border:none;font-size:18px;cursor:pointer;" onmousedown="event.preventDefault()"><i class=gi-no></i></button></div>';
             }).join('');
         } else {
             /* এই পেজে বইয়ের ডেটা লোড করা নেই (যেমন AAcheckout.html) — শুধু নাম দেখাও, হোম পেজে বিস্তারিত */
@@ -932,10 +1011,57 @@ window.gkToggleContact = function () {
         if (b) b.style.display = 'none';
     };
 
+    /* ── Firebase না থাকা পেজে (about/faq/contact/track ইত্যাদি) লগইন চাপলে তখনই Firebase নামাই —
+       আগে এসব পেজে "লগইন করুন" চাপলে auth না থাকায় বোতাম আটকে যেত, কিছুই হতো না ── */
+    var fbLoading = null;
+    function gkEnsureFirebase() {
+        if (typeof auth !== 'undefined' && typeof db !== 'undefined') return Promise.resolve();
+        if (fbLoading) return fbLoading;
+        function load(src) {
+            return new Promise(function (res, rej) {
+                var s = document.createElement('script');
+                s.src = src; s.onload = res; s.onerror = function () { rej(new Error('load')); };
+                document.head.appendChild(s);
+            });
+        }
+        var V = 'https://www.gstatic.com/firebasejs/9.23.0/';
+        fbLoading = load(V + 'firebase-app-compat.js')
+            .then(function () { return Promise.all([load(V + 'firebase-auth-compat.js'), load(V + 'firebase-database-compat.js')]); })
+            .then(function () { return load('Aafirebase-config.js'); })
+            .then(function () { firebase.auth().onAuthStateChanged(function (u) { window.updateAuthUI(u); }); })
+            .catch(function (e) { fbLoading = null; throw e; });
+        return fbLoading;
+    }
+    window.gkEnsureFirebase = gkEnsureFirebase;
+    /* লগইন/রেজিস্টার/রিসেট — Firebase লোড না হলে আগে লোড করে তারপর চালায় */
+    function withAuth(fn) {
+        return function () {
+            var args = arguments;
+            gkEnsureFirebase().then(function () { fn.apply(null, args); })
+                .catch(function () { window.setAuthErr('ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন'); });
+        };
+    }
+    /* Firebase-এর নতুন ভুল-কোডগুলো (ভুল পাসওয়ার্ড এখন invalid-credential নামে আসে) বাংলায় */
+    window.gkAuthErrText = function (code, fallback) {
+        return ({
+            'auth/wrong-password': 'ইমেইল বা পাসওয়ার্ড ভুল',
+            'auth/invalid-credential': 'ইমেইল বা পাসওয়ার্ড ভুল',
+            'auth/invalid-login-credentials': 'ইমেইল বা পাসওয়ার্ড ভুল',
+            'auth/user-not-found': 'এই ইমেইলে কোনো একাউন্ট নেই',
+            'auth/invalid-email': 'সঠিক ইমেইল দিন',
+            'auth/email-already-in-use': 'এই ইমেইলে আগেই একাউন্ট আছে — লগইন করুন',
+            'auth/weak-password': 'পাসওয়ার্ড কমপক্ষে ৬ অক্ষর হতে হবে',
+            'auth/too-many-requests': 'অনেকবার চেষ্টা হয়েছে — কিছুক্ষণ পরে আবার চেষ্টা করুন',
+            'auth/network-request-failed': 'ইন্টারনেট সংযোগ চেক করুন',
+            'auth/popup-blocked': 'পপআপ বন্ধ আছে — ব্রাউজারে পপআপ চালু করে আবার চেষ্টা করুন'
+        })[code] || fallback;
+    };
+
     /* ── অথ মোডাল ── */
     window.showLoginModal = window.showLoginModal || function () {
         injectNavAuth();
         document.getElementById('authModal').style.display = 'flex';
+        gkEnsureFirebase().catch(function () {});
     };
     window.closeAuthModal = window.closeAuthModal || function () {
         var m = document.getElementById('authModal');
@@ -997,7 +1123,7 @@ window.gkToggleContact = function () {
             document.querySelector('.bnav-login-pill').onclick = window.showLoginModal;
         }
     };
-    window.doLogin = window.doLogin || function () {
+    window.doLogin = window.doLogin || withAuth(function () {
         var email = document.getElementById('loginEmail').value.trim();
         var pass = document.getElementById('loginPass').value;
         var btn = document.getElementById('loginBtn');
@@ -1005,14 +1131,14 @@ window.gkToggleContact = function () {
         if (email.indexOf('@') === -1) { window.setAuthErr('এখন শুধু ইমেইল দিয়ে লগইন করা যাচ্ছে — মোবাইল নাম্বার দিয়ে লগইন শীঘ্রই আসছে'); return; }
         window.setAuthBtnLoading(btn, true);
         auth.signInWithEmailAndPassword(email, pass).then(function () {
-            window.closeAuthModal(); showToast('✅ স্বাগতম!', '#2a562b');
+            window.closeAuthModal(); showToast('<i class=gi-ok></i> স্বাগতম!', '#2a562b');
             window.setAuthBtnLoading(btn, false, 'লগইন করুন');
         }).catch(function (e) {
-            window.setAuthErr(e.code === 'auth/wrong-password' ? 'পাসওয়ার্ড ভুল' : e.code === 'auth/user-not-found' ? 'একাউন্ট নেই' : e.code === 'auth/invalid-email' ? 'সঠিক ইমেইল দিন' : 'লগইন ব্যর্থ হয়েছে');
+            window.setAuthErr(window.gkAuthErrText(e.code, 'লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন'));
             window.setAuthBtnLoading(btn, false, 'লগইন করুন');
         });
-    };
-    window.doGoogleLogin = window.doGoogleLogin || function () {
+    });
+    window.doGoogleLogin = window.doGoogleLogin || withAuth(function () {
         var btn = document.getElementById('googleBtn');
         if (typeof firebase === 'undefined' || !auth) { window.setAuthErr('Google লগইন এখন লোড হয়নি, আবার চেষ্টা করুন'); return; }
         btn.disabled = true;
@@ -1025,14 +1151,14 @@ window.gkToggleContact = function () {
                 });
             }
         }).then(function () {
-            window.closeAuthModal(); showToast('✅ স্বাগতম!', '#2a562b');
+            window.closeAuthModal(); showToast('<i class=gi-ok></i> স্বাগতম!', '#2a562b');
         }).catch(function (e) {
             if (e.code !== 'auth/popup-closed-by-user' && e.code !== 'auth/cancelled-popup-request') {
-                window.setAuthErr('Google লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন');
+                window.setAuthErr(window.gkAuthErrText(e.code, 'Google লগইন ব্যর্থ হয়েছে, আবার চেষ্টা করুন'));
             }
         }).then(function () { btn.disabled = false; });
-    };
-    window.doRegister = window.doRegister || function () {
+    });
+    window.doRegister = window.doRegister || withAuth(function () {
         var name = document.getElementById('regName').value.trim();
         var email = document.getElementById('regEmail').value.trim();
         var pass = document.getElementById('regPass').value;
@@ -1045,25 +1171,25 @@ window.gkToggleContact = function () {
                 return db.ref('users/' + cred.user.uid).set({ name: name, email: email, createdAt: Date.now() });
             });
         }).then(function () {
-            window.closeAuthModal(); showToast('✅ রেজিস্ট্রেশন সফল!', '#2a562b');
+            window.closeAuthModal(); showToast('<i class=gi-ok></i> রেজিস্ট্রেশন সফল!', '#2a562b');
             window.setAuthBtnLoading(btn, false, 'রেজিস্টার করুন');
         }).catch(function (e) {
-            window.setAuthErr(e.code === 'auth/email-already-in-use' ? 'এই ইমেইলে আগেই একাউন্ট আছে' : e.code === 'auth/invalid-email' ? 'সঠিক ইমেইল দিন' : 'রেজিস্ট্রেশন ব্যর্থ হয়েছে');
+            window.setAuthErr(window.gkAuthErrText(e.code, 'রেজিস্ট্রেশন ব্যর্থ হয়েছে, আবার চেষ্টা করুন'));
             window.setAuthBtnLoading(btn, false, 'রেজিস্টার করুন');
         });
-    };
-    window.doForgotPassword = window.doForgotPassword || function () {
+    });
+    window.doForgotPassword = window.doForgotPassword || withAuth(function () {
         var email = document.getElementById('loginEmail').value.trim();
         if (!email) { window.setAuthErr('আগে ইমেইলের ঘরে আপনার ইমেইল লিখুন'); return; }
         auth.sendPasswordResetEmail(email).then(function () {
-            window.setAuthErr('✅ পাসওয়ার্ড রিসেট লিংক ' + email + '-এ পাঠানো হয়েছে', 'ok');
+            window.setAuthErr('পাসওয়ার্ড রিসেট লিংক ' + escapeHTML(email) + '-এ পাঠানো হয়েছে (Spam ফোল্ডারও দেখুন)', 'ok');
         }).catch(function (e) {
-            window.setAuthErr(e.code === 'auth/user-not-found' ? 'এই ইমেইলে কোনো একাউন্ট নেই' : 'রিসেট লিংক পাঠানো যায়নি, আবার চেষ্টা করুন');
+            window.setAuthErr(window.gkAuthErrText(e.code, 'রিসেট লিংক পাঠানো যায়নি, আবার চেষ্টা করুন'));
         });
-    };
-    window.doLogout = window.doLogout || function () {
+    });
+    window.doLogout = window.doLogout || withAuth(function () {
         auth.signOut().then(function () { showToast('লগআউট হয়েছে', '#6b7280'); window.updateAuthUI(null); });
-    };
+    });
 
     function init() {
         injectNavAuth();
@@ -1126,8 +1252,8 @@ function toggleViewMode(){
 (function(){
   const inFrame = window.top !== window.self;
   let cur; try{ cur = localStorage.getItem('od_view_mode'); }catch(e){ cur = null; }
-  const desktopLabel = '🖥️ ডেস্কটপ ভার্সন দেখুন';
-  const mobileLabel = '📱 মোবাইল ভার্সন দেখুন';
+  const desktopLabel = 'ডেস্কটপ ভার্সন দেখুন';
+  const mobileLabel = 'মোবাইল ভার্সন দেখুন';
   const link = document.getElementById('viewModeToggle'); /* ফুটারে রাখলে */
   if(link) link.textContent = inFrame ? desktopLabel : (cur === 'desktop' ? mobileLabel : desktopLabel);
   /* fab লুকআপ DOMContentLoaded-এর ভেতরে রাখা জরুরি — এই স্ক্রিপ্ট
@@ -1135,7 +1261,7 @@ function toggleViewMode(){
      তখনো null রিটার্ন করবে (DOM তখনো পার্স হয়নি) */
   document.addEventListener('DOMContentLoaded', function(){
     const fab = document.getElementById('viewModeFab');
-    if(fab) fab.textContent = inFrame ? '🖥️' : (cur === 'desktop' ? '📱' : '🖥️');
+    if(fab) fab.innerHTML = '<i class="gi ' + (inFrame || cur !== 'desktop' ? 'gi-monitor' : 'gi-mobile') + '"></i>';
     if(fab) fab.title = link ? link.textContent : desktopLabel;
   });
 })();
@@ -1334,6 +1460,8 @@ window.gkBookSubject = function (b) {
         /* অ্যাডমিনের সর্বশেষ ক্যাটাগরি তালিকা (ছোট ডাটা) — বদলালে ক্যাশ আপডেট করে আবার আঁকি */
         fetch('https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/siteConfig/categoryTree.json')
             .then(function (r) { return r.ok ? r.json() : null; })
+            /* NafahLife-এর পুরনো অ্যাডমিন ক্যাটাগরি রাখত siteConfig/taxonomy/cats-এ — নতুনটা ফাঁকা থাকলে সেটাই নিই */
+            .then(function (v) { return v ? v : fetch('https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/siteConfig/taxonomy/cats.json').then(function (r) { return r.ok ? r.json() : null; }); })
             .then(function (v) {
                 var list = norm(v);
                 if (!list.length) return;
@@ -1428,7 +1556,7 @@ window.gkBookSubject = function (b) {
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 
-/* ═══ কার্ডে আসল রিভিউ-রেটিং — শুধু যে বইয়ে সত্যিই কেউ রিভিউ দিয়েছে তাতেই ★ দেখায়,
+/* ═══ কার্ডে আসল রিভিউ-রেটিং — শুধু যে বইয়ে সত্যিই কেউ রিভিউ দিয়েছে তাতেই <i class=gi-star></i> দেখায়,
    কোনো বানানো রেটিং নেই। Firebase reviews একবার এনে ১০ মিনিট ক্যাশে রাখি ═══ */
 (function () {
     if (!document.querySelector('script[src*="firebase-config"]')) return;
@@ -1454,7 +1582,7 @@ window.gkBookSubject = function (b) {
             var r = lookup(card.getAttribute('data-bookidx'));
             var el = card.querySelector('.bc-rating');
             if (!r) { if (el) el.remove(); return; }
-            var html = '<span class="bc-star">★</span> ' + bn(r[0].toFixed(1)) + ' <span class="bc-rcount">(' + bn(r[1]) + ')</span>';
+            var html = '<i class="gi gi-star bc-star"></i> ' + bn(r[0].toFixed(1)) + ' <span class="bc-rcount">(' + bn(r[1]) + ')</span>';
             if (el) { if (el.innerHTML !== html) el.innerHTML = html; return; }
             var anchor = card.querySelector('.bc-author') || card.querySelector('.bc-name');
             if (!anchor) return;
@@ -1474,6 +1602,36 @@ window.gkBookSubject = function (b) {
         setTimeout(load, 1200);
         new MutationObserver(function () { if (!RATE) return; clearTimeout(t); t = setTimeout(apply, 80); })
             .observe(document.body, { childList: true, subtree: true });
+    }
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+
+/* ═══════════════════════════════════════════════════════════════
+   ফিরে আসা কাস্টমারকে মনে করানো — আগের বার ব্যাগে বই রেখে চলে গিয়েছিলেন।
+   শুধু হোমপেজে, প্রতি ভিজিটে (সেশনে) প্রথমবার, ব্যাগে সত্যিই বই থাকলে।
+═══════════════════════════════════════════════════════════════ */
+(function () {
+    function start() {
+        if (!/(^|\/)(index\.html)?$/.test(location.pathname)) return;
+        var first = true;
+        try { first = !sessionStorage.getItem('gk_visit'); sessionStorage.setItem('gk_visit', '1'); } catch (e) {}
+        if (!first) return;
+        var c = [];
+        try { c = JSON.parse(localStorage.getItem('alaziz_cart')) || []; } catch (e) {}
+        var host = document.getElementById('gkMenuBar');
+        if (!c.length || !host) return;
+        var bn = function (n) { return String(n).replace(/\d/g, function (d) { return '০১২৩৪৫৬৭৮৯'[d]; }); };
+        var sub = 0; c.forEach(function (i) { sub += Number(i.price) || 0; });
+        var t = window.GK_GIFT_THRESHOLD || 0;
+        var hint = t && sub < t ? 'আর ৳' + bn(t - sub) + ' কিনলেই হাদিয়া' : (t ? 'এই অর্ডারে হাদিয়া পাচ্ছেন' : '');
+        var d = document.createElement('div');
+        d.className = 'gk-nudge';
+        d.innerHTML = '<span class="gk-nudge-ic"><i class="gi gi-bag"></i><em>' + bn(c.length) + '</em></span>' +
+            '<div class="gk-nudge-t"><b>আপনার ব্যাগে ' + bn(c.length) + 'টি বই অপেক্ষা করছে</b><small>মোট ৳' + bn(sub) + (hint ? ' · ' + hint : '') + '</small></div>' +
+            '<a class="gk-nudge-go" href="AAcheckout.html">অর্ডার করুন</a>' +
+            '<button type="button" class="gk-nudge-x" aria-label="বন্ধ করুন">&times;</button>';
+        d.querySelector('.gk-nudge-x').onclick = function () { d.remove(); };
+        host.parentNode.insertBefore(d, host.nextSibling);
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();

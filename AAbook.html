@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app">
     <link rel="icon" href="logo.jpeg" type="image/png">
     <link rel="manifest" href="manifest.webmanifest">
-    <link rel="apple-touch-icon" href="nafah-logo.png">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" id="viewportMeta">
 <script>
 (function(){
@@ -30,7 +30,7 @@
     <meta name="description" content="NafahLife — সাশ্রয়ী মূল্যে ইসলামিক ও সাধারণ বই। সারা বাংলাদেশে ক্যাশ অন ডেলিভারি।" id="metaDesc">
     <link rel="canonical" href="https://nafahlife.com/AAbook.html" id="canonicalLink">
     <meta name="theme-color" content="#ffffff">
-    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Noto+Serif+Bengali:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="AAcommon.css">
     <script>!function(){var t=localStorage.getItem('alaziz_theme');if(t)document.documentElement.setAttribute('data-theme',t);}();</script>
     <style>
@@ -124,20 +124,40 @@
            ডানদিকে চাপা পড়ত, ফলে সেটা wl-btn-lg (top:14) ও share-btn (top:62)
            এর উপর বসে যেত। এখন নিজে absolute হয়ে, ওই দুটো বাটনের নিচে (top:108+)
            নিজের জায়গায় বসে — কোনো ওভারল্যাপ থাকবে না। */
-        .pdf-read-btn-wrap{display:none;position:absolute;top:160px;right:60px;flex-direction:column;align-items:flex-end;cursor:pointer;z-index:11;}
+        /* রকমারির মতো: কভারের ঠিক উপরে বড় লাল লেখা + সবুজ বাঁকা তীর (কভারের দিকে)।
+           বাঁয়ের ছাড়-সিল আর ডানের উইশলিস্ট/শেয়ার বোতামের মাঝখানে বসে (padding দিয়ে জায়গা ছাড়া),
+           ফাঁকা অংশে চাপ পড়ে না (pointer-events) — তাই ওই বোতামগুলো আগের মতোই কাজ করে */
+        .pdf-read-btn-wrap{display:none;justify-content:center;align-items:flex-start;padding:0 32px 0 46px;margin:-4px 0 8px;position:relative;z-index:11;pointer-events:none;}
         .pdf-read-btn-wrap.show{display:flex;}
-        .pdf-read-btn-wrap:hover .pdf-read-btn-text{text-decoration:underline;}
+        .pdf-read-btn-in{display:inline-flex;align-items:flex-start;gap:3px;cursor:pointer;pointer-events:auto;-webkit-tap-highlight-color:transparent;}
+        .pdf-read-btn-in:hover .pdf-read-btn-text{text-decoration:underline;text-underline-offset:5px;}
         .pdf-read-btn{display:none;}
-        .pdf-read-btn-text{font-size:12.5px;font-weight:600;color:#d62828;white-space:nowrap;letter-spacing:0.1px;font-family:'Hind Siliguri',Arial,sans-serif;background:rgba(255,255,255,0.9);padding:3px 8px;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.08);}
-        [data-theme="dark"] .pdf-read-btn-text{background:rgba(20,20,20,0.75);}
-        .pdf-read-btn-arrow{color:#d62828;display:flex;align-items:center;justify-content:flex-end;margin-top:3px;animation:pdfArrowBounce 1.4s ease-in-out infinite;}
+        .pdf-read-btn-text{font-size:clamp(17px,5.4vw,22px);font-weight:700;color:#e11d2a;white-space:nowrap;line-height:1.25;font-family:'Hind Siliguri',Arial,sans-serif;}
+        [data-theme="dark"] .pdf-read-btn-text{color:#ff5a64;}
+        .pdf-read-btn-arrow{display:flex;margin-top:6px;animation:pdfArrowBounce 1.4s ease-in-out infinite;}
+        .pdf-read-btn-arrow svg{width:28px;height:32px;}
         @keyframes pdfArrowBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
-        @media(max-width:340px){.pdf-read-btn-wrap{top:100px;}}
+        /* PDF থাকলে কভারটা বইয়ের মতো — ডান পাশে পাতার কিনারা; চাপলে বই খোলার animation দিয়ে PDF খোলে।
+           চেপে ধরে রাখলে (কম্পিউটারে মাউস রাখলে) কভারটা একটু খুলে ভেতরের পাতা দেখায় — ছাড়লে বন্ধ */
+        .book-img-wrap.has-pdf{cursor:pointer;perspective:900px;-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;}
+        .book-img-wrap.has-pdf img{position:relative;z-index:2;border-radius:4px 10px 10px 4px;transform-origin:left center;transition:transform .5s cubic-bezier(.3,.8,.3,1),box-shadow .5s;-webkit-touch-callout:none;-webkit-user-drag:none;backface-visibility:hidden;}
+        .book-img-wrap.has-pdf img:hover{transform:none;}
+        .peek-page{display:none;}
+        /* খোলা অবস্থায় পাতার ডান দিকের অর্ধেকটাই দেখা যায় — তাই লেখা আর দাগ ডানে */
+        .book-img-wrap.has-pdf .peek-page{display:flex;position:absolute;inset:0;z-index:1;border-radius:4px 10px 10px 4px;background:linear-gradient(90deg,#e7e1d3 0,#fbf8f1 9%,#fffdf8 100%);flex-direction:column;justify-content:center;align-items:flex-end;gap:7px;padding:22px 12px 22px 60%;text-align:right;overflow:hidden;}
+        .peek-page i{display:block;width:100%;height:2px;border-radius:2px;background:#e3dccd;}
+        .peek-page b{font-size:13px;line-height:1.4;color:#234a24;font-weight:700;margin:6px 0;}
+        .book-img-wrap.has-pdf.peek img{transform:rotateY(-58deg);box-shadow:-14px 10px 28px rgba(0,0,0,.28);}
+        .book-img-wrap.has-pdf.peek::before{opacity:0;}
+        @media(hover:hover){.book-img-wrap.has-pdf:hover img{transform:rotateY(-26deg);box-shadow:-10px 8px 22px rgba(0,0,0,.24);}.book-img-wrap.has-pdf:hover::before{opacity:0;}}
+        .book-img-wrap.has-pdf::after{content:'';position:absolute;top:5px;bottom:5px;right:-7px;width:8px;border-radius:0 5px 5px 0;background:repeating-linear-gradient(90deg,#d6d3d1 0 1px,#fafaf9 1px 2.5px);box-shadow:2px 3px 6px rgba(0,0,0,.18);pointer-events:none;}
+        .book-img-wrap.has-pdf::before{content:'';position:absolute;top:0;bottom:0;left:7px;width:2px;background:rgba(0,0,0,.14);box-shadow:1px 0 0 rgba(255,255,255,.25);border-radius:1px;z-index:3;pointer-events:none;transition:opacity .2s;}
+        [data-theme="dark"] .book-img-wrap.has-pdf::after{background:repeating-linear-gradient(90deg,#57534e 0 1px,#a8a29e 1px 2.5px);}
 
         /* ── PDF Modal ── */
         #pdfModal{display:none;position:fixed;inset:0;z-index:9999;align-items:center;justify-content:center;background:rgba(0,0,0,0);}
         #pdfModal.active{display:flex;animation:pdfBgIn 0.4s ease forwards;}
-        @keyframes pdfBgIn{to{background:rgba(4,10,6,0.88)}}
+        @keyframes pdfBgIn{to{background:rgba(8,8,8,0.88)}}
         .pdf-modal-close-top{position:fixed;top:14px;right:14px;background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.18);color:#fff;width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:0.15s;z-index:10000;}
         .pdf-modal-close-top:hover{background:rgba(255,255,255,0.2);}
 
@@ -147,10 +167,21 @@
            ফুটে ওঠে — আগের সাধারণ ফ্লিপের বদলে এটা অনেকটা "বই হাতে নিয়ে খোলার" মতো লাগে */
         .pdf-book3d{width:240px;height:330px;perspective:1100px;transform-style:preserve-3d;position:relative;opacity:0;transform-origin:center bottom;animation:pdfBookFloatIn 0.5s cubic-bezier(.34,1.56,.64,1) forwards;}
         @keyframes pdfBookFloatIn{0%{opacity:0;transform:translateY(36px) scale(0.82) rotateX(14deg)}70%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1) rotateX(0)}}
-        .pdf-b-spine{position:absolute;left:-14px;top:4px;width:14px;height:322px;background:linear-gradient(to right,#063d23,#0a5230);border-radius:3px 0 0 3px;}
-        .pdf-b-back{position:absolute;inset:0;background:#0a3d28;border-radius:3px 10px 10px 3px;}
-        .pdf-b-pages{position:absolute;inset:0;background:linear-gradient(to right,#d8d0be 0%,#f7f3ec 6%,#fdfaf5 100%);border-radius:3px 10px 10px 3px;display:flex;flex-direction:column;padding:24px 20px;gap:8px;opacity:0;}
-        .pdf-b-cover{position:absolute;inset:0;border-radius:3px 10px 10px 3px;overflow:hidden;transform-origin:left center;box-shadow:4px 4px 18px rgba(0,0,0,0.3);}
+        /* "উড়ে এসে খোলা" (মালিকের বাছাই, ২০২৬-১০-০২): পাতার কভারটা নিজের জায়গা থেকে উঠে, একটু বাঁক
+           আর হেলে মাঝখানে বড় হয়ে আসে, তারপর মলাট খোলে। --fx/--fy/--fs বসায় openPdfModal() */
+        .pdf-book3d.fly{transform-origin:center center;animation:pdfBookFly .72s cubic-bezier(.2,.8,.3,1) forwards;}
+        @keyframes pdfBookFly{0%{opacity:1;transform:translate(var(--fx,0px),var(--fy,40px)) scale(var(--fs,.6)) rotate(0deg)}55%{opacity:1;transform:translate(calc(var(--fx,0px) * .12),calc(var(--fy,40px) * .12 - 22px)) scale(1.06) rotate(-3deg)}100%{opacity:1;transform:none}}
+        /* কভার উড়ে যাওয়ার সময় পাতায় তার জায়গাটা ফাঁকা — বন্ধ করলে ফিরে আসে */
+        .book-img-wrap.lifted img{opacity:0;}
+        /* আগে পিঠ (spine) আর পেছনের বোর্ড গাঢ় সবুজ ছিল — মলাট খোলার মুহূর্তে বড় সবুজ চৌকো দেখা যেত।
+           এখন পিঠে বইয়ের নিজের কভারের বাঁ কিনারা (একটু গাঢ় করে, JS বসায়), আর ভেতরে সব কাগজের রং */
+        .pdf-b-spine{position:absolute;left:-14px;top:4px;width:14px;height:322px;background:#57534e no-repeat left center/auto 100%;filter:brightness(.62);border-radius:3px 0 0 3px;}
+        .pdf-b-back{position:absolute;inset:0;background:#e9e3d5;border-radius:3px 10px 10px 3px;}
+        .pdf-b-pages{position:absolute;inset:0;background:linear-gradient(to right,#d8d0be 0%,#f7f3ec 6%,#fdfaf5 100%);border-radius:3px 10px 10px 3px;display:flex;flex-direction:column;padding:24px 20px;gap:8px;}
+        .pdf-b-cover{position:absolute;inset:0;border-radius:3px 10px 10px 3px;overflow:hidden;transform-origin:left center;box-shadow:4px 4px 18px rgba(0,0,0,0.3);background:#f3eee3;}
+        /* মলাট আধা-খোলা (৯০°) পার হলে ভেতরের দিকটা কাগজের মতো — কভারের উল্টো ছবি আর দেখায় না */
+        .pdf-book3d.opening .pdf-b-cover img{animation:pdfCoverFace .75s linear forwards;}
+        @keyframes pdfCoverFace{0%,35%{opacity:1}36%,100%{opacity:0}}
         .pdf-b-cover img{width:100%;height:100%;object-fit:cover;display:block;}
         .pdf-b-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,0.55) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none;}
         .pdf-book3d.opening .pdf-b-cover{animation:pdfCoverOpen 0.75s cubic-bezier(.4,0,.2,1) forwards;}
@@ -158,7 +189,7 @@
         @keyframes pdfCoverOpen{0%{transform:rotateY(0) translateZ(0);box-shadow:4px 4px 18px rgba(0,0,0,0.3)}40%{box-shadow:-18px 10px 34px rgba(0,0,0,0.35)}100%{transform:rotateY(-174deg) translateZ(6px);box-shadow:-4px 2px 10px rgba(0,0,0,0.2)}}
         @keyframes pdfCoverShine{0%{transform:translateX(-120%)}55%{transform:translateX(120%)}100%{transform:translateX(120%)}}
         .pdf-book3d.opening .pdf-b-pages{animation:pdfPagesIn 0.4s 0.4s both;}
-        @keyframes pdfPagesIn{from{opacity:0;transform:scaleX(0.96)}to{opacity:1;transform:scaleX(1)}}
+        @keyframes pdfPagesIn{from{transform:scaleX(0.96)}to{transform:scaleX(1)}}
         .pdf-page-line{height:1px;background:rgba(0,0,0,0.07);border-radius:1px;opacity:0;transform:translateX(-6px);}
         .pdf-book3d.opening .pdf-page-line{animation:pdfLineIn 0.35s both;}
         .pdf-book3d.opening .pdf-page-line:nth-child(1){animation-delay:.46s}
@@ -202,6 +233,26 @@
           .pdf-modal-frame{min-height:55vh;}
           .pdf-cart-popup{width:100%;}
         }
+        /* নিজের রিডার — অ্যাডমিনে বানানো পাতা-ছবি (পাতা কমানো, লোগোসহ); না থাকলে আগের মতো Drive */
+        .pdf-modal-box.pv-on{height:86vh;}
+        .pv-pages{flex:1 1 auto;min-height:0;overflow-y:auto;background:#e7e5e4;padding:12px 10px 16px;display:flex;flex-direction:column;align-items:center;gap:12px;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+        .pv-head,.pv-page,.pv-end{flex-shrink:0;}
+        .pv-head{font-size:12.5px;font-weight:700;color:#44403c;text-align:center;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .pv-page{position:relative;width:100%;max-width:760px;min-height:160px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.16);border-radius:3px;overflow:hidden;}
+        .pv-page img{display:block;width:100%;height:auto;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;pointer-events:none;}
+        .pv-no{position:absolute;left:10px;bottom:8px;font-size:11px;font-weight:700;color:#fff;background:rgba(0,0,0,.45);padding:2px 9px;border-radius:10px;font-family:'Hind Siliguri',Arial,sans-serif;}
+        .pv-end{width:100%;max-width:760px;background:#fff;border-radius:12px;padding:18px 14px;text-align:center;display:flex;flex-direction:column;gap:6px;align-items:center;font-family:'Hind Siliguri',Arial,sans-serif;border:1.5px dashed #2a562b;}
+        .pv-end b{font-size:16px;color:#1a2e1b;}
+        .pv-end span{font-size:13px;color:#57534e;}
+        .pv-end button{margin-top:6px;padding:10px 22px;border:none;border-radius:10px;background:#d62828;color:#fff;font-weight:700;font-size:14px;cursor:pointer;font-family:inherit;}
+        @media(max-width:640px){.pdf-modal-box.pv-on{height:64vh;}}
+        /* কভারে শুধু ছোট, হালকা লোগো, উপরে ডান কোণে — ছবির উপর আলাদা স্তর; চেপে ধরে/মাউস রাখলে (বই খোলার সময়) সরে যায় */
+        .cover-wm{position:absolute;right:6px;top:6px;width:16%;z-index:3;pointer-events:none;line-height:0;opacity:.5;transition:opacity .2s;}
+        .cover-wm img{display:block;width:100% !important;height:auto !important;box-shadow:none !important;border-radius:0 !important;transform:none !important;margin:0 !important;filter:drop-shadow(0 0 1px rgba(255,255,255,.8));}
+        .cover-wm-lg{right:10px;top:10px;width:12%;max-width:70px;}
+        .book-img-wrap.peek .cover-wm,.book-img-wrap.lifted .cover-wm{opacity:0;}
+        @media(hover:hover){.book-img-wrap.has-pdf:hover .cover-wm{opacity:0;}}
+        .img-modal-in{position:relative;display:inline-block;line-height:0;}
 
         /* BOOK INFO CARD */
         .info-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 4px 20px var(--shadow);}
@@ -238,7 +289,8 @@
         #mTrustSlot .trust-mini{margin-top:16px;padding-top:14px;border-top:1px dashed var(--border2);}
         @media(max-width:899px){
             .img-card{padding-bottom:16px;}
-            .img-card .view-badge{position:static;transform:none;display:inline-block;margin-top:8px;}
+            /* নিজের লাইনে, কভারের নিচে মাঝখানে — পাশে বসলে কভারটা বাঁয়ে সরে যেত */
+            .img-card .view-badge{position:static;transform:none;display:table;margin:10px auto 0;}
         }
         .badge{font-size:12px;padding:5px 14px;border-radius:20px;font-weight:600;}
         .b-cat{background:var(--green-bg);color:#2a562b;border:1px solid var(--green-border);}
@@ -328,6 +380,16 @@
 
         /* RELATED */
         .related-card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 4px 20px var(--shadow);}
+        /* প্যাকেজের ভেতরের বই */
+        .pkg-card{border:1.5px solid var(--green-border,#c5dfc5);}
+        .pkg-card h3{display:flex;align-items:center;gap:8px;}
+        .pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(102px,1fr));gap:14px 12px;}
+        .pkg-grid .rel-book{width:auto;text-decoration:none;color:inherit;display:block;}
+        .pkg-grid .rel-book img{width:100%;height:auto;aspect-ratio:11/15;}
+        .pkg-grid .rel-author{font-size:10.5px;color:var(--text2);text-align:center;margin-top:2px;line-height:1.3;}
+        .pkg-save{margin-top:14px;padding:10px 12px;border-radius:12px;background:var(--green-bg,#eef5ee);color:#234a24;font-size:13.5px;font-weight:700;text-align:center;line-height:1.6;}
+        .pkg-save b{color:#dc2626;}
+        @media(max-width:500px){.pkg-grid{grid-template-columns:repeat(3,1fr);gap:12px 8px;}}
         .related-card h3{font-size:16px;font-weight:700;color:var(--dark);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
         [data-theme="dark"] .related-card h3{color:#eef5ee;}
         .rel-row{display:flex;gap:12px;overflow-x:auto;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--border) transparent;}
@@ -442,7 +504,7 @@
 <body>
 
 <div id="readProg"></div>
-<div id="imgModal" onclick="closeImgModal()"><img id="modalImg" src="" alt="বই"></div>
+<div id="imgModal" onclick="closeImgModal()"><span class="img-modal-in"><img id="modalImg" src="" alt="বই"><span class="cover-wm cover-wm-lg" aria-hidden="true"><img src="nafah-wm.png" alt=""></span></span></div>
 
 <!-- NAVBAR -->
 <nav class="navbar">
@@ -479,18 +541,22 @@
             <div class="share-opt" onclick="copyLink()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg> <span id="copyTxt">লিঙ্ক কপি করুন</span></div>
         </div>
         <div id="discRibbon" class="disc-ribbon" style="display:none;"><span id="discRibbonText">30%<small>ছাড়</small></span></div>
-        <div class="pdf-read-btn-wrap" id="pdfReadBtnWrap" onclick="openPdfModal()">
-            <span class="pdf-read-btn-text">একটু পড়ে দেখুন</span>
-            <span class="pdf-read-btn-arrow">
-                <svg width="30" height="26" viewBox="0 0 34 30" fill="none" stroke="#d62828" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M30,2 C30,15 18,24 7,24" fill="none"/>
-                    <polyline points="12,17 6,24 13,29"/>
-                </svg>
+        <div class="pdf-read-btn-wrap" id="pdfReadBtnWrap">
+            <span class="pdf-read-btn-in" onclick="openPdfModal()" role="button" tabindex="0" onkeydown="if(event.key==='Enter')openPdfModal()">
+                <span class="pdf-read-btn-text">একটু পড়ে দেখুন</span>
+                <span class="pdf-read-btn-arrow" aria-hidden="true">
+                    <svg viewBox="0 0 28 32" fill="none" stroke="#16a34a" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M3,7 C15,2 24,9 21,27"/>
+                        <polyline points="15.5,21.5 21,28 26,21"/>
+                    </svg>
+                </span>
             </span>
         </div>
         <div class="book-img-wrap" id="bookImgWrap" onclick="onBookImgClick()" style="cursor:pointer;">
             <div class="img-skel" id="imgSkel"></div>
+            <div class="peek-page" aria-hidden="true"><i></i><i style="width:85%"></i><i style="width:92%"></i><b>পড়তে<br>চাপুন</b><i></i><i style="width:78%"></i><i style="width:88%"></i><i style="width:60%"></i></div>
             <img id="bookImg" src="" alt="বই" onload="if(typeof onImgLoad==='function')onImgLoad()" onerror="if(typeof onImgLoad==='function')onImgLoad()">
+            <span class="cover-wm" aria-hidden="true"><img src="nafah-wm.png" alt=""></span>
         </div>
         <div class="img-thumbs" id="imgThumbs" style="display:none;"></div>
         <div class="badges" id="bookBadges"></div>
@@ -505,7 +571,7 @@
 
     <!-- PDF Modal — বই খোলার animation সহ -->
     <div id="pdfModal" onclick="if(event.target===this)closePdfModal()">
-        <button class="pdf-modal-close-top" onclick="closePdfModal()">✕</button>
+        <button class="pdf-modal-close-top" onclick="closePdfModal()"><i class=gi-x></i></button>
 
         <!-- 3D Book Animation -->
         <div class="pdf-book3d" id="pdfBook3d" style="display:none;">
@@ -530,11 +596,12 @@
             <div class="pdf-modal-box" id="pdfModalBox">
                 <div class="pdf-modal-head">
                     <span class="pdf-modal-title" id="pdfModalTitle"></span>
-                    <button class="pdf-modal-close" onclick="closePdfModal()">✕</button>
+                    <button class="pdf-modal-close" onclick="closePdfModal()"><i class=gi-x></i></button>
                 </div>
                 <iframe class="pdf-modal-frame" id="pdfFrame" src="" allow="autoplay"></iframe>
-                <div class="pdf-modal-foot">
-                    <a id="pdfDriveLink" href="#" target="_blank" rel="noopener">Drive-এ খুলুন ↗</a>
+                <div class="pv-pages" id="pvPages" style="display:none;" oncontextmenu="return false"></div>
+                <div class="pdf-modal-foot" id="pdfModalFoot">
+                    <a id="pdfDriveLink" href="#" target="_blank" rel="noopener">Drive-এ খুলুন <i class=gi-ext></i></a>
                 </div>
             </div>
 
@@ -587,10 +654,10 @@
     </div>
         <div id="mBadgeSlot"></div>
         <div id="preOrderBox" style="display:none;align-items:flex-start;gap:8px;background:linear-gradient(135deg,#fff7ed,#ffedd5);border:1.5px solid #fb923c;border-radius:0;padding:11px 12px;margin-bottom:12px;font-size:12.5px;font-weight:600;color:#9a3412;line-height:1.5;">
-            <span style="font-size:18px;line-height:1;">📦</span> <span id="preOrderText"></span>
+            <span style="font-size:18px;line-height:1;"><i class=gi-package></i></span> <span id="preOrderText"></span>
         </div>
         <div id="hadiyaBanner" style="display:none;align-items:center;gap:8px;background:linear-gradient(135deg,#fffbeb,#fef3c7);border:1.5px solid #fbbf24;border-radius:0;padding:9px 12px;margin-bottom:12px;font-size:12.5px;font-weight:700;color:#92400e;">
-            <span style="font-size:18px;line-height:1;">🎁</span> <span id="hadiyaText"></span>
+            <span style="font-size:18px;line-height:1;"><i class=gi-gift></i></span> <span id="hadiyaText"></span>
         </div>
         <div class="qty-row">
             <span class="qty-label">পরিমাণ:</span>
@@ -601,9 +668,9 @@
             </div>
         </div>
         <div class="delivery-card">
-            <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div><div class="d-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div><div class="d-sub">বাইরে: ৩-৫ কার্যদিবস</div></div></div>
+            <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16,8 20,8 23,11 23,16 16,16 16,8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg></div><div><div class="d-text" id="deliveryText">ঢাকায় ডেলিভারি: ১-২ দিন</div><div class="d-sub" id="deliverySub">বাইরে: ৩-৫ কার্যদিবস</div></div></div>
             <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="3"/><path d="M17 12h.01M7 12h.01"/></svg></div><div><div class="d-text">ক্যাশ অন ডেলিভারি সুবিধা</div><div class="d-sub">ডেলিভারি পেয়ে টাকা দিন</div></div></div>
-            <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><polyline points="23,20 23,14 17,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></div><div><div class="d-text">সহজ রিটার্ন পলিসি</div><div class="d-sub">৭ দিনের মধ্যে ফেরত দিন</div></div></div>
+            <div class="d-row"><div class="d-icon"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1,4 1,10 7,10"/><polyline points="23,20 23,14 17,14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></div><div><div class="d-text">সহজ রিটার্ন পলিসি</div><div class="d-sub">৩ দিনের মধ্যে ফেরত দিন</div></div></div>
         </div>
         <button class="btn-wl" id="wlBtn" onclick="toggleWL()"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> উইশলিস্টে যোগ করুন</button>
         <div class="btn-row" id="btnRow">
@@ -615,6 +682,13 @@
         <div id="notifyMeBox" style="display:none;"></div>
         <button class="btn-wa-order" id="btnWaOrder" onclick="orderViaWA()"><svg viewBox="0 0 24 24" fill="currentColor" style="width:18px;height:18px;flex-shrink:0;"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.13c-.24.68-1.42 1.3-1.96 1.35-.5.05-1.13.07-1.83-.11-.42-.13-.96-.31-1.65-.61-2.9-1.25-4.79-4.17-4.94-4.36-.14-.19-1.18-1.57-1.18-2.99 0-1.42.75-2.12 1.01-2.41.26-.29.57-.36.76-.36l.55.01c.18.01.41-.07.64.49.24.57.81 1.99.88 2.13.07.14.12.31.02.5-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.29-.12.57.16.28.72 1.18 1.54 1.92 1.06.94 1.95 1.23 2.23 1.37.28.14.44.12.6-.07.16-.19.69-.81.87-1.08.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.68-.17 1.36z"/></svg> WhatsApp-এ অর্ডার করুন</button>
         <div id="mTrustSlot"></div>
+    </div>
+
+    <!-- ══ প্যাকেজের ভেতরের বই / এই বই যে প্যাকেজে আছে (অ্যাডমিনে বাছাই করা pkgItems থেকে) ══ -->
+    <div class="related-card pkg-card" id="pkgSection" style="display:none;">
+        <h3 id="pkgTitle"></h3>
+        <div class="pkg-grid" id="pkgBooks"></div>
+        <div class="pkg-save" id="pkgSave" style="display:none;"></div>
     </div>
 
     <!-- ══ TABS (বিবরণ / রিভিউ) ══ -->
@@ -629,14 +703,14 @@
     <div class="desc-card">
         <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg> বিস্তারিত</h3>
         <div class="desc-text" id="bookDesc"></div>
-        <span class="desc-toggle" id="descToggle" onclick="toggleDesc()" style="display:none;">আরো দেখুন ▼</span>
+        <span class="desc-toggle" id="descToggle" onclick="toggleDesc()" style="display:none;">আরো দেখুন <i class=gi-down></i></span>
     </div>
     </div><!-- end tab-desc -->
 
     <div class="tab-content" id="tab-reviews">
     <!-- ══ RATING SUMMARY ══ -->
     <div class="rating-section">
-        <h3>⭐ রেটিং সারসংক্ষেপ</h3>
+        <h3><i class=gi-star></i> রেটিং সারসংক্ষেপ</h3>
         <div style="display:flex;gap:20px;align-items:center;margin-bottom:14px;">
             <div style="text-align:center;">
                 <div class="rating-big" id="avgRating">—</div>
@@ -680,7 +754,7 @@
         <h3><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg> ভিডিও পরিচিতি</h3>
         <div class="video-thumb" id="videoThumb" onclick="playVideo()">
             <div class="video-thumb-bg">
-                <div class="play-circle">▶</div>
+                <div class="play-circle"><i class=gi-play></i></div>
                 <div class="video-title" id="videoTitle">বইয়ের পরিচিতি দেখুন</div>
             </div>
             <div class="video-dur" id="videoDur"></div>
@@ -811,8 +885,8 @@ footer {
         <div class="footer-col">
             <div class="footer-col-title">যোগাযোগ</div>
             <a href="tel:+8801577272305" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.89 12 19.79 19.79 0 0 1 1.88 3.4 2 2 0 0 1 3.88 1.21h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9a16 16 0 0 0 6.29 6.29l1.42-1.42a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> 01577272305</a>
-            <a href="https://wa.me/8801577272305" target="_blank" rel="noopener" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> WhatsApp</a>
-            <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" rel="noopener" class="footer-link"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg> Facebook</a>
+            <a href="https://wa.me/8801577272305" target="_blank" rel="noopener" class="footer-link"><i class="gi-wa"></i> WhatsApp</a>
+            <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" rel="noopener" class="footer-link"><i class="gi-fb"></i> Facebook</a>
             <span class="footer-link" style="cursor:default;"><svg class="eico" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg> ঢাকা, বাংলাদেশ</span>
         </div>
     </div>
@@ -821,14 +895,14 @@ footer {
 
     <!-- Social -->
     <div class="footer-social">
-        <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" rel="noopener"><img src="https://i.ibb.co.com/nGhy2N4/fb-png.webp" alt="Facebook"></a>
-        <a href="https://wa.me/8801577272305" target="_blank" rel="noopener"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp"></a>
+        <a href="https://www.facebook.com/share/1DAXTV8v3a/" target="_blank" rel="noopener"><i class="gi-fb gk-soc" aria-label="Facebook"></i></a>
+        <a href="https://wa.me/8801577272305" target="_blank" rel="noopener"><i class="gi-wa gk-soc" aria-label="WhatsApp"></i></a>
     </div>
 
     <!-- Payment -->
     <div class="footer-payment">
-        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash">
-        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad">
+        <img src="https://i.ibb.co.com/ksGJHftT/bkash-logo.jpg" alt="bKash" loading="lazy" decoding="async" width="40" height="40">
+        <img src="https://i.ibb.co.com/0pvLZ3b8/1725618513nagad-logo.png" alt="Nagad" loading="lazy" decoding="async" width="40" height="40">
     </div>
 
     <hr class="footer-divider">
@@ -837,7 +911,7 @@ footer {
 </footer>
 
 <a href="https://wa.me/8801577272305" target="_blank" rel="noopener" class="wa-btn">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WA" style="width:28px;">
+    <i class="gi-wa gi-w" style="font-size:28px" aria-label="WhatsApp"></i>
 </a>
 
 <div id="stickyBar">
@@ -893,7 +967,7 @@ let GK_TAG_NAMES=new Set(['Best Selling','Trending','New Arrived','নতুন 
 /* অ্যাডমিন siteConfig/tags-এ ট্যাগ তালিকা বদলালে এখানেও লাইভ আপডেট হয় */
 function loadTagsBook(){
     if(typeof db==='undefined'||!db)return;
-    db.ref('siteConfig/tags').get().then(function(snap){
+    db.ref('siteConfig/tags').get().then(function(s){return s.exists()?s:db.ref('siteConfig/taxonomy/tags').get();}).then(function(snap){
         const v=snap.val();
         const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
         if(!list||!list.length)return;
@@ -906,7 +980,7 @@ let GK_TAXO_CATS=new Set(['ইসলামি বই','একাডেমিক 
 /* অ্যাডমিন siteConfig/categoryTree-এ বিভাগ বদলালে বইয়ের পেজেও (breadcrumb/badge) লাইভ আপডেট হয় */
 function loadCatTreeBook(){
     if(typeof db==='undefined'||!db)return;
-    db.ref('siteConfig/categoryTree').get().then(function(snap){
+    db.ref('siteConfig/categoryTree').get().then(function(s){return s.exists()?s:db.ref('siteConfig/taxonomy/cats').get();}).then(function(snap){
         const v=snap.val();
         const list=Array.isArray(v)?v.filter(Boolean):(v&&typeof v==='object'?Object.values(v).filter(Boolean):null);
         if(!list||!list.length)return;
@@ -924,10 +998,10 @@ function bookSubcat(b){ return (b&&b.subject)||''; }
 function updateWLUI(){
     const wl=wishlist.includes(curBook?.name);
     const lg=document.getElementById('wlBtnLg');const btn=document.getElementById('wlBtn');
-    if(lg){lg.innerText=wl?'❤️':'🤍';lg.classList.toggle('active',wl);}
-    if(btn){btn.innerHTML=wl?'❤️ উইশলিস্ট থেকে সরান':'🤍 উইশলিস্টে যোগ করুন';btn.classList.toggle('active',wl);}
+    if(lg){lg.innerHTML=wl?'<i class=gi-heart></i>':'<i class=gi-heart-o></i>';lg.classList.toggle('active',wl);}
+    if(btn){btn.innerHTML=wl?'<i class=gi-heart></i> উইশলিস্ট থেকে সরান':'<i class=gi-heart-o></i> উইশলিস্টে যোগ করুন';btn.classList.toggle('active',wl);}
 }
-/* উইশলিস্ট তালিকা মোডাল থেকে ❌ চাপলে toggleWL(event, name) — নির্দিষ্ট বইয়ের নাম দিয়ে ডাকে;
+/* উইশলিস্ট তালিকা মোডাল থেকে <i class=gi-no></i> চাপলে toggleWL(event, name) — নির্দিষ্ট বইয়ের নাম দিয়ে ডাকে;
    এই পেজের নিজের হার্ট বাটন থেকে ডাকলে কোনো নাম ছাড়াই (তখন curBook ধরে নেয়া হয়) */
 function toggleWL(e, name){
     name = name || (curBook && curBook.name);
@@ -941,7 +1015,7 @@ function toggleWL(e, name){
     /* উইশলিস্ট তালিকা খোলা থাকলে সাথে সাথেই রিফ্রেশ করো, সাথে একটা কনফার্মেশন লাইনও দেখাই */
     const wb=document.getElementById('wishlistBox');
     if(wb && wb.style.display==='flex' && typeof showWishlist==='function'){
-        showWishlist(added ? ('✅ "'+escapeHTML(name)+'" উইশলিস্টে যোগ হয়েছে') : ('🗑️ "'+escapeHTML(name)+'" উইশলিস্ট থেকে সরানো হয়েছে'));
+        showWishlist(added ? ('<i class=gi-ok></i> "'+escapeHTML(name)+'" উইশলিস্টে যোগ হয়েছে') : ('<i class=gi-trash></i> "'+escapeHTML(name)+'" উইশলিস্ট থেকে সরানো হয়েছে'));
         return;
     }
     const b=(typeof books!=='undefined')?books.find(bk=>bk.name===name):null;
@@ -959,14 +1033,14 @@ function openWLModal(added, b){
                 <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:4px;line-height:1.4;">${escapeHTML(b.name)}</div>
                 <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${(b.type||'বই')==='বই'?escapeHTML(b.author||''):escapeHTML(b.brand||'')}</div>
                 <div style="display:inline-flex;align-items:center;gap:6px;background:${added?'#eef5ee':'#fff5f5'};border:1.5px solid ${added?'#9cc79d':'#fca5a5'};border-radius:0;padding:5px 12px;">
-                    <span style="font-size:15px;">${added?'❤️':'<svg class="eico" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#ef4444"/><line x1="12" y1="8" x2="12" y2="18" stroke="white" stroke-width="2"/></svg>'}</span>
+                    <span style="font-size:15px;">${added?'<i class=gi-heart></i>':'<svg class="eico" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" fill="#ef4444"/><line x1="12" y1="8" x2="12" y2="18" stroke="white" stroke-width="2"/></svg>'}</span>
                     <span style="font-size:12px;font-weight:700;color:${added?'#2a562b':'#dc2626'};">${added?'উইশলিস্টে যোগ হয়েছে':'উইশলিস্ট থেকে সরানো হয়েছে'}</span>
                 </div>
             </div>
         </div>
         ${added?`<div style="display:flex;gap:10px;">
             <button onclick="closeWLModal()" style="flex:1;padding:12px;background:var(--bg);color:var(--text);border:1px solid #111;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">কেনাকাটা চালিয়ে যান</button>
-            <button onclick="closeWLModal();showWishlist();" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;">💖 উইশলিস্ট দেখুন</button>
+            <button onclick="closeWLModal();showWishlist();" style="flex:1;padding:12px;background:#dc2626;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;"><i class=gi-heart></i> উইশলিস্ট দেখুন</button>
         </div>`:`<button onclick="closeWLModal()" style="width:100%;padding:12px;background:#2a562b;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:14px;font-weight:700;cursor:pointer;">ঠিক আছে</button>`}`;
     document.getElementById('wlOverlay').style.display='block';
     const modal=document.getElementById('wlModal');
@@ -1049,6 +1123,31 @@ function onBookImgClick(){
     }
 }
 
+/* চেপে ধরে রাখলে কভার একটু খোলে (ভেতরের পাতা দেখায়), ছাড়লে বন্ধ — তখন PDF খোলে না।
+   ছোট করে চাপলে আগের মতো PDF খোলে। ধরে রাখার আগে আঙুল সরালে (স্ক্রল) কিছুই হয় না। */
+(function(){
+    function init(){
+        const w=document.getElementById('bookImgWrap'); if(!w) return;
+        let timer=null, held=false;
+        w.addEventListener('touchstart',function(){
+            if(!w.classList.contains('has-pdf')) return;
+            held=false; clearTimeout(timer);
+            timer=setTimeout(function(){ held=true; w.classList.add('peek'); try{ navigator.vibrate&&navigator.vibrate(10); }catch(e){} },260);
+        },{passive:true});
+        w.addEventListener('touchmove',function(){ if(!held) clearTimeout(timer); },{passive:true});
+        function release(e){
+            clearTimeout(timer);
+            if(held){ if(e&&e.cancelable) e.preventDefault(); w.classList.remove('peek'); setTimeout(function(){ held=false; },50); }
+        }
+        w.addEventListener('touchend',release,{passive:false});
+        w.addEventListener('touchcancel',release);
+        /* ধরে রাখার পর ছাড়লে যে "click" আসে সেটা আটকাই; লম্বা চাপে ছবি-সেভের মেনুও না */
+        w.addEventListener('click',function(e){ if(held){ e.stopImmediatePropagation(); e.preventDefault(); } },true);
+        w.addEventListener('contextmenu',function(e){ if(w.classList.contains('has-pdf')) e.preventDefault(); });
+    }
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+})();
+
 function openPdfModal(){
     const b=curBook;
     if(!b||!b.pdfLink) return;
@@ -1068,22 +1167,60 @@ function openPdfModal(){
     const coverAnim=document.getElementById('pdfBookCoverAnim');
     const bookImg=document.getElementById('bookImg');
 
-    /* বইয়ের ছবি animation-এ বসাও */
-    if(bookImg) coverAnim.src=bookImg.src;
+    /* বইয়ের ছবি animation-এ বসাও — পিঠেও একই কভারের কিনারা, যাতে রং বইয়ের সাথে মেলে */
+    if(bookImg){
+        coverAnim.src=bookImg.src;
+        const spine=book.querySelector('.pdf-b-spine');
+        if(spine) spine.style.backgroundImage=bookImg.src?'url("'+bookImg.src.replace(/"/g,'%22')+'")':'';
+    }
 
-    book.style.display='block';
     panel.classList.remove('show');
     document.getElementById('pdfCartWrap').classList.remove('show');
     document.getElementById('pdfCartPopup').classList.remove('show');
+    pdfTimers.forEach(clearTimeout); pdfTimers=[];
+
+    /* "উড়ে এসে খোলা": পাতার কভারটা যেখানে আছে সেখান থেকে উঠে মাঝখানে আসে (--fx/--fy = কভারের মাঝখান
+       থেকে পর্দার মাঝখানের দূরত্ব, --fs = মাপ), তারপর মলাট খোলে। কভার দেখা না গেলে আগের মতো নিচ থেকে ওঠে।
+       যাঁরা ফোনে "কম অ্যানিমেশন" চালু রেখেছেন, তাঁদের সরাসরি PDF দেখাই। */
+    const reduce=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const r=bookImg?bookImg.getBoundingClientRect():null;
+    const fly=!!(r&&r.width>20&&r.bottom>0&&r.top<window.innerHeight);
+    book.classList.remove('opening','fly');
+    if(fly){
+        book.style.setProperty('--fx',Math.round(r.left+r.width/2-window.innerWidth/2)+'px');
+        book.style.setProperty('--fy',Math.round(r.top+r.height/2-window.innerHeight/2)+'px');
+        book.style.setProperty('--fs',(r.width/240).toFixed(3));
+        void book.offsetWidth;
+        book.classList.add('fly');
+        document.getElementById('bookImgWrap').classList.add('lifted');
+    }
+    book.style.display=reduce?'none':'block';
 
     /* Animation শুরু */
-    setTimeout(function(){ book.classList.add('opening'); }, 80);
+    if(!reduce) pdfTimers.push(setTimeout(function(){ book.classList.add('opening'); }, fly?700:80));
 
     /* Animation শেষে PDF দেখাও */
-    setTimeout(function(){
+    pdfTimers.push(setTimeout(function(){
         book.style.display='none';
-        book.classList.remove('opening');
-        document.getElementById('pdfFrame').src=embedUrl;
+        book.classList.remove('opening','fly');
+        /* অ্যাডমিনে এই PDF থেকেই পাতা-ছবি বানানো থাকলে নিজের রিডার (পাতা কমানো, লোগোসহ, পুরো PDF-এর
+           লিংক ছাড়া); না থাকলে বা PDF লিংক বদলে গেলে আগের মতো Drive */
+        const frame=document.getElementById('pdfFrame'), pvEl=document.getElementById('pvPages');
+        const pid=(raw.match(/\/d\/([\w-]{20,})/)||raw.match(/[?&]id=([\w-]{20,})/)||[])[1]||'';
+        const pv=(Array.isArray(b.previewPages)&&b.previewPages.length&&pid&&b.previewSrc===pid)?b.previewPages:null;
+        panel.classList.toggle('pv-on',!!pv);
+        document.getElementById('pdfModalFoot').style.display=pv?'none':'';
+        if(pv){
+            frame.style.display='none'; frame.src='';
+            const total=Number(b.previewTotal)||0;
+            pvEl.innerHTML='<div class="pv-head">'+(total>pv.length?'নমুনা — প্রথম '+toBN(pv.length)+' পাতা':toBN(pv.length)+' পাতা')+'</div>'+
+                pv.map((p,k)=>'<div class="pv-page"><img src="'+escapeHTML(/^https?:/.test(p)?p:'https://i.ibb.co/'+p)+'" alt="পাতা '+toBN(k+1)+'" loading="'+(k<2?'eager':'lazy')+'" draggable="false"><span class="pv-no">'+toBN(k+1)+'</span></div>').join('')+
+                '<div class="pv-end"><b>নমুনা এখানেই শেষ</b><span>পুরো বইটা পড়তে অর্ডার করুন</span><button type="button" onclick="closePdfModal();addToCartShow()">কার্টে যোগ করুন</button></div>';
+            pvEl.scrollTop=0; pvEl.style.display='';
+        }else{
+            pvEl.style.display='none'; pvEl.innerHTML='';
+            frame.style.display=''; frame.src=embedUrl;
+        }
         document.getElementById('pdfDriveLink').href=raw;
         panel.classList.add('show');
         document.getElementById('pdfCartWrap').classList.add('show');
@@ -1094,16 +1231,20 @@ function openPdfModal(){
         document.getElementById('pdfCartOrig').innerText=(b.original_price>b.price)?'৳ '+b.original_price:'';
         document.getElementById('pdfCartCurrent').innerText='৳ '+b.price;
         document.getElementById('pdfCartPopup').classList.add('show');
-    }, 1100);
+    }, reduce?0:(fly?1400:1100)));
 }
+var pdfTimers=[];
 function closePdfModal(){
     const modal=document.getElementById('pdfModal');
     modal.classList.remove('active');
+    pdfTimers.forEach(clearTimeout); pdfTimers=[];
+    document.getElementById('bookImgWrap').classList.remove('lifted');
     setTimeout(function(){
         document.getElementById('pdfBook3d').style.display='none';
-        document.getElementById('pdfBook3d').classList.remove('opening');
+        document.getElementById('pdfBook3d').classList.remove('opening','fly');
         document.getElementById('pdfModalBox').classList.remove('show');
         document.getElementById('pdfFrame').src='';
+        document.getElementById('pvPages').innerHTML='';
         document.getElementById('pdfCartPopup').classList.remove('show');
         document.getElementById('pdfCartWrap').classList.remove('show');
     }, 300);
@@ -1113,22 +1254,23 @@ document.addEventListener('keydown',function(e){ if(e.key==='Escape') closePdfMo
 
 function toggleShare(e){e.stopPropagation();document.getElementById('sharePanel').classList.toggle('open');}
 document.addEventListener('click',()=>document.getElementById('sharePanel').classList.remove('open'));
-function shareWA(){if(!curBook)return;const isBook=(curBook.type||'বই')==='বই';const byLine=isBook&&curBook.author?' — '+curBook.author:curBook.brand?' — '+curBook.brand:'';const t=encodeURIComponent(`📚 "${curBook.name}"${byLine}\n৳ ${curBook.price} | NafahLife\n${window.location.href}`);window.open('https://wa.me/?text='+t,'_blank');document.getElementById('sharePanel').classList.remove('open');}
-function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copyTxt').innerText='✅ কপি হয়েছে!';setTimeout(()=>document.getElementById('copyTxt').innerText='লিঙ্ক কপি করুন',2000);});}
+function shareWA(){if(!curBook)return;const isBook=(curBook.type||'বই')==='বই';const byLine=isBook&&curBook.author?' — '+curBook.author:curBook.brand?' — '+curBook.brand:'';const t=encodeURIComponent(`"${curBook.name}"${byLine}\n৳ ${curBook.price} | NafahLife\n${window.location.href}`);window.open('https://wa.me/?text='+t,'_blank');document.getElementById('sharePanel').classList.remove('open');}
+function copyLink(){navigator.clipboard.writeText(window.location.href).then(()=>{document.getElementById('copyTxt').innerHTML='<i class=gi-ok></i> কপি হয়েছে!';setTimeout(()=>document.getElementById('copyTxt').innerHTML='লিঙ্ক কপি করুন',2000);});}
 
 /* DESC */
 function toggleDesc(){
     descExp=!descExp;
     const el=document.getElementById('bookDesc');
     el.style.maxHeight=descExp?'none':'80px';el.style.overflow=descExp?'visible':'hidden';
-    document.getElementById('descToggle').innerHTML=descExp?'কম দেখুন ▲':'আরো দেখুন ▼';
+    document.getElementById('descToggle').innerHTML=descExp?'কম দেখুন <i class=gi-up></i>':'আরো দেখুন <i class=gi-down></i>';
 }
 
 /* TOAST */
 let toastT;
 function showToast(msg,color){
     const t=document.getElementById('toast');
-    t.innerText=msg||'✅ কার্টে যোগ হয়েছে!';
+    msg=msg||'<i class=gi-ok></i> কার্টে যোগ হয়েছে!';
+    t.innerHTML=window.gkIconText?gkIconText(msg):escapeHTML(msg);
     if(color){t.style.background=color;t.style.color='#fff';}
     else{t.style.background='';t.style.color='';}
     t.classList.add('show');
@@ -1153,7 +1295,7 @@ function addToCartShow(){
     for(let i=0;i<qty;i++)cart.push({name:curBook.name,price:curBook.price,img:curBook.img});
     localStorage.setItem('alaziz_cart',JSON.stringify(cart));
     updateCartCount();flyToCart(r.left+r.width/2,r.top+r.height/2);
-    showToast(`✅ ${toBN(qty)}টি বই কার্টে যোগ হয়েছে!`);
+    showToast(`<i class=gi-ok></i> ${toBN(qty)}টি বই কার্টে যোগ হয়েছে!`);
     if(window.fbq){try{fbq('track','AddToCart',{content_name:curBook.name,value:curBook.price*qty,currency:'BDT',contents:[{id:curBook.name,quantity:qty}]});}catch(e){}}
 }
 function buyNow(){
@@ -1168,10 +1310,36 @@ function buyNow(){
 function orderViaWA(){
     if(!curBook)return;
     const isBook=(curBook.type||'বই')==='বই';
-    const authorLine=isBook&&curBook.author?`\n✍️ ${curBook.author}`:curBook.brand?`\n🏷️ ${curBook.brand}`:'';
+    const authorLine=isBook&&curBook.author?`\nলেখক: ${curBook.author}`:curBook.brand?`\nব্র্যান্ড: ${curBook.brand}`:'';
     const itemWord=isBook?'বইটি':'পণ্যটি';
-    const msg=`আসসালামু আলাইকুম,\nআমি এই ${itemWord} অর্ডার করতে চাই:\n\n📖 ${curBook.name}${authorLine}\n💵 মূল্য: ৳${curBook.price}\n🔢 পরিমাণ: ${toBN(qty)}টি\n\n🔗 ${window.location.href}`;
+    const msg=`আসসালামু আলাইকুম,\nআমি এই ${itemWord} অর্ডার করতে চাই:\n\n${isBook?'বই':'পণ্য'}: ${curBook.name}${authorLine}\nমূল্য: ৳${curBook.price}\nপরিমাণ: ${toBN(qty)}টি\n\nলিংক: ${window.location.href}`;
     window.open('https://wa.me/8801577272305?text='+encodeURIComponent(msg),'_blank');
+}
+
+/* প্যাকেজ — অ্যাডমিনে বাছাই করা pkgItems (ভেতরের বইগুলোর bid)। প্যাকেজের পাতায় ভেতরের বই + আলাদা
+   কিনলে কত লাগত (সবার আসল দাম থাকলে তবেই); আর কোনো বই কোনো প্যাকেজে থাকলে সেই বইয়ের পাতায় প্যাকেজটা */
+function gkRenderPackage(b){
+    const sec=document.getElementById('pkgSection'); if(!sec||!b) return;
+    const bn=n=>typeof toBN==='function'?toBN(n):n;
+    const items=(Array.isArray(b.pkgItems)?b.pkgItems:[]).map(id=>books.find(x=>x&&x.bid===id)).filter(Boolean);
+    let list=items, title='', save='';
+    const PKG_IC='<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>';
+    if(items.length){
+        title='এই প্যাকেজে যা আছে — '+bn(items.length)+'টি বই';
+        const sum=items.reduce((s,x)=>s+(Number(x.price)||0),0), p=Number(b.price)||0;
+        if(p>0&&items.every(x=>Number(x.price)>0)&&sum>p) save='আলাদা কিনলে ৳ '+bn(sum)+' — প্যাকেজে ৳ '+bn(p)+' · সাশ্রয় <b>৳ '+bn(sum-p)+'</b>';
+    }else if(b.bid){
+        list=books.filter(x=>x&&x!==b&&Array.isArray(x.pkgItems)&&x.pkgItems.includes(b.bid)&&Number(x.price)>0&&!(typeof gkIsHiddenBook==='function'&&gkIsHiddenBook(x)));
+        title='এই বইটি প্যাকেজেও পাওয়া যায়';
+    }
+    if(!list.length){ sec.style.display='none'; return; }
+    document.getElementById('pkgTitle').innerHTML=PKG_IC+' '+escapeHTML(title);
+    document.getElementById('pkgBooks').innerHTML=list.map(x=>{
+        const xi=books.indexOf(x), img=(typeof bookImgs!=='undefined'&&bookImgs[x.name])||x.img||'';
+        return `<a class="rel-book" href="AAbook.html?id=${encodeURIComponent(x.bid||xi)}"><img src="${escapeHTML(img)}" alt="${escapeHTML(x.name)}" loading="lazy"><div class="rel-name">${escapeHTML(x.name)}</div>${x.author?`<div class="rel-author">${escapeHTML(x.author)}</div>`:''}<div class="rel-price">৳ ${Number(x.price)||0}</div></a>`;
+    }).join('');
+    const sv=document.getElementById('pkgSave'); sv.innerHTML=save; sv.style.display=save?'':'none';
+    sec.style.display='';
 }
 
 /* RECENTLY VIEWED */
@@ -1252,11 +1420,11 @@ function loadBook(){
     const isBook=(b.type||'বই')==='বই';
     const authorEl=document.getElementById('bookAuthor');
     if(isBook&&b.author){
-        authorEl.innerText='✍️ '+b.author;
+        authorEl.innerHTML='<i class=gi-pen></i> '+escapeHTML(b.author);
         authorEl.style.display='inline-flex';
         authorEl.onclick=()=>window.location.href=`Aafilter.html?type=author&value=${encodeURIComponent(b.author)}`;
     } else if(!isBook&&b.brand){
-        authorEl.innerText='🏷️ '+b.brand;
+        authorEl.innerHTML='<i class=gi-tag></i> '+escapeHTML(b.brand);
         authorEl.style.display='inline-flex';
         authorEl.style.cursor='default';
         authorEl.onclick=null;
@@ -1267,11 +1435,9 @@ function loadBook(){
     document.getElementById('stickyPrice').innerText='৳ '+b.price;
     /* PDF preview বাটন */
     const pdfBtnWrap=document.getElementById('pdfReadBtnWrap');
-    if(b.pdfLink&&b.pdfLink.trim()){
-        pdfBtnWrap.classList.add('show');
-    } else {
-        pdfBtnWrap.classList.remove('show');
-    }
+    const hasPdf=!!(b.pdfLink&&b.pdfLink.trim());
+    pdfBtnWrap.classList.toggle('show',hasPdf);
+    document.getElementById('bookImgWrap').classList.toggle('has-pdf',hasPdf);
 
     const preOrderBox=document.getElementById('preOrderBox');
     if(b.preorderDate&&b.preorderDate.trim()){
@@ -1342,7 +1508,7 @@ function loadBook(){
 
     function renderDesc(txt){
         const d=txt||'বইটি সম্পর্কে বিস্তারিত শীঘ্রই যোগ করা হবে।';
-        descEl.innerText=d;
+        descEl.innerText=window.gkStripEmoji?gkStripEmoji(d):d;
         const tog=document.getElementById('descToggle');
         if(d.length>200){descEl.style.maxHeight='80px';descEl.style.overflow='hidden';if(tog)tog.style.display='inline-block';}
         else{descEl.style.maxHeight='';descEl.style.overflow='';if(tog)tog.style.display='none';}
@@ -1402,7 +1568,7 @@ function loadBook(){
                 gkLdPatch(ld=>{ ld.offers.availability='https://schema.org/OutOfStock'; });
                 ['btnCart','btnBuy','stickyBuy'].forEach(id=>{
                     const el=document.getElementById(id);
-                    if(el){el.classList.add('btn-disabled');el.onclick=()=>showToast('❌ এই বইটি এখন স্টকে নেই!');}
+                    if(el){el.classList.add('btn-disabled');el.onclick=()=>showToast('<i class=gi-no></i> এই বইটি এখন স্টকে নেই!');}
                 });
                 showNotifyMeBox(b);
             } else {
@@ -1421,7 +1587,7 @@ function loadBook(){
         box.style.display='block';
         box.innerHTML=`
           <div style="border:1.5px dashed #f59e0b;border-radius:0;padding:14px;margin-bottom:12px;background:rgba(251,191,36,0.06);">
-            <div style="font-size:13px;font-weight:700;margin-bottom:8px;">🔔 স্টকে এলে জানাতে চান?</div>
+            <div style="font-size:13px;font-weight:700;margin-bottom:8px;"><i class=gi-bell></i> স্টকে এলে জানাতে চান?</div>
             <div style="display:flex;gap:8px;">
               <input id="notifyPhoneInput" type="tel" placeholder="০১XXXXXXXXX" style="flex:1;padding:9px 12px;border:1px solid #111;border-radius:0;background:var(--card);color:var(--text);font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;outline:none;box-sizing:border-box;">
               <button onclick="submitNotifyMe()" style="padding:9px 16px;background:#d97706;color:white;border:none;border-radius:0;font-family:'Hind Siliguri',Arial,sans-serif;font-size:13px;font-weight:700;cursor:pointer;flex-shrink:0;">জানান</button>
@@ -1433,22 +1599,23 @@ function loadBook(){
         const inp=document.getElementById('notifyPhoneInput');
         const phone=(inp.value||'').trim();
         const msgEl=document.getElementById('notifyMeMsg');
-        if(!/^01[3-9]\d{8}$/.test(phone)){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='⚠️ সঠিক মোবাইল নম্বর দিন (যেমন: 01712345678)'; return; }
+        if(!/^01[3-9]\d{8}$/.test(phone)){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-warn></i> সঠিক মোবাইল নম্বর দিন (যেমন: 01712345678)'; return; }
         if(!curBook) return;
         /* admin-এর স্টক সিস্টেম idx (array index) দিয়ে কাজ করে, তাই এখানেও একই key ব্যবহার করছি
            যাতে admin panel-এ কোন বইয়ের জন্য কারা নোটিফাই চেয়েছে সহজে মেলানো যায় */
         try{
             await db.ref('stockNotify/'+idx+'/'+phone.replace(/\+/g,'_')).set({phone, bookName:curBook.name, requestedAt:Date.now()});
-            msgEl.style.display='block'; msgEl.style.color='#2a562b'; msgEl.textContent='✅ ঠিক আছে! স্টকে এলেই জানানো হবে।';
+            msgEl.style.display='block'; msgEl.style.color='#2a562b'; msgEl.innerHTML='<i class=gi-ok></i> ঠিক আছে! স্টকে এলেই জানানো হবে।';
             inp.value='';
-        }catch(e){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.textContent='❌ কিছু ভুল হয়েছে, আবার চেষ্টা করুন'; }
+        }catch(e){ msgEl.style.display='block'; msgEl.style.color='#dc2626'; msgEl.innerHTML='<i class=gi-no></i> কিছু ভুল হয়েছে, আবার চেষ্টা করুন'; }
     };
 
-    document.getElementById('deliveryText').innerText=`ঢাকায় ডেলিভারি: ১-২ কার্যদিবস`;
+    gkDeliveryEstimate();
     updateWLUI();
 
     const _mc=bookMainCat(b), _tg=bookTags(b);
     const related=books.filter((rb,i)=>i!==idx&&!gkIsHiddenBook(rb)&&(isBook?rb.author!==b.author:true)&&((_mc&&bookMainCat(rb)===_mc)||(rb.subject&&rb.subject===b.subject)||bookTags(rb).some(t=>_tg.includes(t)))).slice(0,8);
+    try{ gkRenderPackage(b); }catch(e){}
     if(!related.length){document.getElementById('relatedSection').style.display='none';}
     else{document.getElementById('relatedBooks').innerHTML=related.map(rb=>{const ri=books.indexOf(rb);const rImg=(typeof bookImgs!=='undefined'&&bookImgs[rb.name])||rb.img||'';return `<div class="rel-book" onclick="window.location.href='AAbook.html?id=${encodeURIComponent(rb.bid||ri)}'"><img src="${escapeHTML(rImg)}" alt="${escapeHTML(rb.name)}" loading="lazy"><div class="rel-name">${escapeHTML(rb.name)}</div><div class="rel-price">৳ ${Number(rb.price)||0}</div></div>`;}).join('');}
 
@@ -1462,6 +1629,27 @@ function loadBook(){
     updateSEO(b,idx,bookImg,descStaticClean||'');
 }
 
+/* "আজ অর্ডার করলে কবে পাবেন" — দোকানের নিজের নিয়ম থেকে হিসাব (ঢাকায় ১–২, বাইরে ৩–৫ কার্যদিবস,
+   শুক্রবার ডেলিভারি বন্ধ)। রাত ১০টার পরের অর্ডার পরদিন থেকে গোনা হয়। সরকারি ছুটি জানা নেই বলে "আনুমানিক"। */
+function gkDeliveryEstimate(){
+    const MONTHS=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+    const now=new Date(Date.now()+(new Date().getTimezoneOffset()+360)*60000);   /* বাংলাদেশ সময় */
+    const base=new Date(now.getFullYear(),now.getMonth(),now.getDate()+(now.getHours()>=22?1:0));
+    function addWorkDays(n){
+        const d=new Date(base);
+        while(n>0){ d.setDate(d.getDate()+1); if(d.getDay()!==5) n--; }
+        return d;
+    }
+    function range(a,b){
+        const d1=addWorkDays(a), d2=addWorkDays(b);
+        return d1.getMonth()===d2.getMonth()
+            ? toBN(d1.getDate())+'–'+toBN(d2.getDate())+' '+MONTHS[d2.getMonth()]
+            : toBN(d1.getDate())+' '+MONTHS[d1.getMonth()]+' – '+toBN(d2.getDate())+' '+MONTHS[d2.getMonth()];
+    }
+    const t=document.getElementById('deliveryText'), s=document.getElementById('deliverySub');
+    if(t) t.innerHTML='আজ অর্ডারে ঢাকায় পাবেন <b class="d-date">'+range(1,2)+'</b>';
+    if(s) s.innerHTML='ঢাকার বাইরে <b>'+range(3,5)+'</b> · আনুমানিক, শুক্রবার ডেলিভারি বন্ধ';
+}
 function updateSEO(b,idx,bookImg,desc){
     const SITE='https://nafahlife.com';
     const pageUrl=SITE+'/AAbook.html?id='+encodeURIComponent(b.bid||idx);
@@ -1540,19 +1728,19 @@ function bkRunSearch(){
     const q=document.getElementById('bkSearchInput').value.normalize('NFC').trim().toLowerCase();
     const body=document.getElementById('bkSearchBody');
     if(!q){bkClearSearch();return;}
-    if(typeof books==='undefined'||!books.length){body.innerHTML='<div class="bks-hint">⏳ বই লোড হচ্ছে...</div>';return;}
+    if(typeof books==='undefined'||!books.length){body.innerHTML='<div class="bks-hint"><i class=gi-hourglass></i> বই লোড হচ্ছে...</div>';return;}
     const found=(typeof gkSearchBooks==='function')
         ? gkSearchBooks(gkVisibleBooks(books), q)
         : gkVisibleBooks(books).filter(b=>b.name.normalize('NFC').toLowerCase().includes(q)||(b.author||'').normalize('NFC').toLowerCase().includes(q)||(b.pub||'').normalize('NFC').toLowerCase().includes(q));
-    if(!found.length){body.innerHTML='<div class="bks-hint">📚 এই নামে কোনো বই পাওয়া যায়নি</div>';return;}
-    body.innerHTML=`<div class="bks-count">🔍 ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
+    if(!found.length){body.innerHTML='<div class="bks-hint"><i class=gi-books></i> এই নামে কোনো বই পাওয়া যায়নি</div>';return;}
+    body.innerHTML=`<div class="bks-count"><i class=gi-search></i> ${found.length}টি বই</div>`+found.slice(0,40).map(b=>{
         const idx=books.indexOf(b);
         const img=(typeof bookImgs!=='undefined'&&bookImgs[b.name])||b.img||'';
         return `<div class="bks-item" onclick="window.location.href='AAbook.html?id=${encodeURIComponent(b.bid||idx)}'">
             <img src="${escapeHTML(img)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='book-placeholder.svg'">
             <div style="flex:1;min-width:0;">
                 <div class="bks-name">${escapeHTML(b.name)}</div>
-                ${(b.type||'বই')==='বই' ? `<div class="bks-auth">✍️ ${escapeHTML(b.author||'')}</div>` : (b.brand ? `<div class="bks-auth">🏷️ ${escapeHTML(b.brand)}</div>` : '')}
+                ${(b.type||'বই')==='বই' ? `<div class="bks-auth"><i class=gi-pen></i> ${escapeHTML(b.author||'')}</div>` : (b.brand ? `<div class="bks-auth"><i class=gi-tag></i> ${escapeHTML(b.brand)}</div>` : '')}
                 <div class="bks-price">৳ ${b.price}</div>
             </div></div>`;
     }).join('');
@@ -1568,7 +1756,7 @@ function incrementView(bookId){
         db.ref('views/'+bookId).transaction(v=>(v||0)+1).then(res=>{
             const v=res.snapshot.val()||0;
             if(v>1){
-                document.getElementById('viewBadge').innerHTML='<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> '+v+' বার দেখা হয়েছে';
+                document.getElementById('viewBadge').innerHTML='<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg> '+toBN(v)+' বার দেখা হয়েছে';
             } else {
                 document.getElementById('viewBadge').style.display='none';
             }
@@ -1609,7 +1797,7 @@ function loadReviews(bookId){
                         <span style="font-size:11px;color:var(--text2);">${new Date(r.createdAt).toLocaleDateString('bn-BD')}</span>
                     </div>
                     <div style="color:#d97706;font-size:15px;margin-bottom:5px;">${'<svg class="eico" viewBox="0 0 24 24" fill="currentColor"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>'.repeat(r.rating||0)+'<svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/></svg>'.repeat(5-(r.rating||0))}</div>
-                    <div style="font-size:13px;line-height:1.5;">${escapeHTML(r.comment||'')}</div>
+                    <div style="font-size:13px;line-height:1.5;">${escapeHTML(window.gkStripEmoji?gkStripEmoji(r.comment||''):(r.comment||''))}</div>
                     <div class="rv-helpful" onclick="markHelpful('${r.key}','${bookId}',this)"><svg class="eico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg> সহায়ক (<span>${r.helpful||0}</span>)</div>
                 </div>`).join('');
         }).catch(()=>{el.innerHTML='<div style="text-align:center;padding:20px;color:var(--text2);">রিভিউ লোড হয়নি</div>';});
@@ -1622,7 +1810,7 @@ function updateRatingBars(reviews){
     const counts={1:0,2:0,3:0,4:0,5:0};
     reviews.forEach(r=>{if(r.rating>=1&&r.rating<=5)counts[r.rating]++;});
     const avg=total?reviews.reduce((s,r)=>s+(r.rating||0),0)/total:0;
-    /* আসল রিভিউ থাকলে তবেই Google-কে রেটিং জানাই (সার্চ রেজাল্টে ★ দেখাতে পারে) */
+    /* আসল রিভিউ থাকলে তবেই Google-কে রেটিং জানাই (সার্চ রেজাল্টে <i class=gi-star></i> দেখাতে পারে) */
     const rated=reviews.filter(r=>r.rating>=1&&r.rating<=5);
     if(rated.length) gkLdPatch(ld=>{ ld.aggregateRating={"@type":"AggregateRating","ratingValue":(rated.reduce((s,r)=>s+Number(r.rating),0)/rated.length).toFixed(1),"reviewCount":rated.length,"bestRating":5,"worstRating":1}; });
     document.getElementById('avgRating').innerText=total?avg.toFixed(1):'—';
@@ -1636,19 +1824,26 @@ function updateRatingBars(reviews){
 }
 
 async function markHelpful(reviewKey,bookId,el){
+    /* একজন একটা রিভিউতে একবারই "সহায়ক" দিতে পারবে — আগে বারবার চাপলে সংখ্যা বাড়তেই থাকত */
+    let done={};
+    try{ done=JSON.parse(localStorage.getItem('gk_helpful')||'{}'); }catch(e){}
+    if(done[reviewKey]){ showToast('<i class=gi-ok></i> আপনি আগেই জানিয়েছেন','#2a562b'); return; }
+    done[reviewKey]=1;
+    try{ localStorage.setItem('gk_helpful',JSON.stringify(done)); }catch(e){}
+    el.classList.add('done');
     try{
         const ref=db.ref('reviews/'+bookId+'/'+reviewKey+'/helpful');
         await ref.transaction(v=>(v||0)+1);
         const snap=await ref.get();
         el.querySelector('span').innerText=snap.val()||0;
-        showToast('👍 ধন্যবাদ!','#2a562b');
+        showToast('<i class=gi-thumb></i> ধন্যবাদ!','#2a562b');
     }catch(e){}
 }
 
 async function submitReview(){
     const name=document.getElementById('reviewName').value.trim();
     const comment=document.getElementById('reviewText').value.trim();
-    if(!selectedRating)return showToast('⭐ রেটিং দিন','#d97706');
+    if(!selectedRating)return showToast('<i class=gi-star></i> রেটিং দিন','#d97706');
     if(!comment)return showToast('মতামত লিখুন','#d97706');
     if(!name)return showToast('নাম লিখুন','#d97706');
     try{
@@ -1657,9 +1852,9 @@ async function submitReview(){
         document.getElementById('reviewText').value='';
         document.getElementById('reviewName').value='';
         setRating(0);selectedRating=0;
-        showToast('✅ রিভিউ দেওয়া হয়েছে!','#2a562b');
+        showToast('<i class=gi-ok></i> রিভিউ দেওয়া হয়েছে!','#2a562b');
         loadReviews(curBookId);
-    }catch(e){showToast('❌ রিভিউ পাঠানো যায়নি','#dc2626');}
+    }catch(e){showToast('<i class=gi-no></i> রিভিউ পাঠানো যায়নি','#dc2626');}
 }
 
 /* ══════════════════════════════
@@ -1804,7 +1999,7 @@ function loadLeaderboard(){
                             const pct=Math.round((md.books||0)/nextEntry.books*100);
                             document.getElementById('myProgBar').style.width=pct+'%';
                         } else {
-                            document.getElementById('myProgMsg').innerText='আপনি শীর্ষে আছেন! 🎉';
+                            document.getElementById('myProgMsg').innerHTML='আপনি শীর্ষে আছেন! <i class=gi-party></i>';
                             document.getElementById('myProgBar').style.width='100%';
                         }
                     }
@@ -1863,13 +2058,18 @@ document.addEventListener('DOMContentLoaded', function(){
     loadBook();
     loadTagsBook();
     loadCatTreeBook();
-    /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট (নতুন প্রোডাক্টসহ) এলে আবার রেন্ডার */
-    window.GK_BOOKS_LIVE=syncLiveBookData();
-    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function(){ loadBook(); });
-    /* fallback: কিছুক্ষণেও বই না পেলে হোমে ফেরত */
-    setTimeout(function(){
-        if(!curBook) window.location.href='index.html';
-    }, 4000);
+    /* অ্যাডমিন প্যানেলের লাইভ বুকলিস্ট (নতুন প্রোডাক্টসহ) এলে আবার রেন্ডার।
+       আগে aabooks-live.js-এর পুরো-তালিকার প্রমিসটা এখানে মুছে যেত — ফলে book.js-এ এখনো নেই
+       এমন নতুন বইয়ের লিংকে ঢুকলে ৪ সেকেন্ড পর হোমে ফেরত পাঠাত। এখন দুটোই অপেক্ষা করি। */
+    const fullLive=window.GK_BOOKS_LIVE||Promise.resolve(false);
+    const oneLive=syncLiveBookData()||Promise.resolve();
+    window.GK_BOOKS_LIVE=Promise.all([fullLive,oneLive]).then(function(r){ return !!r[0]; });
+    fullLive.then(function(ok){ if(ok) loadBook(); });
+    oneLive.then(function(){ loadBook(); });
+    /* সব তথ্য আসার পরেও বই না পেলে (ভুল/মুছে ফেলা লিংক) তবেই হোমে ফেরত; নেট খুব ধীর হলেও সর্বোচ্চ ১৫ সেকেন্ড */
+    function gkBookMissing(){ if(!curBook) window.location.href='index.html'; }
+    window.GK_BOOKS_LIVE.then(function(){ setTimeout(gkBookMissing, 600); }, gkBookMissing);
+    setTimeout(gkBookMissing, 15000);
     /* views/reviews-এর জন্য key হিসেবে URL-এর id-টাই সরাসরি ব্যবহার হচ্ছে —
        এটা bid (নতুন স্থায়ী লিংক) বা পুরনো সংখ্যা (লেগেসি লিংক) দুটোই হতে পারে */
     const bookKey=new URLSearchParams(window.location.search).get('id');
@@ -1900,4 +2100,4 @@ document.addEventListener('DOMContentLoaded', function(){
 @media(min-width:900px){.view-toggle-fab{bottom:24px;left:24px;}}</style>
 <button class="view-toggle-fab" id="viewModeFab" onclick="toggleViewMode()" style="display:none"></button>
 </body>
-</html>
+</html>
