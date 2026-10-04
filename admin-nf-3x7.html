@@ -4840,12 +4840,24 @@ function gkCheckMissingBooks(){
     if(typeof books==='undefined'||!books.length) return;
     const have=new Set(localBooks.map(b=>b&&b.bid).filter(Boolean));
     const missing=books.filter(b=>b&&b.bid&&!have.has(b.bid));
-    if(!missing.length) return;
+    /* আগে থেকে থাকা বইয়ে book.js-এ নতুন যোগ হওয়া PDF লিংক/কভার ছবি, যা Firebase-এ নেই —
+       এগুলোও তুলে দিই, নইলে অ্যাডমিন থেকে পরে সেভ করলে হারিয়ে যেত (NafahLife, ২০২৬-১০-০৪) */
+    const isHttp=s=>/^https?:\/\//.test(String(s||''));
+    const byBidLocal={}; localBooks.forEach((b,i)=>{ if(b&&b.bid&&byBidLocal[b.bid]===undefined) byBidLocal[b.bid]=i; });
+    const fieldUpd={};
+    books.forEach(b=>{
+        if(!b||!b.bid) return; const i=byBidLocal[b.bid]; if(i===undefined) return; const l=localBooks[i];
+        if(isHttp(b.pdfLink)&&!isHttp(l.pdfLink)) fieldUpd['bookList/'+i+'/pdfLink']=b.pdfLink;
+        if(isHttp(b.img)&&!isHttp(l.img)) fieldUpd['bookList/'+i+'/img']=b.img;
+    });
+    const nUpd=Object.keys(fieldUpd).length;
+    if(!missing.length&&!nUpd) return;
     const bar=document.createElement('div');
     bar.id='gkMissingBar';
     bar.style.cssText='position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:99999;max-width:560px;width:calc(100% - 24px);background:#fff7ed;border:2px solid #f97316;color:#7c2d12;padding:14px 16px;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.25);font-family:inherit;font-size:13.5px;line-height:1.6;';
-    bar.innerHTML=`<b><i class=gi-warn></i> ${missing.length}টি বই শুধু book.js-এ আছে, Firebase-এ নেই।</b><br>এগুলো অ্যাডমিন প্যানেলে দেখা যায় না, আর সাইটে লাইভ লিস্ট এলে হারিয়ে যায়। একবার "Firebase-এ তুলুন" চাপলেই ঠিক হয়ে যাবে।
-        <div style="display:flex;gap:8px;margin-top:10px;"><button id="gkMissingBtn" class="btn btn-primary" style="flex:2;"><i class=gi-up></i> ${missing.length}টি বই Firebase-এ তুলুন</button><button class="btn" style="flex:1;" onclick="this.closest('#gkMissingBar').remove()">পরে</button></div>`;
+    const what=[missing.length?missing.length+'টি নতুন বই':'', nUpd?nUpd+'টা PDF লিংক/কভার ছবি':''].filter(Boolean).join(' আর ');
+    bar.innerHTML=`<b><i class=gi-warn></i> ${what} শুধু book.js-এ আছে, Firebase-এ নেই।</b><br>এগুলো অ্যাডমিন প্যানেলে দেখা যায় না, আর সাইটে লাইভ লিস্ট এলে হারিয়ে যায়। একবার "Firebase-এ তুলুন" চাপলেই ঠিক হয়ে যাবে।
+        <div style="display:flex;gap:8px;margin-top:10px;"><button id="gkMissingBtn" class="btn btn-primary" style="flex:2;"><i class=gi-up></i> ${what} Firebase-এ তুলুন</button><button class="btn" style="flex:1;" onclick="this.closest('#gkMissingBar').remove()">পরে</button></div>`;
     document.body.appendChild(bar);
     document.getElementById('gkMissingBtn').onclick=async function(){
         this.disabled=true; this.textContent='তোলা হচ্ছে...';
@@ -4857,10 +4869,13 @@ function gkCheckMissingBooks(){
                 localBooks[start+i]=copy;
                 updates['bookList/'+(start+i)]=copy;
             });
+            Object.assign(updates, fieldUpd);
             await db.ref().update(updates);
+            /* পেজের তালিকাতেও বসাই (PDF লিংক/ছবি) */
+            Object.keys(fieldUpd).forEach(k=>{ const m=k.match(/^bookList\/(\d+)\/(\w+)$/); if(m&&localBooks[+m[1]]) localBooks[+m[1]][m[2]]=fieldUpd[k]; });
             bar.remove();
             beUpdateStats(); if(document.getElementById('tabPanelEditor').style.display==='block') beRenderList();
-            showToast(`${missing.length}টি বই Firebase-এ উঠেছে — এখন Tools থেকে book.js ডাউনলোড করে আপলোড করুন`,'#2a562b');
+            showToast(`${what} Firebase-এ উঠেছে — এখন Tools থেকে book.js ডাউনলোড করে আপলোড করুন`,'#2a562b');
         }catch(e){
             this.disabled=false; this.textContent='আবার চেষ্টা করুন';
             showToast('ব্যর্থ: '+e.message,'#dc2626');
@@ -6860,6 +6875,72 @@ function downloadSitemap(){
 }
 
 /* ── DOWNLOAD book.js + book-desc.js (একসাথে দুটো) ── */
+/* ══ book.js ছোট আকারে (সাইট দ্রুত খোলার জন্য) ══
+   প্রতিটা বই এক লাইনে একটা ছোট array: প্রকাশনী/লেখক/বিভাগ/বিষয়/কভার ইত্যাদি বারবার না লিখে একটা
+   তালিকার নম্বর, ছবির লিংকের সাধারণ শুরুটা (যেমন wafilife-এর uploads/) একবারই, নামের সাথে হুবহু
+   মেলে এমন bid আর খালি ঘর বাদ। book.js-এর ভেতরের ছোট ফাংশন সাইট খোলার সময় আগের মতো পূর্ণ
+   books তালিকা বানায় — তাই সাইটের বাকি কোড কিছুই বদলায় না। ফাইল ২.৪ MB থেকে ~০.৮ MB।
+   downloadBookJs() দুই রকমই বানিয়ে মিলিয়ে দেখে — হুবহু এক না হলে পুরনো পূর্ণ রূপটাই দেয়। */
+const GK_PACK_UNPACKER=`(function (H, R) {
+    var D = H.d, P = H.p, T = H.t;
+    function slug(s) { return (s || '').toString().trim().replace(/[।,.!?;:'"()\\[\\]{}\\/\\\\]/g, '').replace(/\\s+/g, '-').toLowerCase().slice(0, 60) || 'boi'; }
+    function v(k, i) { return D[k][i || 0]; }
+    return R.map(function (r) {
+        var b = {}, im = r[5] || '', pdf = r[14], x = r[17], k;
+        b.bid = r[0] === 0 ? slug(r[1]) : r[0];
+        b.type = v('type', r[12]); b.name = r[1]; b.author = v('author', r[2]);
+        b.price = r[3] || 0; b.original_price = r[4] || 0;
+        b.cat = v('cat', r[7]); b.subcat = v('subcat', r[9]); b.subject = v('subject', r[8]);
+        b.cover = v('cover', r[10]); b.pub = v('pub', r[6]); b.pages = v('pages', r[11]); b.brand = v('brand', r[13]);
+        if (im.charAt(0) === '~') im = P[im.charCodeAt(1) - 48] + im.slice(2);
+        b.img = im; b.desc = '';
+        b.tags = (r[15] || []).map(function (i) { return T[i]; });
+        b.attributes = r[16] || [];
+        if (pdf !== null) { pdf = pdf || ''; if (pdf.charAt(0) === '#') pdf = 'https://drive.google.com/file/d/' + pdf.slice(1) + '/view'; b.pdfLink = pdf; }
+        if (x) for (k in x) b[k] = x[k];
+        return b;
+    });
+})`;
+function gkPackBooksCode(src){
+    const norm=s=>String(s).replace(/\r\n/g,'\n').replace(/\r/g,'\n');
+    const slug=s=>(s||'').toString().trim().replace(/[।,.!?;:'"()\[\]{}\/\\]/g,'').replace(/\s+/g,'-').toLowerCase().slice(0,60)||'boi';
+    const DK=['type','author','cat','subcat','subject','cover','pub','pages','brand'];
+    const val=(b,k)=>k==='type'?norm(b.type||'বই'):norm(b[k]??'');
+    /* প্রতিটা ঘরের মান → নম্বর (বেশি ব্যবহৃতটা ০, যাতে শেষের ০ বাদ দেওয়া যায়) */
+    const D={}, I={};
+    DK.forEach(k=>{ const m=new Map(); src.forEach(b=>{ const x=val(b,k); m.set(x,(m.get(x)||0)+1); }); D[k]=[...m.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]); I[k]=new Map(D[k].map((x,i)=>[x,i])); });
+    const tagsOf=b=>(Array.isArray(b.tags)?b.tags:bookTags(b)).map(norm);
+    const T=[...new Set(src.flatMap(tagsOf))], TI=new Map(T.map((t,i)=>[t,i]));
+    /* ছবির লিংকের সবচেয়ে বেশি ব্যবহৃত শুরুগুলো (সর্বোচ্চ ১০টা) */
+    const pc=new Map();
+    src.forEach(b=>{ const m=norm(b.img??'').match(/^https?:\/\/[^/]+\/(?:[^/?#]+\/)?/); if(m) pc.set(m[0],(pc.get(m[0])||0)+1); });
+    const P=[...pc.entries()].filter(e=>e[1]>=20).sort((a,b)=>b[0].length-a[0].length||b[1]-a[1]).slice(0,10).map(e=>e[0]);
+    const done=new Set(['bid','type','name','author','price','original_price','cat','subcat','subject','cover','pub','pages','brand','img','desc','tags','attributes']);
+    const rows=src.map(b=>{
+        const name=norm(b.name??''), bid=norm(b.bid??'');
+        let im=norm(b.img??'');
+        if(!/^https?:\/\//.test(im)) im=''; /* placeholder ("1" ইত্যাদি) — নিচের IMAGE FALLBACK এমনিতেই কভার-টেমপ্লেট বসায় */
+        else{ const p=P.findIndex(x=>im.startsWith(x)); if(p>-1) im='~'+String.fromCharCode(48+p)+im.slice(P[p].length); }
+        const ek=Object.keys(b).filter(k=>!done.has(k)&&b[k]!==undefined);
+        let pdf=null; const extra={};
+        const pl=b.pdfLink;
+        if(ek[0]==='pdfLink'&&typeof pl==='string'&&!/^[#~]/.test(pl)){
+            const m=pl.match(/^https:\/\/drive\.google\.com\/file\/d\/([\w-]+)\/view$/);
+            pdf=m?'#'+m[1]:pl; ek.shift();
+        }
+        ek.forEach(k=>{ extra[k]=JSON.parse(JSON.stringify(b[k])); });
+        const attrs=Array.isArray(b.attributes)?b.attributes.filter(a=>a&&a.label).map(a=>({label:norm(a.label),value:norm(a.value||'')})):[];
+        const r=[bid===slug(name)?0:bid, name, I.author.get(val(b,'author')), Number(b.price)||0, Number(b.original_price)||0, im,
+            I.pub.get(val(b,'pub')), I.cat.get(val(b,'cat')), I.subject.get(val(b,'subject')), I.subcat.get(val(b,'subcat')),
+            I.cover.get(val(b,'cover')), I.pages.get(val(b,'pages')), I.type.get(val(b,'type')), I.brand.get(val(b,'brand')),
+            pdf, tagsOf(b).map(t=>TI.get(t)), attrs.length?attrs:0, ek.length?extra:0];
+        while(r.length&&(r[r.length-1]===0||r[r.length-1]===''||(Array.isArray(r[r.length-1])&&!r[r.length-1].length))) r.pop();
+        return JSON.stringify(r);
+    });
+    return `/* বইয়ের তালিকা ছোট আকারে লেখা — নিচের ছোট ফাংশন সাইট খোলার সময় পূর্ণ তালিকা বানায়। হাতে বদলাবেন না, অ্যাডমিন প্যানেল থেকে ডাউনলোড করুন। */\nconst books = ${GK_PACK_UNPACKER}(${JSON.stringify({d:D,p:P,t:T})}, [\n${rows.join(',\n')}\n]);`;
+}
+
+
 function downloadBookJs(){
     if(gkForeignBookEdit){
         alert('অন্য কোনো ডিভাইস/মডারেটর থেকে বই বদলানো হয়েছে — এই পেজের লিস্ট পুরনো।\n\nপেজটা রিফ্রেশ করে তারপর book.js ডাউনলোড করুন।');
@@ -6896,7 +6977,14 @@ function downloadBookJs(){
     const fallback=`\n\n/* ═══ IMAGE FALLBACK ═══\n   যেসব বইয়ের img এখনো placeholder ("1", "a" ইত্যাদি) — আসল URL না —\n   সেগুলোতে ভাঙা ছবির বদলে বইয়ের কভার-টেমপ্লেট দেখানো হবে। আসল কভার URL বসালেই এটি আর প্রযোজ্য হবে না। */\nbooks.forEach(function(b){\n    if(!b.img || !/^https?:\\/\\//.test(b.img)) b.img = 'book-placeholder.svg';\n});`;
     /* Firebase-এর bookListVer এই ফাইলে বসে — সাইট মিলিয়ে দেখে, মিললে বাড়তি ডাউনলোড নেই */
     const verLine=`/* bookList ভার্সন — অ্যাডমিন প্যানেল থেকে আপনাআপনি বসে, হাতে বদলাবেন না */\nvar GK_BOOKS_VER = ${JSON.stringify(GK_ADMIN_BOOKVER)};\n`;
-    const bookJsCode=verLine+`const books = [\n${lines.join(',\n')}\n];`+fallback;
+    let bookJsCode=verLine+`const books = [\n${lines.join(',\n')}\n];`+fallback;
+    /* ছোট রূপ — দুটো চালিয়ে হুবহু একই তালিকা এলে তবেই সেটা দিই, নইলে পুরনো পূর্ণ রূপ */
+    try{
+        const packed=verLine+gkPackBooksCode(src)+fallback;
+        const a=new Function(bookJsCode+'\n;return books;')(), p=new Function(packed+'\n;return books;')();
+        if(a.length===p.length&&JSON.stringify(a)===JSON.stringify(p)) bookJsCode=packed;
+        else console.warn('book.js ছোট রূপ পূর্ণ রূপের সাথে মেলেনি — পূর্ণ রূপ দেওয়া হলো');
+    }catch(e){ console.warn('book.js ছোট রূপ বানানো যায়নি — পূর্ণ রূপ দেওয়া হলো',e); }
 
     /* ── দুটো ফাইল download ── */
     function dlBlob(code, filename){
