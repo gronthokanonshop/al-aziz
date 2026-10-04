@@ -1712,7 +1712,7 @@ body.gk-ib-on #gkContact{display:none;}
 
 /* ═══════════════════════════════════════════════════════════════
    NafahLife-এর নিজস্ব চেহারা (২০২৬-১০-০২)
-   গ্রন্থকাননের সাথে একই কোড, কিন্তু দেখতে আলাদা — লোগোর রঙ থেকে:
+   বোন-সাইটের সাথে একই কোড, কিন্তু দেখতে আলাদা — লোগোর রঙ থেকে:
    গাঢ় বনসবুজ + সোনালি, ক্রিম কাগজ, শিরোনামে ক্লাসিক বইয়ের ফন্ট।
    শুধু রং/ফন্ট/বর্ডার বদলায় — কোনো কাজ বদলায় না। পুরো ব্লকটা মুছে দিলেই আগের চেহারা।
    ("html body" দিয়ে শুরু, যাতে পেজের নিজের <style>-এর উপরেও খাটে)
@@ -1838,7 +1838,7 @@ html body .footer-col-title { color: var(--nf-gold-d); }
 html body .gk-why-in { box-shadow: inset 0 0 0 1px rgba(217,181,90,.4), 0 14px 34px -18px rgba(31,61,38,.7); }
 html body .gk-why-c b { color: #f0d995; }
 
-/* ১০. গ্রন্থকাননের সবুজ-কমলা খাড়া দাগ (::before) সরাই — NafahLife-এ হীরা + রেখা; ক্যাটাগরি ঘরের নীল কিনারা সোনালি */
+/* ১০. মূল ডিজাইনের সবুজ-কমলা খাড়া দাগ (::before) সরাই — NafahLife-এ হীরা + রেখা; ক্যাটাগরি ঘরের নীল কিনারা সোনালি */
 html body .cat-section-title::before { display: none; }
 html body .catcard-tile-img { border-color: rgba(184,137,45,.32); box-shadow: 0 1px 4px rgba(184,137,45,.1); }
 html:not([data-theme="dark"]) body .catcard { background: var(--nf-card); }
@@ -1847,3 +1847,88 @@ html body .sticky-price { color: var(--nf-ink); }
 /* ফিল্টার পেজের শিরোনাম (#titleText.section-title) ও হিরো — একই সোনালি হীরা ও ফন্ট */
 html body .section-title, html body #heroHeading { font-family: var(--nf-serif); }
 html body .section-title { border-left: 0; padding-left: 20px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Crect x='2.5' y='2.5' width='7' height='7' rx='1' transform='rotate(45 6 6)' fill='%23b8892d'/%3E%3C/svg%3E") left 2px center / 12px 12px no-repeat; }
+
+/* ═══ NafahLife: PDF-এর পাতা খোলার অ্যানিমেশন (২০২৬-১০-০৪) ═══
+   রিডারে প্রতিটা পাতা চোখে পড়ার সময় বাঁ দিকের বাঁধাই থেকে আসল বইয়ের পাতার মতো ঘুরে খোলে।
+   Drive-এর ভিউয়ারে (নিজের পাতা না থাকলে) পুরো পাতাটা একবার খুলে আসে। */
+@keyframes nfPageOpen {
+    0%   { transform: perspective(1400px) rotateY(-84deg); opacity: .2; }
+    55%  { opacity: 1; }
+    100% { transform: perspective(1400px) rotateY(0deg); opacity: 1; }
+}
+@keyframes nfPageShade { 0% { opacity: 1; } 100% { opacity: 0; } }
+html body .pv-page.nf-pg { transform-origin: left center; transform: perspective(1400px) rotateY(-84deg); opacity: 0; backface-visibility: hidden; }
+html body .pv-page.nf-pg.nf-open { animation: nfPageOpen .9s cubic-bezier(.2,.75,.25,1) both; }
+html body .pv-page.nf-pg::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+    background: linear-gradient(90deg, rgba(60,40,10,.28), rgba(60,40,10,.06) 22%, rgba(255,255,255,0) 45%);
+}
+html body .pv-page.nf-pg.nf-open::after { animation: nfPageShade 1.1s ease-out both; animation-delay: inherit; }
+html body #pdfFrame.nf-unfold { transform-origin: left center; animation: nfPageOpen .95s cubic-bezier(.2,.75,.25,1) both; }
+@media (prefers-reduced-motion: reduce) {
+    html body .pv-page.nf-pg { transform: none; opacity: 1; }
+    html body .pv-page.nf-pg.nf-open, html body #pdfFrame.nf-unfold, html body .pv-page.nf-pg.nf-open::after { animation: none; }
+}
+
+/* ═══ NafahLife: মাসের বেস্টসেলার বোর্ড (হোমপেজ) — আসল অর্ডার থেকে, অ্যাডমিন প্রতি মাসে হালনাগাদ করে ═══ */
+.nf-bs { max-width: 1100px; margin: 8px auto 22px; padding: 0 12px; }
+.nf-bs-in {
+    position: relative; overflow: hidden; border-radius: 22px; padding: 18px 16px 16px;
+    background:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56' viewBox='0 0 56 56'%3E%3Cg fill='none' stroke='%23d9b55a' stroke-opacity='.13' stroke-width='1'%3E%3Crect x='18' y='18' width='20' height='20'/%3E%3Crect x='18' y='18' width='20' height='20' transform='rotate(45 28 28)'/%3E%3C/g%3E%3C/svg%3E"),
+        linear-gradient(150deg, #123821 0%, #1f5130 55%, #2a562b 100%);
+    box-shadow: inset 0 0 0 1.5px rgba(217,181,90,.55), 0 16px 34px -20px rgba(18,56,33,.85);
+    color: #fdf6e3;
+}
+.nf-bs-in::before { /* ভেতরের সরু সোনালি ফ্রেম */
+    content: ''; position: absolute; inset: 7px; border-radius: 16px; border: 1px solid rgba(217,181,90,.28); pointer-events: none;
+}
+.nf-bs-head { position: relative; display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.nf-bs-crown {
+    flex-shrink: 0; width: 46px; height: 46px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 35% 30%, #f3dc94, #b8892d 70%); color: #3b2a07; font-size: 22px;
+    box-shadow: 0 0 0 3px rgba(217,181,90,.25), 0 6px 14px rgba(0,0,0,.25);
+}
+.nf-bs-crown .gi { color: #3b2a07; }
+.nf-bs-head h2 { margin: 0; font-family: var(--nf-serif); font-size: 19px; font-weight: 700; color: #fff7dd; line-height: 1.3; }
+.nf-bs-head p { margin: 2px 0 0; font-size: 12px; color: #d8c9a0; }
+.nf-bs-tabs { position: relative; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 2px 2px 12px; }
+.nf-bs-tabs::-webkit-scrollbar { display: none; }
+.nf-bs-tab {
+    flex-shrink: 0; border: 1px solid rgba(217,181,90,.5); background: rgba(255,255,255,.06); color: #f3e7c3;
+    padding: 7px 14px; border-radius: 20px; font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer; transition: background .2s, color .2s;
+}
+.nf-bs-tab.on { background: linear-gradient(135deg, #e9cd7c, #b8892d); color: #2b1f05; border-color: transparent; }
+.nf-bs-list { position: relative; list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.nf-bs-row {
+    display: flex; align-items: center; gap: 11px; padding: 9px 11px; border-radius: 14px; cursor: pointer;
+    background: #fffdf8; color: #233023; box-shadow: 0 2px 8px rgba(0,0,0,.15); transition: transform .2s, box-shadow .2s;
+    animation: nfRowIn .45s ease both;
+}
+.nf-bs-row:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(0,0,0,.22); }
+@keyframes nfRowIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.nf-bs-rank {
+    flex-shrink: 0; width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 15px; color: #6b5a2e; background: #f6efdc; border: 1.5px solid rgba(184,137,45,.45);
+}
+.nf-bs-row.r1 .nf-bs-rank { background: radial-gradient(circle at 35% 30%, #fbe8a6, #c9a03a 70%); color: #3b2a07; border-color: #a07a1c; }
+.nf-bs-row.r2 .nf-bs-rank { background: radial-gradient(circle at 35% 30%, #f8fafc, #a8b0bb 70%); color: #262c33; border-color: #8a929c; }
+.nf-bs-row.r3 .nf-bs-rank { background: radial-gradient(circle at 35% 30%, #f6c9a5, #b0703f 70%); color: #3a1d08; border-color: #8f5530; }
+.nf-bs-row img { flex-shrink: 0; width: 44px; height: 60px; object-fit: cover; border-radius: 5px; box-shadow: 0 2px 6px rgba(0,0,0,.22); background: #eee; }
+.nf-bs-info { flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.35; }
+.nf-bs-info b { font-size: 14px; font-weight: 700; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nf-bs-info small { font-size: 11.5px; color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nf-bs-price { flex-shrink: 0; font-weight: 800; font-size: 14px; color: var(--nf-ink, #1f5130); }
+@media (min-width: 900px) {
+    .nf-bs-in { padding: 22px 22px 20px; }
+    .nf-bs-list { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+    .nf-bs-row { flex-direction: column; text-align: center; padding: 14px 10px 12px; position: relative; }
+    .nf-bs-row .nf-bs-rank { position: absolute; top: 8px; left: 8px; width: 30px; height: 30px; font-size: 13px; }
+    .nf-bs-row img { width: 96px; height: 132px; }
+    .nf-bs-info { align-items: center; width: 100%; }
+    .nf-bs-info b, .nf-bs-info small { white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+}
+[data-theme="dark"] .nf-bs-row { background: #16231c; color: #e7efe9; }
+[data-theme="dark"] .nf-bs-info small { color: #9fb3a6; }
+[data-theme="dark"] .nf-bs-price { color: #9cc79d; }
+@media (prefers-reduced-motion: reduce) { .nf-bs-row { animation: none; } }

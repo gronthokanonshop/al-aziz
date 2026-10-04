@@ -1217,9 +1217,11 @@ function openPdfModal(){
                 pv.map((p,k)=>'<div class="pv-page"><img src="'+escapeHTML(/^https?:/.test(p)?p:'https://i.ibb.co/'+p)+'" alt="পাতা '+toBN(k+1)+'" loading="'+(k<2?'eager':'lazy')+'" draggable="false"><span class="pv-no">'+toBN(k+1)+'</span></div>').join('')+
                 '<div class="pv-end"><b>নমুনা এখানেই শেষ</b><span>পুরো বইটা পড়তে অর্ডার করুন</span><button type="button" onclick="closePdfModal();addToCartShow()">কার্টে যোগ করুন</button></div>';
             pvEl.scrollTop=0; pvEl.style.display='';
+            nfPageReveal(pvEl);   /* NafahLife: পাতাগুলো বইয়ের মতো ঘুরে খোলে */
         }else{
             pvEl.style.display='none'; pvEl.innerHTML='';
             frame.style.display=''; frame.src=embedUrl;
+            frame.classList.remove('nf-unfold'); void frame.offsetWidth; frame.classList.add('nf-unfold');
         }
         document.getElementById('pdfDriveLink').href=raw;
         panel.classList.add('show');
@@ -1234,6 +1236,24 @@ function openPdfModal(){
     }, reduce?0:(fly?1400:1100)));
 }
 var pdfTimers=[];
+/* NafahLife: রিডারের পাতা চোখে পড়লেই বাঁ দিকের বাঁধাই থেকে ঘুরে খোলে (একসাথে দেখা পাতাগুলো একটু পরপর) */
+function nfPageReveal(root){
+    if(!root||!('IntersectionObserver' in window)) return;
+    if(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const pages=[...root.querySelectorAll('.pv-page')];
+    pages.forEach(p=>p.classList.add('nf-pg'));
+    const io=new IntersectionObserver(entries=>{
+        let k=0;
+        entries.forEach(e=>{
+            if(!e.isIntersecting) return;
+            e.target.style.animationDelay=(0.12+k*0.22)+'s'; k++;
+            e.target.classList.add('nf-open'); io.unobserve(e.target);
+        });
+    },{root:root, threshold:0.12});
+    pages.forEach(p=>io.observe(p));
+    /* নিরাপত্তা: কোনো কারণে observer না চললে (পুরনো ব্রাউজার/ট্যাব লুকানো) পাতা যেন অদৃশ্য না থাকে */
+    setTimeout(()=>{ if(!root.querySelector('.nf-open')){ io.disconnect(); pages.forEach(p=>p.classList.remove('nf-pg')); } },1800);
+}
 function closePdfModal(){
     const modal=document.getElementById('pdfModal');
     modal.classList.remove('active');
@@ -2039,6 +2059,8 @@ function syncLiveBookData(){
                    দাম/ছবি বসে যেত — তাই bid মিললেই তবে লাইভ তথ্য বসাই */
                 if(live&&typeof live==='object'&&(!live.bid||!books[idx].bid||live.bid===books[idx].bid)){
                     books[idx]=Object.assign({},books[idx],live);
+                    /* Firebase-এ ছবির ঘরে ভুল লেখা (যেমন "b2") থাকলে ভাঙা ছবি না দেখিয়ে কভার-টেমপ্লেট */
+                    if(!books[idx].img||!/^https?:\/\//.test(books[idx].img)) books[idx].img='book-placeholder.svg';
                 }
             }
         }).catch(function(e){ console.warn('Live book sync ব্যর্থ:',e); });

@@ -1285,6 +1285,22 @@ window.gkResolveSubject = function (label) {
     if (counts[label]) return label;
     function norm(s) { return String(s).normalize('NFC').replace(/[\s()\[\]{}.,।:;'"`\-–—_\/\\|!?]+/g, ''); }
     function grams(s) { var g = {}; for (var i = 0; i < s.length - 1; i++) { var k = s.substr(i, 2); g[k] = (g[k] || 0) + 1; } return g; }
+    /* ১) শব্দ ধরে মেলানো — স্বরচিহ্ন (ি/ী, ু/ূ, া, ে…) বাদ দিয়ে শুধু ব্যঞ্জনের কঙ্কাল মিলাই:
+          "আকিদা" = "ঈমান ও আকীদা"-র "আকীদা", "সিরাত" → "সীরাতে", "তাফসির" → "তাফসীরুল", "ফিকহ" = "ফিকাহ" */
+    function skel(s) { return String(s).normalize('NFC').toLowerCase().replace(/[়া-ৌ্ৗঁ]/g, '').replace(/ঈ/g, 'ই').replace(/ঊ/g, 'উ').replace(/য়/g, 'য'); }
+    function words(s) { return String(s).split(/[\s,()\[\]\/:.।\-–—&]+/).filter(function (w) { return w && w !== 'ও' && w !== 'এবং'; }); }
+    var lw = words(label).map(skel).filter(function (w) { return w.length >= 2; });
+    if (lw.length) {
+        var wBest = null, wCount = 0;
+        Object.keys(counts).forEach(function (s) {
+            if (counts[s] < 2 || cats[s]) return;
+            var sw = words(s).map(skel);
+            var ok = lw.every(function (l) { return sw.some(function (w) { return w === l || (l.length >= 3 && w.indexOf(l) === 0); }); });
+            if (ok && counts[s] > wCount) { wCount = counts[s]; wBest = s; }
+        });
+        if (wBest) return wBest;
+    }
+    /* ২) না মিললে অক্ষর-জোড়ার মিল — কড়া সীমা (০.৬), যাতে "কিতাব" ভুল করে "কবিতা" না হয় */
     var a = norm(label), ga = grams(a), na = Math.max(a.length - 1, 1);
     var best = null, bestScore = 0;
     Object.keys(counts).forEach(function (s) {
@@ -1294,7 +1310,7 @@ window.gkResolveSubject = function (label) {
         var score = 2 * common / (na + nb);
         if (score > bestScore) { bestScore = score; best = s; }
     });
-    return bestScore >= 0.5 ? best : null;
+    return bestScore >= 0.6 ? best : null;
 };
 /* কোনো বইয়ের নিজের বিষয় — শুধু যদি সেটা আসল বিষয় হয় (ক্যাটাগরির নাম নয়, অন্তত ২টা বই আছে) */
 window.gkBookSubject = function (b) {

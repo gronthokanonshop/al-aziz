@@ -1144,14 +1144,15 @@ function renderHomeCatChips(){
                 var lbl=label.trim().toLowerCase();
                 var fits=function(b){ return b&&inCat(b)&&(rsub ? b.subject===rsub : (lbl.length>1&&String(b.name||'').toLowerCase().indexOf(lbl)>-1)); };
                 var pick=books.find(function(b){ return fits(b)&&realImg(b); });
-                /* মেলানো বই না পেলে — এই ক্যাটাগরির যেকোনো ছবিওয়ালা বই, এলোমেলোভাবে (প্রতিবার আলাদা) */
-                if(!pick){ var pool=books.filter(function(b){ return inCat(b)&&realImg(b)&&!usedImg['n:'+b.name]; }); if(pool.length) pick=pool[Math.floor(Math.random()*pool.length)]; }
+                /* এই বিষয়ের কোনো বই-ই না থাকলে তবেই — ক্যাটাগরির প্রথম ছবিওয়ালা বই (প্রতিবার একই)।
+                   বিষয়ের বই আছে কিন্তু ছবি নেই → নিচে ওই বিষয়ের বইয়েরই নাম-কভার (অন্য বিষয়ের ছবি নয়) */
+                if(!pick&&!books.some(fits)){ var pool=books.filter(function(b){ return inCat(b)&&realImg(b)&&!usedImg['n:'+b.name]; }); if(pool.length) pick=pool[0];   /* NafahLife: প্রতিবার একই বই (এলোমেলো নয়) */ }
                 if(pick){ img=pick.img; isReal=true; usedImg['n:'+pick.name]=1; }
                 else {
                     /* ছবিওয়ালা বই-ই নেই — ওই ক্যাটাগরির একটা আসল বইয়ের নাম দিয়ে কভার (AAcommon.js বানাবে) */
                     var okb=function(b){ return inCat(b)&&!usedImg['n:'+b.name]&&!(window.gkIsHiddenBook&&gkIsHiddenBook(b)); };
                     var gp=books.find(function(b){ return fits(b)&&okb(b); });
-                    if(!gp){ var gpool=books.filter(okb); if(gpool.length) gp=gpool[Math.floor(Math.random()*gpool.length)]; }
+                    if(!gp){ var gpool=books.filter(okb); if(gpool.length) gp=gpool[0]; }
                     if(gp){ genName=gp.name; usedImg['n:'+gp.name]=1; }
                 }
             }
@@ -1406,6 +1407,18 @@ function loadHomeAuthors(){
         </div>
     </div>
 </div>
+
+<!-- ═══════ NafahLife: মাসের বেস্টসেলার বোর্ড — অ্যাডমিন আসল অর্ডার গুনে siteConfig/bestSellers-এ রাখে; যথেষ্ট বিক্রি না থাকলে লুকানো ═══════ -->
+<section class="nf-bs" id="nfBest" style="display:none;" aria-label="মাসের বেস্টসেলার">
+  <div class="nf-bs-in">
+    <div class="nf-bs-head">
+      <span class="nf-bs-crown"><i class="gi gi-trophy"></i></span>
+      <div><h2 id="nfBestTitle">মাসের বেস্টসেলার</h2><p>আসল অর্ডারের হিসাবে সাজানো · প্রতি মাসে নতুন</p></div>
+    </div>
+    <div class="nf-bs-tabs" id="nfBestTabs" role="tablist"></div>
+    <ol class="nf-bs-list" id="nfBestList"></ol>
+  </div>
+</section>
 
 <div class="sections" id="sectionsWrapper" style="display:none;"></div>
 
@@ -2529,6 +2542,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     auth.onAuthStateChanged(user=>updateAuthUI(user));
     loadReviewSlider();
+    loadBestBoard();
     loadBanners();
     loadTagsHome();
     loadCatTreeHome();
@@ -2627,6 +2641,46 @@ function loadHomeBlogs(){
             </a>`).join('');
             row.innerHTML=ctaCard+readerCards+builtinCards;applyHblogTopic();
         }).catch(()=>{});
+}
+
+/* ═══ NafahLife: মাসের বেস্টসেলার বোর্ড ═══
+   অ্যাডমিন প্যানেল আসল অর্ডার গুনে siteConfig/bestSellers-এ রাখে (প্রতি মাসের শুরুতে নিজে থেকে)।
+   এখানে শুধু দেখাই — যে বই এখন দোকানে নেই/লুকানো সেটা বাদ; "সব বিষয়"-এ ৩টার কম থাকলে বোর্ডই লুকানো। */
+let NF_BEST=null, nfBestTab=0;
+function loadBestBoard(){
+    fetch('https://screenshot-2db71-default-rtdb.asia-southeast1.firebasedatabase.app/siteConfig/bestSellers.json')
+        .then(r=>r.ok?r.json():null)
+        .then(d=>{ NF_BEST=d; renderBestBoard(); })
+        .catch(()=>{});
+    /* লাইভ বইয়ের তালিকা পরে এলে আবার আঁকি (নতুন বই/দাম) */
+    if(window.GK_BOOKS_LIVE) GK_BOOKS_LIVE.then(function(ok){ if(ok&&NF_BEST) renderBestBoard(); });
+}
+function nfBestTabs(){
+    const d=NF_BEST; if(!d||d.hidden||typeof books==='undefined') return [];
+    const byBid={}; books.forEach((b,i)=>{ if(b&&b.bid&&byBid[b.bid]===undefined) byBid[b.bid]=i; });
+    const pick=list=>(Array.isArray(list)?list:[]).map(x=>x&&byBid[x.bid]).filter(i=>i!==undefined&&Number(books[i].price)>0&&!(window.gkIsHiddenBook&&gkIsHiddenBook(books[i]))).slice(0,5);
+    const tabs=[{name:'সব বিষয়', idx:pick(d.overall)}];
+    (Array.isArray(d.subjects)?d.subjects:[]).forEach(s=>{ const idx=s&&s.name?pick(s.items):[]; if(idx.length>=2) tabs.push({name:s.name, idx}); });
+    return tabs[0].idx.length>=3?tabs:[];
+}
+function renderBestBoard(){
+    const sec=document.getElementById('nfBest'); if(!sec) return;
+    const tabs=nfBestTabs();
+    if(!tabs.length){ sec.style.display='none'; return; }
+    if(nfBestTab>=tabs.length) nfBestTab=0;
+    const bn=n=>String(n).replace(/\d/g,d=>'০১২৩৪৫৬৭৮৯'[d]);
+    const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    document.getElementById('nfBestTitle').textContent=(NF_BEST.label||'এই মাস')+'-এর বেস্টসেলার'+(NF_BEST.partial?' (এখন পর্যন্ত)':'');
+    document.getElementById('nfBestTabs').innerHTML=tabs.map((t,i)=>'<button type="button" role="tab" class="nf-bs-tab'+(i===nfBestTab?' on':'')+'" onclick="nfBestTab='+i+';renderBestBoard()">'+esc(t.name)+'</button>').join('');
+    document.getElementById('nfBestList').innerHTML=tabs[nfBestTab].idx.map((bi,k)=>{
+        const b=books[bi], img=getImg(b)||'book-placeholder.svg', who=(b.type&&b.type!=='বই')?(b.brand||''):(b.author||'');
+        return '<li class="nf-bs-row'+(k<3?' r'+(k+1):'')+'" style="animation-delay:'+(k*0.06)+'s" onclick="goToBook('+bi+')">'
+            +'<span class="nf-bs-rank">'+bn(k+1)+'</span>'
+            +'<img src="'+esc(img)+'" alt="'+esc(b.name)+'" loading="lazy">'
+            +'<span class="nf-bs-info"><b>'+esc(b.name)+'</b><small>'+esc(who)+'</small></span>'
+            +'<span class="nf-bs-price">৳ '+bn(b.price)+'</span></li>';
+    }).join('');
+    sec.style.display='';
 }
 
 /* ═══ রিভিউ স্লাইডার — Firebase থেকে সেরা রিভিউগুলো ═══ */
