@@ -184,7 +184,7 @@
         @keyframes pdfCoverFace{0%,35%{opacity:1}36%,100%{opacity:0}}
         .pdf-b-cover img{width:100%;height:100%;object-fit:cover;display:block;}
         .pdf-b-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,255,255,0.55) 48%,transparent 66%);transform:translateX(-120%);pointer-events:none;}
-        .pdf-book3d.opening .pdf-b-cover{animation:pdfCoverOpen 0.75s cubic-bezier(.4,0,.2,1) forwards;}
+        .pdf-book3d.opening .pdf-b-cover{animation:pdfCoverOpen 0.75s cubic-bezier(.4,0,.2,1) forwards,nfCoverAway .18s .82s forwards;}
         .pdf-book3d.opening .pdf-b-cover::after{animation:pdfCoverShine 0.75s cubic-bezier(.4,0,.2,1) forwards;}
         @keyframes pdfCoverOpen{0%{transform:rotateY(0) translateZ(0);box-shadow:4px 4px 18px rgba(0,0,0,0.3)}40%{box-shadow:-18px 10px 34px rgba(0,0,0,0.35)}100%{transform:rotateY(-174deg) translateZ(6px);box-shadow:-4px 2px 10px rgba(0,0,0,0.2)}}
         @keyframes pdfCoverShine{0%{transform:translateX(-120%)}55%{transform:translateX(120%)}100%{transform:translateX(120%)}}
@@ -192,13 +192,31 @@
         @keyframes pdfPagesIn{from{transform:scaleX(0.96)}to{transform:scaleX(1)}}
         .pdf-page-line{height:1px;background:rgba(0,0,0,0.07);border-radius:1px;opacity:0;transform:translateX(-6px);}
         .pdf-book3d.opening .pdf-page-line{animation:pdfLineIn 0.35s both;}
-        .pdf-book3d.opening .pdf-page-line:nth-child(1){animation-delay:.46s}
-        .pdf-book3d.opening .pdf-page-line:nth-child(2){animation-delay:.51s}
-        .pdf-book3d.opening .pdf-page-line:nth-child(3){animation-delay:.56s}
-        .pdf-book3d.opening .pdf-page-line:nth-child(4){animation-delay:.61s}
-        .pdf-book3d.opening .pdf-page-line:nth-child(5){animation-delay:.66s}
-        .pdf-book3d.opening .pdf-page-line:nth-child(6){animation-delay:.71s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(1){animation-delay:1.3s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(2){animation-delay:1.35s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(3){animation-delay:1.4s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(4){animation-delay:1.45s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(5){animation-delay:1.5s}
+        .pdf-book3d.opening .pdf-page-line:nth-child(6){animation-delay:1.55s}
         @keyframes pdfLineIn{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:translateX(0)}}
+        /* "পাতা ঝরঝর করে উল্টানো" (মালিকের বাছাই, ২০২৬-১০-০৪): মলাট খোলার পরপরই ৪টা পাতা একের পর এক
+           দ্রুত উল্টে বাঁয়ে জমে, বইটা একটু ডানে সরে খোলা দুই পাতা মাঝখানে আসে, শেষে PDF খোলে */
+        .pdf-b-leaf{position:absolute;inset:3px 4px 3px 0;border-radius:2px 8px 8px 2px;transform-origin:left center;transform-style:preserve-3d;pointer-events:none;
+            background:repeating-linear-gradient(to bottom,transparent 0 12px,rgba(70,50,20,.08) 12px 13px) 22px 28px/calc(100% - 44px) calc(100% - 64px) no-repeat,linear-gradient(90deg,#ddd3bd 0%,#f8f3e8 9%,#fdfaf4 100%);}
+        .pdf-b-leaf::after{content:'';position:absolute;inset:0;border-radius:8px 2px 2px 8px;backface-visibility:hidden;transform:rotateY(180deg) translateZ(.5px);
+            background:repeating-linear-gradient(to bottom,transparent 0 12px,rgba(70,50,20,.08) 12px 13px) 22px 28px/calc(100% - 44px) calc(100% - 64px) no-repeat,linear-gradient(270deg,#d9cfb8 0%,#f3ecdc 9%,#f9f4e9 100%);}
+        .pdf-book3d.opening .pdf-b-leaf{animation:nfLeafFlip .6s cubic-bezier(.45,.05,.25,1) both;}
+        .pdf-book3d.opening .pdf-b-leaf:nth-of-type(4){animation-delay:.32s;--nfl:-171deg}
+        .pdf-book3d.opening .pdf-b-leaf:nth-of-type(5){animation-delay:.49s;--nfl:-168deg}
+        .pdf-book3d.opening .pdf-b-leaf:nth-of-type(6){animation-delay:.66s;--nfl:-165deg}
+        .pdf-book3d.opening .pdf-b-leaf:nth-of-type(7){animation-delay:.83s;--nfl:-162deg}
+        @keyframes nfLeafFlip{0%{transform:rotateY(0);box-shadow:none}50%{box-shadow:-10px 6px 18px rgba(0,0,0,.16)}100%{transform:rotateY(var(--nfl,-166deg));box-shadow:none}}
+        /* খোলা মলাট বাঁয়ে পাতার নিচে চলে যায় — কিছু ফোনে 3D ক্রম ঠিক হয় না বলে মলাটটা একটু পরে মিলিয়ে দিই, যাতে উল্টানো পাতা ঢাকা না পড়ে */
+        @keyframes nfCoverAway{to{opacity:0}}
+        /* খোলা বই দুই পাতা চওড়া — তাই খোলার সময় অর্ধেক পাতা ডানে সরে মাঝখানে আসে (ছোট পর্দায় একটু ছোটও হয়) */
+        .pdf-book3d.opening{opacity:1;animation:nfBookCenter 1s cubic-bezier(.3,.7,.2,1) forwards;}
+        @keyframes nfBookCenter{0%{opacity:1;transform:none}100%{opacity:1;transform:translateX(var(--nfsh,120px)) scale(var(--nfsc,1))}}
+        @media (max-width:560px){.pdf-book3d{--nfsh:84px;--nfsc:.7}}
 
         /* PDF+Cart wrapper */
         .pdf-cart-wrap{display:none;align-items:flex-start;gap:14px;width:96%;max-width:860px;max-height:90vh;animation:pdfPanelUp 0.32s cubic-bezier(.4,0,.2,1);}
@@ -585,6 +603,8 @@
                 <div class="pdf-page-line" style="width:75%"></div>
                 <div class="pdf-page-line" style="width:50%"></div>
             </div>
+            <!-- NafahLife: মলাট খোলার পর ঝরঝর করে উল্টানো ৪টা পাতা -->
+            <div class="pdf-b-leaf"></div><div class="pdf-b-leaf"></div><div class="pdf-b-leaf"></div><div class="pdf-b-leaf"></div>
             <div class="pdf-b-cover">
                 <img id="pdfBookCoverAnim" src="" alt="">
             </div>
@@ -1197,7 +1217,7 @@ function openPdfModal(){
     book.style.display=reduce?'none':'block';
 
     /* Animation শুরু */
-    if(!reduce) pdfTimers.push(setTimeout(function(){ book.classList.add('opening'); }, fly?700:80));
+    if(!reduce) pdfTimers.push(setTimeout(function(){ book.classList.add('opening'); }, fly?700:420));
 
     /* Animation শেষে PDF দেখাও */
     pdfTimers.push(setTimeout(function(){
@@ -1233,7 +1253,7 @@ function openPdfModal(){
         document.getElementById('pdfCartOrig').innerText=(b.original_price>b.price)?'৳ '+b.original_price:'';
         document.getElementById('pdfCartCurrent').innerText='৳ '+b.price;
         document.getElementById('pdfCartPopup').classList.add('show');
-    }, reduce?0:(fly?1400:1100)));
+    }, reduce?0:(fly?2350:2050)));
 }
 var pdfTimers=[];
 /* NafahLife: রিডারের পাতা চোখে পড়লেই বাঁ দিকের বাঁধাই থেকে ঘুরে খোলে (একসাথে দেখা পাতাগুলো একটু পরপর) */
